@@ -1,4 +1,5 @@
 ﻿using System;
+using WasmerSharp;
 
 namespace Opa.Wasm.ConsoleSample
 {
@@ -7,9 +8,11 @@ namespace Opa.Wasm.ConsoleSample
 	{
 		static void Main(string[] args)
 		{
+			Module m = OpaPolicyLoader.LoadFromDisk("policy.wasm");
+
 			var policy = new Opa.Wasm.OpaPolicy();
 			policy.ReserveMemory();
-			policy.LoadFromDisk("policy.wasm");
+			policy.Load(m);
 
 			policy.SetData(@"{""world"": ""world""}");
 
