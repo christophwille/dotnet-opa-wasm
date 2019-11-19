@@ -38,14 +38,46 @@ namespace PlaygroundApp
 				, funcOpaBuiltin0, funcOpaBuiltin1, funcOpaBuiltin2, funcOpaBuiltin3, funcOpaBuiltin4);
 
 			string builtins = DumpJson(_memory, _instance.Call("builtins"));
-			Console.WriteLine(builtins);
+			Console.WriteLine($"builtins: {builtins}");
+
+			int baseAddr = LoadJson(_memory, "{}");
+		}
+
+		// Should be an extension method on Instance
+		private int AddrReturn(string name, params object[] args)
+		{
+			var result = _instance.Call(name, args);
+			return (int)result[0];
+		}
+
+		private int LoadJson(Memory memory, string json)
+		{
+			int length = json.Length;
+			int addr = AddrReturn("opa_malloc", length);
+			byte[] jsonAsBytes = System.Text.Encoding.UTF8.GetBytes(json);
+
+			unsafe
+			{
+				var buf = (byte*)memory.Data;
+				for (int i = 0; i < length; i++)
+				{
+					buf[addr + i] = jsonAsBytes[i];
+				}
+			}
+
+			int parseAddr = AddrReturn("opa_json_parse", addr, json.Length);
+
+			if (0 == parseAddr)
+			{
+				throw new ArgumentNullException("Parsing failed");
+			}
+
+			return parseAddr;
 		}
 
 		private string DumpJson(Memory memory, object[] addrResult)
 		{
-			var jsondumpResult = _instance.Call("opa_json_dump", (int)addrResult[0]);
-			int addr = (int)jsondumpResult[0];
-
+			int addr = AddrReturn("opa_json_dump", (int)addrResult[0]);
 			return DumpString(memory, addr);
 		}
 
@@ -75,32 +107,37 @@ namespace PlaygroundApp
 
 		public void opa_abort(InstanceContext ctx, int addr)
 		{
+			Debugger.Break();
 			// TODO: impl stringDecoder
-			Trace.TraceError("opa_abort was called");
 		}
 
 		public int opa_builtin0(InstanceContext ctx, int builtinId, int opaCtxReserved)
 		{
+			Debugger.Break();
 			return 0;
 		}
 
 		public int opa_builtin1(InstanceContext ctx, int builtinId, int opaCtxReserved, int addr1)
 		{
+			Debugger.Break();
 			return 0;
 		}
 
 		public int opa_builtin2(InstanceContext ctx, int builtinId, int opaCtxReserved, int addr1, int addr2)
 		{
+			Debugger.Break();
 			return 0;
 		}
 
 		public int opa_builtin3(InstanceContext ctx, int builtinId, int opaCtxReserved, int addr1, int addr2, int addr3)
 		{
+			Debugger.Break();
 			return 0;
 		}
 
 		public int opa_builtin4(InstanceContext ctx, int builtinId, int opaCtxReserved, int addr1, int addr2, int addr3, int addr4)
 		{
+			Debugger.Break();
 			return 0;
 		}
 	}
