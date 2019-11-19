@@ -8,9 +8,6 @@ namespace MinimalInteraction
 	{
 		static void Main(string[] args)
 		{
-			Memory memory = Memory.Create(minPages: 5);
-			// Import memoryImport = new Import("env", "memory", memory);
-
 			byte[] wasm = File.ReadAllBytes("policy.wasm");
 			Module m = Module.Create(wasm);
 
