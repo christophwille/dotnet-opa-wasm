@@ -17,6 +17,13 @@ namespace MinimalInteraction
 				Console.WriteLine($"import: {import.Kind} {import.ModuleName}::{import.Name} ");
 			}
 
+			// Expected: none
+			Console.WriteLine("The loaded wasm has the following exports listed:");
+			foreach (ExportDescriptor export in m.ExportDescriptors)
+			{
+				Console.WriteLine($"export: {export.Kind} {export.Name} ");
+			}
+
 			Console.Read();
 		}
 	}
