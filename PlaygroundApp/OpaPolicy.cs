@@ -38,10 +38,53 @@ namespace PlaygroundApp
 				, funcOpaBuiltin0, funcOpaBuiltin1, funcOpaBuiltin2, funcOpaBuiltin3, funcOpaBuiltin4);
 
 			string builtins = DumpJson(_memory, _instance.Call("builtins"));
-			Console.WriteLine($"builtins: {builtins}");
+			// Console.WriteLine($"builtins: {builtins}");
 
-			int baseAddr = LoadJson(_memory, "{}");
+			_dataAddr = LoadJson(_memory, "{}");
+			_baseHeapPtr = AddrReturn("opa_heap_ptr_get");
+			_baseHeapTop = AddrReturn("opa_heap_top_get");
+			_dataHeapPtr = _baseHeapPtr;
+			_dataHeapTop = _baseHeapTop;
+
+			// endof js ctor LoadedPolicy
 		}
+
+		public string Evaluate(string json)
+		{
+			// Reset the heap pointer before each evaluation
+			AddrReturn("opa_heap_ptr_set", _dataHeapPtr);
+			AddrReturn("opa_heap_top_set", _dataHeapTop);
+
+			// Load the input data
+			var inputAddr = LoadJson(_memory, json);
+
+			// Setup the evaluation context
+			var ctxAddr = AddrReturn("opa_eval_ctx_new");
+			AddrReturn("opa_eval_ctx_set_input", ctxAddr, inputAddr);
+			AddrReturn("opa_eval_ctx_set_data", ctxAddr, _dataAddr);
+
+			// Actually evaluate the policy
+			AddrReturn("eval", ctxAddr);
+
+			// Retrieve the result
+			var resultAddr = _instance.Call("opa_eval_ctx_get_result", ctxAddr);
+			return DumpJson(_memory, resultAddr);
+		}
+
+		public void SetData(string json)
+		{
+			AddrReturn("opa_heap_ptr_set", _baseHeapPtr);
+			AddrReturn("opa_heap_top_set", _baseHeapTop);
+			_dataAddr = LoadJson(_memory, json);
+			_dataHeapPtr = AddrReturn("opa_heap_ptr_get");
+			_dataHeapTop = AddrReturn("opa_heap_top_get");
+		}
+
+		private int _dataAddr;
+		private int _baseHeapPtr;
+		private int _baseHeapTop;
+		private int _dataHeapPtr;
+		private int _dataHeapTop;
 
 		// Should be an extension method on Instance
 		private int AddrReturn(string name, params object[] args)
@@ -78,10 +121,10 @@ namespace PlaygroundApp
 		private string DumpJson(Memory memory, object[] addrResult)
 		{
 			int addr = AddrReturn("opa_json_dump", (int)addrResult[0]);
-			return DumpString(memory, addr);
+			return DecodeNullTerminatedString(memory, addr);
 		}
 
-		private static string DumpString(Memory memory, int addr)
+		private static string DecodeNullTerminatedString(Memory memory, int addr)
 		{
 			unsafe
 			{
