@@ -19,4 +19,8 @@
     <PackageReference Include="WasmerSharp" Version="0.7.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Opa.Wasm\Opa.Wasm.csproj" />
+  </ItemGroup>
+
 </Project>

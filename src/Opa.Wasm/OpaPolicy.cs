@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
 using WasmerSharp;
 
-namespace PlaygroundApp
+namespace Opa.Wasm
 {
 	public class OpaPolicy
 	{

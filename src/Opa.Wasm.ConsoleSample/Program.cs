@@ -1,13 +1,13 @@
 ﻿using System;
 
-namespace PlaygroundApp
+namespace Opa.Wasm.ConsoleSample
 {
 	// See https://github.com/open-policy-agent/npm-opa-wasm/blob/master/examples/nodejs-app/app.js
 	class Program
 	{
 		static void Main(string[] args)
 		{
-			var policy = new OpaPolicy();
+			var policy = new Opa.Wasm.OpaPolicy();
 			policy.ReserveMemory();
 			policy.LoadFromDisk("policy.wasm");
 
