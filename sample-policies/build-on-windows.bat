@@ -1,0 +1,1 @@
+opa build -d example.rego "data.example = x"
