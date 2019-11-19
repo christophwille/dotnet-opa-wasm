@@ -1,53 +1,40 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Text;
 using WasmerSharp;
 
-namespace PlaygroundApp
+namespace Opa.Wasm
 {
 	public class OpaPolicy
 	{
 		private Memory _memory;
 		private Instance _instance;
 
-		public OpaPolicy()
-		{
-		}
-
 		public void ReserveMemory()
 		{
 			_memory = Memory.Create(minPages: 5);
 		}
 
-		public void LoadFromDisk(string filename)
-		{
-			byte[] wasm = File.ReadAllBytes(filename);
-			Load(wasm);
-		}
-
-		public void Load(byte[] wasm)
+		public void Load(Module m)
 		{
 			Import memoryImport = new Import("env", "memory", _memory);
 
-			var funcOpaAbort = new Import("env", "opa_abort", new ImportFunction((opaabortCallback)(opa_abort)));
-			var funcOpaBuiltin0 = new Import("env", "opa_builtin0", new ImportFunction((builtin0Callback)(opa_builtin0)));
-			var funcOpaBuiltin1 = new Import("env", "opa_builtin1", new ImportFunction((builtin1Callback)(opa_builtin1)));
-			var funcOpaBuiltin2 = new Import("env", "opa_builtin2", new ImportFunction((builtin2Callback)(opa_builtin2)));
-			var funcOpaBuiltin3 = new Import("env", "opa_builtin3", new ImportFunction((builtin3Callback)(opa_builtin3)));
-			var funcOpaBuiltin4 = new Import("env", "opa_builtin4", new ImportFunction((builtin4Callback)(opa_builtin4)));
+			var funcOpaAbort = new Import("env", OpaFunc.Abort, new ImportFunction((opaabortCallback)(opa_abort)));
+			var funcOpaBuiltin0 = new Import("env", OpaFunc.Builtin0, new ImportFunction((builtin0Callback)(opa_builtin0)));
+			var funcOpaBuiltin1 = new Import("env", OpaFunc.Builtin1, new ImportFunction((builtin1Callback)(opa_builtin1)));
+			var funcOpaBuiltin2 = new Import("env", OpaFunc.Builtin2, new ImportFunction((builtin2Callback)(opa_builtin2)));
+			var funcOpaBuiltin3 = new Import("env", OpaFunc.Builtin3, new ImportFunction((builtin3Callback)(opa_builtin3)));
+			var funcOpaBuiltin4 = new Import("env", OpaFunc.Builtin4, new ImportFunction((builtin4Callback)(opa_builtin4)));
 
-			_instance = new Instance(wasm, memoryImport, funcOpaAbort
+			_instance = m.Instatiate(memoryImport, funcOpaAbort
 				, funcOpaBuiltin0, funcOpaBuiltin1, funcOpaBuiltin2, funcOpaBuiltin3, funcOpaBuiltin4);
 
-			string builtins = DumpJson(_memory, _instance.Call("builtins"));
+			string builtins = DumpJson(_memory, _instance.Call(OpaFunc.Builtins));
 			// Console.WriteLine($"builtins: {builtins}");
 			// TODO: Builtins are not implemented, not necessary for basic sample
 
 			_dataAddr = LoadJson(_memory, "{}");
-			_baseHeapPtr = AddrReturn("opa_heap_ptr_get");
-			_baseHeapTop = AddrReturn("opa_heap_top_get");
+			_baseHeapPtr = AddrReturn(OpaFunc.HeapPtrGet);
+			_baseHeapTop = AddrReturn(OpaFunc.HeapTopGet);
 			_dataHeapPtr = _baseHeapPtr;
 			_dataHeapTop = _baseHeapTop;
 
@@ -57,32 +44,32 @@ namespace PlaygroundApp
 		public string Evaluate(string json)
 		{
 			// Reset the heap pointer before each evaluation
-			AddrReturn("opa_heap_ptr_set", _dataHeapPtr);
-			AddrReturn("opa_heap_top_set", _dataHeapTop);
+			AddrReturn(OpaFunc.HeapPtrSet, _dataHeapPtr);
+			AddrReturn(OpaFunc.HeapTopSet, _dataHeapTop);
 
 			// Load the input data
 			var inputAddr = LoadJson(_memory, json);
 
 			// Setup the evaluation context
-			var ctxAddr = AddrReturn("opa_eval_ctx_new");
-			AddrReturn("opa_eval_ctx_set_input", ctxAddr, inputAddr);
-			AddrReturn("opa_eval_ctx_set_data", ctxAddr, _dataAddr);
+			var ctxAddr = AddrReturn(OpaFunc.EvalCtxNew);
+			AddrReturn(OpaFunc.EvalCtxSetInput, ctxAddr, inputAddr);
+			AddrReturn(OpaFunc.EvalCtxSetData, ctxAddr, _dataAddr);
 
 			// Actually evaluate the policy
-			AddrReturn("eval", ctxAddr);
+			AddrReturn(OpaFunc.Eval, ctxAddr);
 
 			// Retrieve the result
-			var resultAddr = _instance.Call("opa_eval_ctx_get_result", ctxAddr);
+			var resultAddr = _instance.Call(OpaFunc.EvalCtxGetResult, ctxAddr);
 			return DumpJson(_memory, resultAddr);
 		}
 
 		public void SetData(string json)
 		{
-			AddrReturn("opa_heap_ptr_set", _baseHeapPtr);
-			AddrReturn("opa_heap_top_set", _baseHeapTop);
+			AddrReturn(OpaFunc.HeapPtrSet, _baseHeapPtr);
+			AddrReturn(OpaFunc.HeapTopSet, _baseHeapTop);
 			_dataAddr = LoadJson(_memory, json);
-			_dataHeapPtr = AddrReturn("opa_heap_ptr_get");
-			_dataHeapTop = AddrReturn("opa_heap_top_get");
+			_dataHeapPtr = AddrReturn(OpaFunc.HeapPtrGet);
+			_dataHeapTop = AddrReturn(OpaFunc.HeapTopGet);
 		}
 
 		private int _dataAddr;
@@ -101,7 +88,7 @@ namespace PlaygroundApp
 		private int LoadJson(Memory memory, string json)
 		{
 			int length = json.Length;
-			int addr = AddrReturn("opa_malloc", length);
+			int addr = AddrReturn(OpaFunc.Malloc, length);
 			byte[] jsonAsBytes = System.Text.Encoding.UTF8.GetBytes(json);
 
 			unsafe
@@ -113,7 +100,7 @@ namespace PlaygroundApp
 				}
 			}
 
-			int parseAddr = AddrReturn("opa_json_parse", addr, json.Length);
+			int parseAddr = AddrReturn(OpaFunc.JsonParse, addr, json.Length);
 
 			if (0 == parseAddr)
 			{
@@ -125,7 +112,7 @@ namespace PlaygroundApp
 
 		private string DumpJson(Memory memory, object[] addrResult)
 		{
-			int addr = AddrReturn("opa_json_dump", (int)addrResult[0]);
+			int addr = AddrReturn(OpaFunc.JsonDump, (int)addrResult[0]);
 			return DecodeNullTerminatedString(memory, addr);
 		}
 

@@ -10,13 +10,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\sample-policies\policy.wasm" Link="policy.wasm">
+    <None Include="..\..\sample-policies\policy.wasm" Link="policy.wasm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="WasmerSharp" Version="0.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Opa.Wasm\Opa.Wasm.csproj" />
   </ItemGroup>
 
 </Project>

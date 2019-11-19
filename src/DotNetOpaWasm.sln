@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29509.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlaygroundApp", "PlaygroundApp.csproj", "{279FB6BC-EAAD-40B1-AAAB-15238855D097}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Opa.Wasm.ConsoleSample", "Opa.Wasm.ConsoleSample\Opa.Wasm.ConsoleSample.csproj", "{279FB6BC-EAAD-40B1-AAAB-15238855D097}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Opa.Wasm", "Opa.Wasm\Opa.Wasm.csproj", "{D8525797-4467-4C8C-920B-EF244EC0C560}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{279FB6BC-EAAD-40B1-AAAB-15238855D097}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{279FB6BC-EAAD-40B1-AAAB-15238855D097}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{279FB6BC-EAAD-40B1-AAAB-15238855D097}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8525797-4467-4C8C-920B-EF244EC0C560}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8525797-4467-4C8C-920B-EF244EC0C560}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8525797-4467-4C8C-920B-EF244EC0C560}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8525797-4467-4C8C-920B-EF244EC0C560}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

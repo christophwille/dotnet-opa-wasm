@@ -1,15 +1,18 @@
 ﻿using System;
+using WasmerSharp;
 
-namespace PlaygroundApp
+namespace Opa.Wasm.ConsoleSample
 {
 	// See https://github.com/open-policy-agent/npm-opa-wasm/blob/master/examples/nodejs-app/app.js
 	class Program
 	{
 		static void Main(string[] args)
 		{
-			var policy = new OpaPolicy();
+			Module m = OpaPolicyLoader.LoadFromDisk("policy.wasm");
+
+			var policy = new Opa.Wasm.OpaPolicy();
 			policy.ReserveMemory();
-			policy.LoadFromDisk("policy.wasm");
+			policy.Load(m);
 
 			policy.SetData(@"{""world"": ""world""}");
 

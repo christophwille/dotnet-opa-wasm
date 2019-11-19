@@ -2,7 +2,7 @@
 
 Call Open Policy Agent (OPA) policies in WASM (Web Assembly) from C# .NET Core
 
-A working sample is in PlayGroundApp. It mirrors the node sample, but not the node library (currently builtins not hooked up properly).
+A working sample is in src\Opa.Wasm.ConsoleSample. It mirrors the node sample, but not the node library (currently builtins not hooked up properly).
 
 ## References
 
