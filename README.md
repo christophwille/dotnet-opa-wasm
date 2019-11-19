@@ -2,7 +2,7 @@
 
 Call Open Policy Agent (OPA) policies in WASM (Web Assembly) from C# .NET Core
 
-A working sample is in PlayGround. It mirrors the node sample, but not the node library (currently builtins not hooked up properly).
+A working sample is in PlayGroundApp. It mirrors the node sample, but not the node library (currently builtins not hooked up properly).
 
 ## References
 
@@ -12,7 +12,10 @@ Docs are at https://github.com/open-policy-agent/opa/blob/master/docs/content/wa
 
 JS impl is at https://github.com/open-policy-agent/npm-opa-wasm/blob/master/src/opa.js
 
+Writing policies https://www.openpolicyagent.org/docs/latest/how-do-i-write-policies/
+
 ## WasmerSharp Infos
 
-https://github.com/migueldeicaza/WasmerSharp/
-https://migueldeicaza.github.io/WasmerSharp/articles/intro.html
+GitHub repo https://github.com/migueldeicaza/WasmerSharp/
+
+Intro article https://migueldeicaza.github.io/WasmerSharp/articles/intro.html
