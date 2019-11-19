@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using WasmerSharp;
@@ -9,6 +10,7 @@ namespace PlaygroundApp
 	public class OpaPolicy
 	{
 		private Memory _memory;
+		private Instance _instance;
 
 		public OpaPolicy()
 		{
@@ -32,13 +34,35 @@ namespace PlaygroundApp
 
 			byte[] wasm = File.ReadAllBytes("policy.wasm");
 
-			// This will crash until all imports are satisfied
-			Instance instance = new Instance(wasm, memoryImport, funcOpaAbort
+			_instance = new Instance(wasm, memoryImport, funcOpaAbort
 				, funcOpaBuiltin0, funcOpaBuiltin1, funcOpaBuiltin2, funcOpaBuiltin3, funcOpaBuiltin4);
 
-			foreach (var export in instance.Exports)
+			string builtins = DumpJson(_memory, _instance.Call("builtins"));
+			Console.WriteLine(builtins);
+		}
+
+		private string DumpJson(Memory memory, object[] addrResult)
+		{
+			var jsondumpResult = _instance.Call("opa_json_dump", (int)addrResult[0]);
+			int addr = (int)jsondumpResult[0];
+
+			return DumpString(memory, addr);
+		}
+
+		private static string DumpString(Memory memory, int addr)
+		{
+			unsafe
 			{
-				Console.WriteLine($"export {export.Name}");
+				int idx = addr;
+				var buf = (byte*)memory.Data;
+
+				while (buf[idx] != 0)
+				{
+					idx++;
+				}
+
+				var str = System.Text.Encoding.UTF8.GetString(buf + addr, idx - addr);
+				return str;
 			}
 		}
 
@@ -51,7 +75,8 @@ namespace PlaygroundApp
 
 		public void opa_abort(InstanceContext ctx, int addr)
 		{
-			var x = "";
+			// TODO: impl stringDecoder
+			Trace.TraceError("opa_abort was called");
 		}
 
 		public int opa_builtin0(InstanceContext ctx, int builtinId, int opaCtxReserved)
