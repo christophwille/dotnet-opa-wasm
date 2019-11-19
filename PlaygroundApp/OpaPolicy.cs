@@ -21,7 +21,13 @@ namespace PlaygroundApp
 			_memory = Memory.Create(minPages: 5);
 		}
 
-		public void LoadFromDisk()
+		public void LoadFromDisk(string filename)
+		{
+			byte[] wasm = File.ReadAllBytes(filename);
+			Load(wasm);
+		}
+
+		public void Load(byte[] wasm)
 		{
 			Import memoryImport = new Import("env", "memory", _memory);
 
@@ -32,13 +38,12 @@ namespace PlaygroundApp
 			var funcOpaBuiltin3 = new Import("env", "opa_builtin3", new ImportFunction((builtin3Callback)(opa_builtin3)));
 			var funcOpaBuiltin4 = new Import("env", "opa_builtin4", new ImportFunction((builtin4Callback)(opa_builtin4)));
 
-			byte[] wasm = File.ReadAllBytes("policy.wasm");
-
 			_instance = new Instance(wasm, memoryImport, funcOpaAbort
 				, funcOpaBuiltin0, funcOpaBuiltin1, funcOpaBuiltin2, funcOpaBuiltin3, funcOpaBuiltin4);
 
 			string builtins = DumpJson(_memory, _instance.Call("builtins"));
 			// Console.WriteLine($"builtins: {builtins}");
+			// TODO: Builtins are not implemented, not necessary for basic sample
 
 			_dataAddr = LoadJson(_memory, "{}");
 			_baseHeapPtr = AddrReturn("opa_heap_ptr_get");
@@ -86,7 +91,7 @@ namespace PlaygroundApp
 		private int _dataHeapPtr;
 		private int _dataHeapTop;
 
-		// Should be an extension method on Instance
+		// TODO: should be an extension method on Instance
 		private int AddrReturn(string name, params object[] args)
 		{
 			var result = _instance.Call(name, args);

@@ -9,7 +9,7 @@ namespace PlaygroundApp
 		{
 			var policy = new OpaPolicy();
 			policy.ReserveMemory();
-			policy.LoadFromDisk();
+			policy.LoadFromDisk("policy.wasm");
 
 			policy.SetData(@"{""world"": ""world""}");
 
