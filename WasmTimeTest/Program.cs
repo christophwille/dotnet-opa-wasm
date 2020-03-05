@@ -4,6 +4,7 @@ using System.Linq;
 using Wasmtime;
 using Wasmtime.Exports;
 using Wasmtime.Externs;
+using Wasmtime.Imports;
 
 namespace WasmTimeTest
 {
@@ -14,27 +15,12 @@ namespace WasmTimeTest
 			using var engine = new Engine();
 			using var store = engine.CreateStore();
 			using var module = store.CreateModule("policy.wasm");
+			using dynamic instance = module.Instantiate(new OpaHost());
 
-			using var instance = module.Instantiate(new OpaHost());
-			// my guess: would need access to _handle in Memory which is internal (Memory in WasmerSharp is derived from WasmerNativeHandle)
-			/*
-			Wasmtime.WasmtimeException
-			  HResult=0x80131500
-			  Message=Unable to bind 'OpaHost.EnvMemory' to WebAssembly import 'env.memory': Memory does not have the expected minimum of 2 page(s).
-			  Source=Wasmtime.Dotnet
-			  StackTrace:
-			   at Wasmtime.Bindings.MemoryBinding.Bind(Store store, IHost host)
-			   at Wasmtime.Instance.<>c__DisplayClass0_0.<.ctor>b__0(Binding b)
-			   at System.Linq.Enumerable.SelectListIterator`2.ToArray()
-			   at System.Linq.Enumerable.ToArray[TSource](IEnumerable`1 source)
-			   at Wasmtime.Instance..ctor(Module module, Wasi wasi, IHost host)
-			   at Wasmtime.Module.Instantiate(Wasi wasi, IHost host)
-			   at Wasmtime.Module.Instantiate(IHost host)
-			   at WasmTimeTest.Program.Main(String[] args) in D:\GitWorkspace\csharp-opa-wasm\WasmTimeTest\Program.cs:line 17
-			 */
+			int addrBuiltins = instance.builtins();
+			int addrDumpedJson = instance.opa_json_dump(addrBuiltins);
 
-
-			var memory = instance.Externs.Memories.FirstOrDefault();
+			// How am I going to decode a null-terminated string using Memory?
 		}
 	}
 
@@ -42,7 +28,7 @@ namespace WasmTimeTest
 	{
 		public OpaHost()
 		{
-			EnvMemory = new Memory(Memory.PageSize * 2, UInt32.MaxValue); // min page size = 2
+			EnvMemory = new Memory(2); // (import "env" "memory" (memory $env.memory 2))
 		}
 
 		public Instance Instance { get; set; }
