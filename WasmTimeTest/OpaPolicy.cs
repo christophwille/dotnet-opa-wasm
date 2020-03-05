@@ -48,6 +48,37 @@ namespace WasmTimeTest
 			// endof js ctor LoadedPolicy
 		}
 
+		public string Evaluate(string json)
+		{
+			// Reset the heap pointer before each evaluation
+			_policy.opa_heap_ptr_set(_dataHeapPtr);
+			_policy.opa_heap_top_set(_dataHeapTop);
+
+			// Load the input data
+			int inputAddr = LoadJson(json);
+
+			// Setup the evaluation context
+			int ctxAddr = _policy.opa_eval_ctx_new();
+			_policy.opa_eval_ctx_set_input(ctxAddr, inputAddr);
+			_policy.opa_eval_ctx_set_data(ctxAddr, _dataAddr);
+
+			// Actually evaluate the policy
+			_policy.eval(ctxAddr);
+
+			// Retrieve the result
+			int resultAddr = _policy.opa_eval_ctx_get_result(ctxAddr);
+			return DumpJson(resultAddr);
+		}
+
+		public void SetData(string json)
+		{
+			_policy.opa_heap_ptr_set(_baseHeapPtr);
+			_policy.opa_heap_top_set(_baseHeapTop);
+			_dataAddr = LoadJson(json);
+			_dataHeapPtr = _policy.opa_heap_ptr_get();
+			_dataHeapTop = _policy.opa_heap_top_get();
+		}
+
 		private int LoadJson(string json)
 		{
 			int addr = _policy.opa_malloc(json.Length);

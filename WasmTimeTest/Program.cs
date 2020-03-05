@@ -17,6 +17,13 @@ namespace WasmTimeTest
 
 			var opaPolicy = module.CreateOpaPolicy();
 
+			opaPolicy.SetData(@"{""world"": ""world""}");
+
+			string input = @"{""message"": ""world""}";
+			string output = opaPolicy.Evaluate(input);
+
+			Console.WriteLine($"eval output: {output}");
+			Console.Read();
 		}
 	}
 }
