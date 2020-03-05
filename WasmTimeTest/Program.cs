@@ -15,12 +15,23 @@ namespace WasmTimeTest
 			using var engine = new Engine();
 			using var store = engine.CreateStore();
 			using var module = store.CreateModule("policy.wasm");
-			using dynamic instance = module.Instantiate(new OpaHost());
 
-			int addrBuiltins = instance.builtins();
-			int addrDumpedJson = instance.opa_json_dump(addrBuiltins);
+			var host = new OpaHost();
+			using var instance = module.Instantiate(host);
 
-			// How am I going to decode a null-terminated string using Memory?
+			dynamic policy = (dynamic) instance;
+			int addrBuiltins = policy.builtins();
+			int addrDumpedJson = policy.opa_json_dump(addrBuiltins);
+
+			var buf = host.EnvMemory.Span;
+			int idx = addrDumpedJson;
+
+			while (buf[idx] != 0)
+			{
+				idx++;
+			}
+
+			string dumpedJson = host.EnvMemory.ReadString(addrDumpedJson, idx - addrDumpedJson);
 		}
 	}
 
