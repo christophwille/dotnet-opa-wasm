@@ -1,5 +1,5 @@
 ﻿using System;
-using Wasmtime;
+using WasmerSharp;
 
 namespace Opa.Wasm.ConsoleSample
 {
@@ -8,16 +8,16 @@ namespace Opa.Wasm.ConsoleSample
 	{
 		static void Main(string[] args)
 		{
-			using var engine = new Engine();
-			using var store = engine.CreateStore();
-			using var module = store.CreateModule("policy.wasm");
+			Module m = OpaPolicyLoader.LoadFromDisk("policy.wasm");
 
-			var opaPolicy = module.CreateOpaPolicy();
+			var policy = new Opa.Wasm.OpaPolicy();
+			policy.ReserveMemory();
+			policy.Load(m);
 
-			opaPolicy.SetData(@"{""world"": ""world""}");
+			policy.SetData(@"{""world"": ""world""}");
 
 			string input = @"{""message"": ""world""}";
-			string output = opaPolicy.Evaluate(input);
+			string output = policy.Evaluate(input);
 
 			Console.WriteLine($"eval output: {output}");
 			Console.Read();
