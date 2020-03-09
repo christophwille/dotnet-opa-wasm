@@ -20,7 +20,7 @@ namespace BenchmarkOpaWasm
 		[Benchmark]
 		public string RunPolicy()
 		{
-			var opaPolicy = _module.CreateOpaPolicy();
+			using var opaPolicy = _module.CreateOpaPolicy();
 
 			opaPolicy.SetData(@"{""world"": ""world""}");
 

@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.12.0" />
-    <PackageReference Include="Opa.Wasm" Version="0.2.0" />
+    <PackageReference Include="Opa.Wasm" Version="0.2.1" />
   </ItemGroup>
 
 </Project>
