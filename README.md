@@ -1,4 +1,6 @@
-# csharp-opa-wasm
+# Open Policy Agent for .NET
+
+[NuGet package](https://www.nuget.org/packages/Opa.Wasm/)
 
 Call Open Policy Agent (OPA) policies in WASM (Web Assembly) from C# .NET Core
 
