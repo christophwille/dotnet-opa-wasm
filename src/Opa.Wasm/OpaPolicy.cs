@@ -15,7 +15,7 @@ namespace Opa.Wasm
 		}
 	}
 
-	public class OpaPolicy
+	public class OpaPolicy : IDisposable
 	{
 		private int _dataAddr;
 		private int _baseHeapPtr;
@@ -111,6 +111,22 @@ namespace Opa.Wasm
 			}
 
 			return memory.ReadString(addr, idx - addr);
+		}
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				_policy = null;
+				_instance.Dispose();
+				_instance = null;
+			}
 		}
 	}
 }
