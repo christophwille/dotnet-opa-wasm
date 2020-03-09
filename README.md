@@ -14,8 +14,6 @@ JS impl is at https://github.com/open-policy-agent/npm-opa-wasm/blob/master/src/
 
 Writing policies https://www.openpolicyagent.org/docs/latest/how-do-i-write-policies/
 
-## WasmerSharp Infos
+## Wasmtime Infos
 
-GitHub repo https://github.com/migueldeicaza/WasmerSharp/
-
-Intro article https://migueldeicaza.github.io/WasmerSharp/articles/intro.html
+GitHub repo https://github.com/bytecodealliance/wasmtime/tree/master/crates/misc/dotnet (includes samples)
