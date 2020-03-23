@@ -27,6 +27,7 @@ namespace AspNetAuthZwithOpa
 		{
 			services.AddRazorPages();
 
+			services.AddMemoryCache();
 			services.AddSingleton<IPoliciesStore, ImmutablePoliciesFileStore>();
 
 			services.AddAuthorization(options =>

@@ -4,18 +4,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace AspNetAuthZwithOpa.Authorization
 {
 	public class ImmutablePoliciesFileStore : IPoliciesStore
 	{
+		private readonly IMemoryCache _cache;
 		private readonly ILogger<ImmutablePoliciesFileStore> _logger;
 		private readonly string _wasmLoadPath;
 
 		// TODO: Add Cache
 
-		public ImmutablePoliciesFileStore(ILogger<ImmutablePoliciesFileStore> logger)
+		public ImmutablePoliciesFileStore(IMemoryCache cache, ILogger<ImmutablePoliciesFileStore> logger)
 		{
+			_cache = cache;
 			_logger = logger;
 
 			// Set default load path
@@ -32,8 +35,19 @@ namespace AspNetAuthZwithOpa.Authorization
 			throw new NotImplementedException();
 		}
 
+		public virtual string GenerateCacheKeyForPolicy(string name)
+		{
+			return "OPA_AuthZ_Policies_Cached_" + name;
+		}
+
 		public async Task<(byte[], bool)> LoadPolicyAsync(string name, bool throwOnLoadError = false)
 		{
+			string cacheKey = GenerateCacheKeyForPolicy(name);
+			if (_cache.TryGetValue(cacheKey, out byte[] wasmBytes))
+			{
+				return (wasmBytes, true);
+			}
+
 			string fileName = Path.Combine(_wasmLoadPath, name + ".wasm");
 			bool fileExists = File.Exists(fileName);
 			
@@ -50,6 +64,7 @@ namespace AspNetAuthZwithOpa.Authorization
 			try
 			{
 				var bytes = await File.ReadAllBytesAsync(fileName);
+				_cache.Set(cacheKey, bytes);
 				return (bytes, true);
 			}
 			catch (Exception e)
