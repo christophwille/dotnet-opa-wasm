@@ -27,6 +27,8 @@ namespace AspNetAuthZwithOpa
 		{
 			services.AddRazorPages();
 
+			services.AddSingleton<IPoliciesStore, ImmutablePoliciesFileStore>();
+
 			services.AddAuthorization(options =>
 			{
 				options.AddPolicy("GuardedByOpa", policy =>
