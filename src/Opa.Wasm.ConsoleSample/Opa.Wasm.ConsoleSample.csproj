@@ -10,7 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\sample-policies\policy.wasm" Link="policy.wasm">
+    <None Include="..\..\sample-policies\example.wasm" Link="example.wasm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\sample-policies\rbac.wasm" Link="rbac.wasm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

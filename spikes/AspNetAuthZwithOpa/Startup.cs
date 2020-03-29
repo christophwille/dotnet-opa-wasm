@@ -33,7 +33,7 @@ namespace AspNetAuthZwithOpa
 			services.AddAuthorization(options =>
 			{
 				options.AddPolicy("GuardedByOpa", policy =>
-					policy.Requirements.Add(new OpaPolicyRequirement("policy")));
+					policy.Requirements.Add(new OpaPolicyRequirement("example")));
 			});
 
 			services.AddSingleton<IAuthorizationHandler, OpaPolicyHandler>();

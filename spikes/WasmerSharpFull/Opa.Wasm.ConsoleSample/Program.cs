@@ -8,7 +8,7 @@ namespace Opa.Wasm.ConsoleSample
 	{
 		static void Main(string[] args)
 		{
-			Module m = OpaPolicyLoader.LoadFromDisk("policy.wasm");
+			Module m = OpaPolicyLoader.LoadFromDisk("example.wasm");
 
 			var policy = new Opa.Wasm.OpaPolicy();
 			policy.ReserveMemory();

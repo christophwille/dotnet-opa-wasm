@@ -14,7 +14,7 @@ namespace BenchmarkOpaWasm
 		{
 			var engine = new Engine();
 			var store = engine.CreateStore();
-			_module = store.CreateModule("policy.wasm");
+			_module = store.CreateModule("example.wasm");
 		}
 
 		[Benchmark]

@@ -8,7 +8,7 @@ namespace MinimalInteraction
 	{
 		static void Main(string[] args)
 		{
-			byte[] wasm = File.ReadAllBytes("policy.wasm");
+			byte[] wasm = File.ReadAllBytes("example.wasm");
 			Module m = Module.Create(wasm);
 
 			Console.WriteLine("The loaded wasm has the following imports listed:");
