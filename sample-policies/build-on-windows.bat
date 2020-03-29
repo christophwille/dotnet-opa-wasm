@@ -1,1 +1,1 @@
-opa build -d example.rego "data.example = x"
+opa_windows_amd64 build -d example.rego "data.example = x"

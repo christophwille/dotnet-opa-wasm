@@ -8,7 +8,7 @@
     <RepositoryUrl>https://github.com/christophwille/csharp-opa-wasm.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Authors>Christoph Wille</Authors>
-    <Description>Built for Open Policy Agent 0.15.1 Web Assembly interface</Description>
+    <Description>Built for Open Policy Agent 0.18 Web Assembly interface</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
