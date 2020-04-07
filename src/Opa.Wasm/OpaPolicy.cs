@@ -1,20 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
 using Wasmtime;
 
 namespace Opa.Wasm
 {
-	public static class OpaExtensions
-	{
-		public static OpaPolicy CreateOpaPolicy(this Module module)
-		{
-			var op = new OpaPolicy();
-			op.Load(module);
-			return op;
-		}
-	}
-
 	public class OpaPolicy : IDisposable
 	{
 		private int _dataAddr;
@@ -23,18 +12,99 @@ namespace Opa.Wasm
 		private int _dataHeapPtr;
 		private int _dataHeapTop;
 
+		private Host _host;
+		private Memory _envMemory;
 		private Instance _instance;
-		private OpaHost _host;
 		private dynamic _policy;
 
-		internal OpaPolicy()
+		public OpaPolicy()
 		{
+			_host = new Host();
+			BuildHost();
 		}
 
-		internal void Load(Module module)
+		public void BuildHost()
 		{
-			_host = new OpaHost();
-			_instance = module.Instantiate(_host);
+			/* https://webassembly.github.io/wabt/demo/wasm2wat/
+			  (type $t0 (func (param i32 i32) (result i32)))
+			  (type $t2 (func (param i32 i32 i32) (result i32)))
+			  (type $t3 (func (param i32)))
+			  (type $t4 (func (param i32 i32 i32 i32) (result i32)))
+			  (type $t5 (func (param i32 i32 i32 i32 i32) (result i32)))
+			  (type $t6 (func (param i32 i32 i32 i32 i32 i32) (result i32)))
+			  (import "env" "memory" (memory $env.memory 2))
+			  (import "env" "opa_abort" (func $env.opa_abort (type $t3)))
+			  (import "env" "opa_builtin0" (func $env.opa_builtin0 (type $t0)))
+			  (import "env" "opa_builtin1" (func $env.opa_builtin1 (type $t2)))
+			  (import "env" "opa_builtin2" (func $env.opa_builtin2 (type $t4)))
+			  (import "env" "opa_builtin3" (func $env.opa_builtin3 (type $t5)))
+			  (import "env" "opa_builtin4" (func $env.opa_builtin4 (type $t6)))
+			*/
+			_envMemory = _host.DefineMemory(OpaConstants.Module, OpaConstants.MemoryName, 2);
+
+			_host.DefineFunction(OpaConstants.Module, OpaConstants.Abort,
+				(Caller caller, int addr) =>
+				{
+					Debugger.Break();
+				}
+			);
+
+			_host.DefineFunction(OpaConstants.Module, OpaConstants.Builtin0,
+				(Caller caller, int builtinId, int opaCtxReserved) =>
+				{
+					Debugger.Break();
+					return 0;
+				}
+			);
+
+			_host.DefineFunction(OpaConstants.Module, OpaConstants.Builtin1,
+				(Caller caller, int builtinId, int opaCtxReserved, int addr1) =>
+				{
+					Debugger.Break();
+					return 0;
+				}
+			);
+
+			_host.DefineFunction(OpaConstants.Module, OpaConstants.Builtin2,
+				(Caller caller, int builtinId, int opaCtxReserved, int addr1, int addr2) =>
+				{
+					Debugger.Break();
+					return 0;
+				}
+			);
+
+			_host.DefineFunction(OpaConstants.Module, OpaConstants.Builtin3,
+				(Caller caller, int builtinId, int opaCtxReserved, int addr1, int addr2, int addr3) =>
+				{
+					Debugger.Break();
+					return 0;
+				}
+			);
+
+			_host.DefineFunction(OpaConstants.Module, OpaConstants.Builtin4,
+				(Caller caller, int builtinId, int opaCtxReserved, int addr1, int addr2, int addr3, int addr4) =>
+				{
+					Debugger.Break();
+					return 0;
+				}
+			);
+		}
+
+		public void Load(string fileName)
+		{
+			using var module = _host.LoadModule(fileName);
+			InitializePolicy(module);
+		}
+
+		public void Load(string name, byte[] content)
+		{
+			using var module = _host.LoadModule(name, content);
+			InitializePolicy(module);
+		}
+
+		private void InitializePolicy(Module module)
+		{
+			_instance = _host.Instantiate(module);
 			_policy = (dynamic)_instance;
 
 			string builtins = DumpJson(_policy.builtins());
@@ -82,7 +152,7 @@ namespace Opa.Wasm
 		private int LoadJson(string json)
 		{
 			int addr = _policy.opa_malloc(json.Length);
-			_host.EnvMemory.WriteString(addr, json);
+			_envMemory.WriteString(addr, json);
 
 			int parseAddr = _policy.opa_json_parse(addr, json.Length);
 
@@ -97,7 +167,7 @@ namespace Opa.Wasm
 		private string DumpJson(int addrResult)
 		{
 			int addr = _policy.opa_json_dump(addrResult);
-			return DecodeNullTerminatedString(_host.EnvMemory, addr);
+			return DecodeNullTerminatedString(_envMemory, addr);
 		}
 
 		private static string DecodeNullTerminatedString(Memory memory, int addr)
@@ -123,9 +193,12 @@ namespace Opa.Wasm
 		{
 			if (disposing)
 			{
+				_envMemory = null;
 				_policy = null;
 				_instance.Dispose();
 				_instance = null;
+				_host.Dispose();
+				_host = null;
 			}
 		}
 	}

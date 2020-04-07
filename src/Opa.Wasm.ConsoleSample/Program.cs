@@ -1,5 +1,4 @@
 ﻿using System;
-using Wasmtime;
 
 namespace Opa.Wasm.ConsoleSample
 {
@@ -17,11 +16,8 @@ namespace Opa.Wasm.ConsoleSample
 		// https://play.openpolicyagent.org/ "Role-based" example stripped down to minimum
 		static void EvaluateRbac()
 		{
-			using var engine = new Engine();
-			using var store = engine.CreateStore();
-			using var module = store.CreateModule("rbac.wasm");
-
-			var opaPolicy = module.CreateOpaPolicy();
+			using var opaPolicy = new OpaPolicy();
+			opaPolicy.Load("rbac.wasm");
 
 			opaPolicy.SetData(@"{""user_roles"": { ""alice"": [""admin""],""bob"": [""employee"",""billing""],""eve"": [""customer""]}}");
 
@@ -33,11 +29,8 @@ namespace Opa.Wasm.ConsoleSample
 
 		static void EvaluateHelloWorld()
 		{
-			using var engine = new Engine();
-			using var store = engine.CreateStore();
-			using var module = store.CreateModule("example.wasm");
-
-			var opaPolicy = module.CreateOpaPolicy();
+			using var opaPolicy = new OpaPolicy();
+			opaPolicy.Load("example.wasm");
 
 			opaPolicy.SetData(@"{""world"": ""world""}");
 

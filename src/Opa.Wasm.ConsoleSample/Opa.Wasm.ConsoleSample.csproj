@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Wasmtime" Version="0.12.0-preview1" />
+    <PackageReference Include="Wasmtime" Version="0.15.0-preview1" />
   </ItemGroup>
 
   <ItemGroup>

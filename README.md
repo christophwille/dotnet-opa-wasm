@@ -18,4 +18,6 @@ Writing policies https://www.openpolicyagent.org/docs/latest/how-do-i-write-poli
 
 ## Wasmtime Infos
 
-GitHub repo https://github.com/bytecodealliance/wasmtime/tree/master/crates/misc/dotnet (includes samples)
+GitHub repo https://github.com/bytecodealliance/wasmtime-dotnet
+
+Docs https://bytecodealliance.github.io/wasmtime-dotnet/articles/intro.html

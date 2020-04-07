@@ -8,19 +8,18 @@ namespace BenchmarkOpaWasm
 {
 	public class WasmPolicyExecution
 	{
-		private readonly Module _module;
+		private readonly byte[] _module;
 
 		public WasmPolicyExecution()
 		{
-			var engine = new Engine();
-			var store = engine.CreateStore();
-			_module = store.CreateModule("example.wasm");
+			_module = System.IO.File.ReadAllBytes("example.wasm");
 		}
 
 		[Benchmark]
 		public string RunPolicy()
 		{
-			using var opaPolicy = _module.CreateOpaPolicy();
+			using var opaPolicy = new OpaPolicy();
+			opaPolicy.Load("example", _module);
 
 			opaPolicy.SetData(@"{""world"": ""world""}");
 
