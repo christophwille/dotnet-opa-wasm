@@ -17,13 +17,14 @@ namespace Opa.Wasm
 		private Instance _instance;
 		private dynamic _policy;
 
-		public OpaPolicy()
+		public OpaPolicy(Store store, Module module)
 		{
-			_host = new Host();
+			_host = new Host(store);
 			BuildHost();
+			Initialize(module);
 		}
 
-		public void BuildHost()
+		private void BuildHost()
 		{
 			/* https://webassembly.github.io/wabt/demo/wasm2wat/
 			  (type $t0 (func (param i32 i32) (result i32)))
@@ -90,19 +91,7 @@ namespace Opa.Wasm
 			);
 		}
 
-		public void Load(string fileName)
-		{
-			using var module = _host.LoadModule(fileName);
-			InitializePolicy(module);
-		}
-
-		public void Load(string name, byte[] content)
-		{
-			using var module = _host.LoadModule(name, content);
-			InitializePolicy(module);
-		}
-
-		private void InitializePolicy(Module module)
+		private void Initialize(Module module)
 		{
 			_instance = _host.Instantiate(module);
 			_policy = (dynamic)_instance;

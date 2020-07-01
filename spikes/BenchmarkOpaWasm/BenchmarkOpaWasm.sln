@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29827.131
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BenchmarkOpaWasm", "BenchmarkOpaWasm.csproj", "{5A3915DC-9B1D-439B-881B-D08C5DEC0C6F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Opa.Wasm", "..\..\src\Opa.Wasm\Opa.Wasm.csproj", "{297E6CD7-7D3B-4E19-81C1-4700C201FB0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Opa.Wasm", "..\..\src\Opa.Wasm\Opa.Wasm.csproj", "{6931C48D-6ABD-4F2D-9E57-56D378A67BFB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{5A3915DC-9B1D-439B-881B-D08C5DEC0C6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A3915DC-9B1D-439B-881B-D08C5DEC0C6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A3915DC-9B1D-439B-881B-D08C5DEC0C6F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{297E6CD7-7D3B-4E19-81C1-4700C201FB0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{297E6CD7-7D3B-4E19-81C1-4700C201FB0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{297E6CD7-7D3B-4E19-81C1-4700C201FB0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{297E6CD7-7D3B-4E19-81C1-4700C201FB0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6931C48D-6ABD-4F2D-9E57-56D378A67BFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6931C48D-6ABD-4F2D-9E57-56D378A67BFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6931C48D-6ABD-4F2D-9E57-56D378A67BFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6931C48D-6ABD-4F2D-9E57-56D378A67BFB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

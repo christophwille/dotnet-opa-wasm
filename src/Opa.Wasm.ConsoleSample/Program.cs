@@ -16,8 +16,9 @@ namespace Opa.Wasm.ConsoleSample
 		// https://play.openpolicyagent.org/ "Role-based" example stripped down to minimum
 		static void EvaluateRbac()
 		{
-			using var opaPolicy = new OpaPolicy();
-			opaPolicy.Load("rbac.wasm");
+			using var opaStore = new OpaPolicyStore();
+			using var module = opaStore.Load("rbac.wasm");
+			using var opaPolicy = new OpaPolicy(opaStore.Store, module);
 
 			opaPolicy.SetData(@"{""user_roles"": { ""alice"": [""admin""],""bob"": [""employee"",""billing""],""eve"": [""customer""]}}");
 
@@ -29,8 +30,9 @@ namespace Opa.Wasm.ConsoleSample
 
 		static void EvaluateHelloWorld()
 		{
-			using var opaPolicy = new OpaPolicy();
-			opaPolicy.Load("example.wasm");
+			using var opaStore = new OpaPolicyStore();
+			using var module = opaStore.Load("example.wasm");
+			using var opaPolicy = new OpaPolicy(opaStore.Store, module);
 
 			opaPolicy.SetData(@"{""world"": ""world""}");
 
