@@ -1,20 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Wasmtime;
 
 namespace Opa.Wasm
 {
-	public class OpaPolicyStore : IDisposable
+	public class OpaModule : IDisposable
 	{
+		private Engine _engine;
 		private Store _store;
 
-		public OpaPolicyStore()
+		public OpaModule()
 		{
-			_store = new Store();
+			_engine = new Engine();
+			_store = new Store(_engine);
 		}
 
-		public Store Store { get { return _store; } }
+		public Host CreateHost() => new Host(_engine);
 
 		public Module Load(string fileName)
 		{
@@ -38,6 +38,8 @@ namespace Opa.Wasm
 			{
 				_store.Dispose();
 				_store = null;
+				_engine.Dispose();
+				_engine = null;
 			}
 		}
 	}

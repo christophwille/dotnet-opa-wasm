@@ -17,11 +17,11 @@ namespace Opa.Wasm
 		private Instance _instance;
 		private dynamic _policy;
 
-		public OpaPolicy(Store store, Module module)
+		public OpaPolicy(OpaModule module, Module wasmModule)
 		{
-			_host = new Host(store);
+			_host = module.CreateHost();
 			BuildHost();
-			Initialize(module);
+			Initialize(wasmModule);
 		}
 
 		private void BuildHost()
