@@ -1,2 +1,11 @@
-opa_windows_amd64 build -d example.rego -o example.wasm "data.example = result"
-opa_windows_amd64 build -d rbac.rego -o rbac.wasm "data.app.rbac = result"
+opa_windows_amd64 build -t wasm -e "example/hello" example.rego
+tar -xzf bundle.tar.gz /policy.wasm
+copy policy.wasm example.wasm
+del policy.wasm
+del bundle.tar.gz
+
+opa_windows_amd64 build -t wasm -e "app.rbac" rbac.rego
+tar -xzf bundle.tar.gz /policy.wasm
+copy policy.wasm rbac.wasm
+del policy.wasm
+del bundle.tar.gz

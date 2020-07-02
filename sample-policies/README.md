@@ -2,4 +2,4 @@ Example.rego is taken from https://github.com/open-policy-agent/npm-opa-wasm/tre
 
 rbac.rego is simplified from https://play.openpolicyagent.org/
 
-Download Windows binaries (wasm in this folder built with v0.18) from https://github.com/open-policy-agent/opa/releases
+Download Windows binaries (wasm in this folder built with v0.21.0) from https://github.com/open-policy-agent/opa/releases

@@ -13,5 +13,6 @@ namespace Opa.Wasm
 		public static string Builtin2 = "opa_builtin2";
 		public static string Builtin3 = "opa_builtin3";
 		public static string Builtin4 = "opa_builtin4";
+		public static string PrintLn = "opa_println";
 	}
 }

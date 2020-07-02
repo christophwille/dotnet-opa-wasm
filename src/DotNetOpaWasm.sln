@@ -5,7 +5,15 @@ VisualStudioVersion = 16.0.29509.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Opa.Wasm.ConsoleSample", "Opa.Wasm.ConsoleSample\Opa.Wasm.ConsoleSample.csproj", "{279FB6BC-EAAD-40B1-AAAB-15238855D097}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Opa.Wasm", "Opa.Wasm\Opa.Wasm.csproj", "{D8525797-4467-4C8C-920B-EF244EC0C560}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Opa.Wasm", "Opa.Wasm\Opa.Wasm.csproj", "{D8525797-4467-4C8C-920B-EF244EC0C560}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Policies", "Policies", "{E7C60A3A-950E-4DD9-9BE4-39428A3A5311}"
+	ProjectSection(SolutionItems) = preProject
+		..\sample-policies\build-on-windows.bat = ..\sample-policies\build-on-windows.bat
+		..\sample-policies\example.rego = ..\sample-policies\example.rego
+		..\sample-policies\rbac.rego = ..\sample-policies\rbac.rego
+		..\sample-policies\README.md = ..\sample-policies\README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

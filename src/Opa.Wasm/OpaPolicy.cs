@@ -40,6 +40,7 @@ namespace Opa.Wasm
 			  (import "env" "opa_builtin2" (func $env.opa_builtin2 (type $t4)))
 			  (import "env" "opa_builtin3" (func $env.opa_builtin3 (type $t5)))
 			  (import "env" "opa_builtin4" (func $env.opa_builtin4 (type $t6)))
+			  (import "env" "opa_println" (func $env.opa_println (type $t3)))
 			*/
 			_envMemory = _host.DefineMemory(OpaConstants.Module, OpaConstants.MemoryName, 2);
 
@@ -87,6 +88,13 @@ namespace Opa.Wasm
 				{
 					Debugger.Break();
 					return 0;
+				}
+			);
+
+			_host.DefineFunction(OpaConstants.Module, OpaConstants.PrintLn,
+				(Caller caller, int addr) =>
+				{
+					Debugger.Break();
 				}
 			);
 		}
