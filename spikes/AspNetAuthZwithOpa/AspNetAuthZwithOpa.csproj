@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Opa.Wasm" Version="0.2.0" />
+    <PackageReference Include="Opa.Wasm" Version="0.3.0" />
   </ItemGroup>
 
 

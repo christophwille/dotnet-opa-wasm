@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 using Microsoft.Extensions.Logging;
@@ -13,8 +11,6 @@ namespace AspNetAuthZwithOpa.Authorization
 		private readonly IMemoryCache _cache;
 		private readonly ILogger<ImmutablePoliciesFileStore> _logger;
 		private readonly string _wasmLoadPath;
-
-		// TODO: Add Cache
 
 		public ImmutablePoliciesFileStore(IMemoryCache cache, ILogger<ImmutablePoliciesFileStore> logger)
 		{
@@ -50,7 +46,7 @@ namespace AspNetAuthZwithOpa.Authorization
 
 			string fileName = Path.Combine(_wasmLoadPath, name + ".wasm");
 			bool fileExists = File.Exists(fileName);
-			
+
 			if (!fileExists)
 			{
 				_logger.LogWarning("Policy {0} not found", fileName);

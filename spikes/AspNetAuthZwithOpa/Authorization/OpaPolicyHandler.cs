@@ -1,23 +1,21 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Opa.Wasm;
-using Wasmtime;
 
 namespace AspNetAuthZwithOpa.Authorization
 {
 	public class OpaPolicyHandler : AuthorizationHandler<OpaPolicyRequirement>
 	{
 		private readonly IPoliciesStore _policiesStore;
-		private readonly Store _store;
+		private readonly ILogger<OpaPolicyHandler> _logger;
 
-		public OpaPolicyHandler(IPoliciesStore policiesStore)
+		public OpaPolicyHandler(IPoliciesStore policiesStore, ILogger<OpaPolicyHandler> logger)
 		{
 			_policiesStore = policiesStore;
-			var engine = new Engine();
-			_store = engine.CreateStore();
+			_logger = logger;
 		}
 
 		protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, OpaPolicyRequirement requirement)
@@ -31,8 +29,10 @@ namespace AspNetAuthZwithOpa.Authorization
 
 			if (succeeded)
 			{
-				using var module = _store.CreateModule(policyName, wasmBytes);
-				var opaPolicy = module.CreateOpaPolicy();
+				using var opaModule = new OpaModule();
+				// TODO: This incurs the compilation penalty for wasm - use an object pool (single-threaded use only)
+				using var module = opaModule.Load(policyName, wasmBytes);
+				using var opaPolicy = new OpaPolicy(opaModule, module);
 
 				opaPolicy.SetData(@"{""world"": ""world""}");
 
@@ -40,6 +40,10 @@ namespace AspNetAuthZwithOpa.Authorization
 				string output = opaPolicy.Evaluate(input);
 
 				context.Succeed(requirement);
+			}
+			else
+			{
+				_logger.LogError($"Policy {policyName} not found, cannot evaluate");
 			}
 		}
 	}
