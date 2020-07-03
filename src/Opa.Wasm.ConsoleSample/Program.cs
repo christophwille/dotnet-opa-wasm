@@ -1,4 +1,7 @@
-﻿using System;
+﻿using ICSharpCode.SharpZipLib.GZip;
+using ICSharpCode.SharpZipLib.Tar;
+using System;
+using System.IO;
 
 namespace Opa.Wasm.ConsoleSample
 {
@@ -9,6 +12,8 @@ namespace Opa.Wasm.ConsoleSample
 		{
 			EvaluateHelloWorld();
 			EvaluateRbac();
+
+			ReadFromBundle();
 
 			Console.Read();
 		}
@@ -40,6 +45,36 @@ namespace Opa.Wasm.ConsoleSample
 			string output = opaPolicy.Evaluate(input);
 
 			Console.WriteLine($"Hello world output: {output}");
+		}
+
+		static void ReadFromBundle()
+		{
+			using var inStream = File.OpenRead("bundle-example.tar.gz"); // by default would be bundle.tar.gz
+			using var gzipStream = new GZipInputStream(inStream);
+			using var tarStream = new TarInputStream(gzipStream);
+
+			TarEntry current = null;
+			MemoryStream ms = null;
+			while (null != (current = tarStream.GetNextEntry()))
+			{
+				if ("/policy.wasm" == current.Name)
+				{
+					ms = new MemoryStream();
+					tarStream.CopyEntryContents(ms);
+					break;
+				}
+			}
+
+			tarStream.Close();
+			gzipStream.Close();
+			inStream.Close();
+
+			if (null != ms)
+			{
+				ms.Position = 0;
+				var bytes = ms.ToArray();
+				int length = bytes.Length; // 232 KB (237,668 bytes)
+			}
 		}
 	}
 }
