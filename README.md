@@ -12,9 +12,14 @@ A working sample is in src\Opa.Wasm.ConsoleSample. It mirrors the node sample, b
 
 Docs are at https://github.com/open-policy-agent/opa/blob/master/docs/content/wasm.md
 
-JS impl is at https://github.com/open-policy-agent/npm-opa-wasm/blob/master/src/opa.js
-
 Writing policies https://www.openpolicyagent.org/docs/latest/how-do-i-write-policies/
+
+Example and Integrations https://github.com/open-policy-agent/contrib
+
+## Other Open Policy Agent WebAssemby SDKs
+
+* https://github.com/open-policy-agent/npm-opa-wasm/
+* https://github.com/open-policy-agent/golang-opa-wasm
 
 ## Wasmtime Infos
 
