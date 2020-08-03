@@ -14,16 +14,20 @@ namespace Opa.Wasm
 			_store = new Store(_engine);
 		}
 
-		public Host CreateHost() => new Host(_engine);
+		public Host CreateHost()
+		{
+			// return new Host(new Engine());
+			return new Host(_engine);
+		}
 
 		public Module Load(string fileName)
 		{
-			return _store.LoadModule(fileName);
+			return Module.FromFile(_engine, fileName);
 		}
 
 		public Module Load(string name, byte[] content)
 		{
-			return _store.LoadModule(name, content);
+			return Module.FromBytes(_engine, name, content);
 		}
 
 		public void Dispose()
