@@ -14,11 +14,7 @@ namespace Opa.Wasm
 			_store = new Store(_engine);
 		}
 
-		public Host CreateHost()
-		{
-			// return new Host(new Engine());
-			return new Host(_engine);
-		}
+		public Host CreateHost() => new Host(_engine);
 
 		public Module Load(string fileName)
 		{

@@ -17,7 +17,40 @@ namespace Opa.Wasm
 		private Instance _instance;
 		private dynamic _policy;
 
+		/// <summary>
+		/// This ctor is intended for scenarios where you want to cache a precompiled WASM module
+		/// </summary>
+		/// <param name="module"></param>
+		/// <param name="wasmModule"></param>
 		public OpaPolicy(OpaModule module, Module wasmModule)
+		{
+			SetupHost(module, wasmModule);
+		}
+
+		/// <summary>
+		/// Load OPA policy from a .wasm file on disk. Incurs compilation penalty.
+		/// </summary>
+		/// <param name="fileName"></param>
+		public OpaPolicy(string fileName)
+		{
+			using var module = new OpaModule();
+			var wasmModule = module.Load(fileName);
+			SetupHost(module, wasmModule);
+		}
+
+		/// <summary>
+		/// Load OPA policy from an in-memory byte[] (eg Cache or other non-disk location). Incurs compilation penalty.
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="content"></param>
+		public OpaPolicy(string name, byte[] content)
+		{
+			using var module = new OpaModule();
+			var wasmModule = module.Load(name, content);
+			SetupHost(module, wasmModule);
+		}
+
+		private void SetupHost(OpaModule module, Module wasmModule)
 		{
 			_host = module.CreateHost();
 			BuildHost();
