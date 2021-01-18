@@ -4,8 +4,10 @@ copy policy.wasm example.wasm
 del policy.wasm
 del bundle.tar.gz
 
-opa_windows_amd64 build -t wasm -e "app.rbac" rbac.rego
+opa_windows_amd64 build -t wasm -e "app/rbac" rbac.rego
 tar -xzf bundle.tar.gz /policy.wasm
 copy policy.wasm rbac.wasm
 del policy.wasm
 del bundle.tar.gz
+
+.\opa_windows_amd64.exe build example.rego --target wasm --entrypoint "example/hello" --output bundle-example.tar.gz

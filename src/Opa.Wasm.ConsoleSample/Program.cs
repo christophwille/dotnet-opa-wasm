@@ -73,7 +73,7 @@ namespace Opa.Wasm.ConsoleSample
 			{
 				ms.Position = 0;
 				var bytes = ms.ToArray();
-				int length = bytes.Length; // 232 KB (237,668 bytes)
+				int length = bytes.Length; // 554984
 			}
 		}
 	}
