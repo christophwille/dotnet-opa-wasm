@@ -1,7 +1,4 @@
-DEPRECATED - see \src\Opa.Wasm.Benchmarks
-
-
-Run `\bin\release\netcoreapp3.1> .\BenchmarkOpaWasm.exe`
+Run `\bin\release\netcoreapp3.1> .\Opa.Wasm.Benchmarks.exe`
 
 ``` ini
 
