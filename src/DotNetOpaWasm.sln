@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Policies", "Policies", "{E7
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Opa.Wasm.Benchmarks", "Opa.Wasm.Benchmarks\Opa.Wasm.Benchmarks.csproj", "{885FB6A8-BBD4-42B4-845A-FC077087B11A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Opa.Wasm.UnitTests", "Opa.Wasm.UnitTests\Opa.Wasm.UnitTests.csproj", "{AFC00FD4-7578-4B73-938D-8EC351CBDB2D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{885FB6A8-BBD4-42B4-845A-FC077087B11A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{885FB6A8-BBD4-42B4-845A-FC077087B11A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{885FB6A8-BBD4-42B4-845A-FC077087B11A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFC00FD4-7578-4B73-938D-8EC351CBDB2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFC00FD4-7578-4B73-938D-8EC351CBDB2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFC00FD4-7578-4B73-938D-8EC351CBDB2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFC00FD4-7578-4B73-938D-8EC351CBDB2D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
