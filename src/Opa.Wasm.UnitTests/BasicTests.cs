@@ -35,10 +35,10 @@ namespace Opa.Wasm.UnitTests
 			using var module = opaModule.Load(WasmFiles.RbacExample);
 			using var opaPolicy = new OpaPolicy(opaModule, module);
 
-			string data = File.ReadAllText(@".\TestData\basic_rbac_data.json");
+			string data = File.ReadAllText(Path.Combine("TestData", "basic_rbac_data.json"));
 			opaPolicy.SetData(data);
 
-			string input = File.ReadAllText(@".\TestData\basic_rbac_input.json");
+			string input = File.ReadAllText(Path.Combine("TestData", "basic_rbac_input.json"));
 			string outputJson = opaPolicy.Evaluate(input);
 
 			dynamic output = outputJson.ToDynamic();
