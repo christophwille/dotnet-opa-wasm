@@ -77,59 +77,66 @@ namespace Opa.Wasm
 			*/
 			_envMemory = _host.DefineMemory(OpaConstants.Module, OpaConstants.MemoryName, 2);
 
-			_host.DefineFunction(OpaConstants.Module, OpaConstants.Abort,
+			var funcAbort = _host.DefineFunction(OpaConstants.Module, OpaConstants.Abort,
 				(Caller caller, int addr) =>
 				{
 					Debugger.Break();
 				}
 			);
+			funcAbort.Dispose();
 
-			_host.DefineFunction(OpaConstants.Module, OpaConstants.Builtin0,
+			var funcBuiltin0 = _host.DefineFunction(OpaConstants.Module, OpaConstants.Builtin0,
 				(Caller caller, int builtinId, int opaCtxReserved) =>
 				{
 					Debugger.Break();
 					return 0;
 				}
 			);
+			funcBuiltin0.Dispose();
 
-			_host.DefineFunction(OpaConstants.Module, OpaConstants.Builtin1,
+			var funcBuiltin1 = _host.DefineFunction(OpaConstants.Module, OpaConstants.Builtin1,
 				(Caller caller, int builtinId, int opaCtxReserved, int addr1) =>
 				{
 					Debugger.Break();
 					return 0;
 				}
 			);
+			funcBuiltin1.Dispose();
 
-			_host.DefineFunction(OpaConstants.Module, OpaConstants.Builtin2,
+			var funcBuiltin2 = _host.DefineFunction(OpaConstants.Module, OpaConstants.Builtin2,
 				(Caller caller, int builtinId, int opaCtxReserved, int addr1, int addr2) =>
 				{
 					Debugger.Break();
 					return 0;
 				}
 			);
+			funcBuiltin2.Dispose();
 
-			_host.DefineFunction(OpaConstants.Module, OpaConstants.Builtin3,
+			var funcBuiltin3 = _host.DefineFunction(OpaConstants.Module, OpaConstants.Builtin3,
 				(Caller caller, int builtinId, int opaCtxReserved, int addr1, int addr2, int addr3) =>
 				{
 					Debugger.Break();
 					return 0;
 				}
 			);
+			funcBuiltin3.Dispose();
 
-			_host.DefineFunction(OpaConstants.Module, OpaConstants.Builtin4,
+			var funcBuiltin4 = _host.DefineFunction(OpaConstants.Module, OpaConstants.Builtin4,
 				(Caller caller, int builtinId, int opaCtxReserved, int addr1, int addr2, int addr3, int addr4) =>
 				{
 					Debugger.Break();
 					return 0;
 				}
 			);
+			funcBuiltin4.Dispose();
 
-			_host.DefineFunction(OpaConstants.Module, OpaConstants.PrintLn,
+			var funcPrintLn = _host.DefineFunction(OpaConstants.Module, OpaConstants.PrintLn,
 				(Caller caller, int addr) =>
 				{
 					Debugger.Break();
 				}
 			);
+			funcPrintLn.Dispose();
 		}
 
 		private void Initialize(Module module)
