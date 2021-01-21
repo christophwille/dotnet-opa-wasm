@@ -6,12 +6,12 @@ namespace Opa.Wasm
 	public class OpaModule : IDisposable
 	{
 		private Engine _engine;
-		private Store _store;
+		// private Store _store;
 
 		public OpaModule()
 		{
 			_engine = new Engine();
-			_store = new Store(_engine);
+			// _store = new Store(_engine);
 		}
 
 		public Host CreateHost() => new Host(_engine);
@@ -36,8 +36,8 @@ namespace Opa.Wasm
 		{
 			if (disposing)
 			{
-				_store.Dispose();
-				_store = null;
+				// _store.Dispose();
+				// _store = null;
 				_engine.Dispose();
 				_engine = null;
 			}

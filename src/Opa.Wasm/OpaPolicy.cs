@@ -223,6 +223,7 @@ namespace Opa.Wasm
 		{
 			if (disposing)
 			{
+				_envMemory.Dispose();
 				_envMemory = null;
 				_policy = null;
 				_instance.Dispose();
