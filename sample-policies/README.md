@@ -7,5 +7,4 @@
 
 Binaries: https://github.com/open-policy-agent/opa/releases
 
-The WASM files in this folder were built with the Windows binaries v0.21.0 
-using build-on-windows.bat (in PowerShell)
+The WASM files in this folder were built on Windows using build-on-windows.bat (in PowerShell)

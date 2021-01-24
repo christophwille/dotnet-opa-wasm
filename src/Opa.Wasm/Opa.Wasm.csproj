@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <Version>0.8.0</Version>
+    <Version>0.9.0</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/christophwille/csharp-opa-wasm</PackageProjectUrl>
     <RepositoryUrl>https://github.com/christophwille/csharp-opa-wasm.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Authors>Christoph Wille</Authors>
-    <Description>Built for Open Policy Agent 0.25.2 and Wasmtime 0.22.1-preview1</Description>
+    <Description>Built for Open Policy Agent 0.26 and Wasmtime 0.22.1-preview1</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

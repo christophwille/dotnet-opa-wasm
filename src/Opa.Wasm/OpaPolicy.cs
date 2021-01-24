@@ -8,9 +8,7 @@ namespace Opa.Wasm
 	{
 		private int _dataAddr;
 		private int _baseHeapPtr;
-		private int _baseHeapTop;
 		private int _dataHeapPtr;
-		private int _dataHeapTop;
 
 		private Host _host;
 		private Memory _envMemory;
@@ -57,24 +55,23 @@ namespace Opa.Wasm
 			Initialize(wasmModule);
 		}
 
+		/*  https://webassembly.github.io/wabt/demo/wasm2wat/
+			(type $t0 (func (param i32 i32 i32) (result i32)))
+			(type $t1 (func (param i32 i32) (result i32)))
+			(type $t4 (func (param i32)))
+			(type $t9 (func (param i32 i32 i32 i32) (result i32)))
+			(type $t10 (func (param i32 i32 i32 i32 i32 i32) (result i32)))
+			(type $t11 (func (param i32 i32 i32 i32 i32) (result i32)))
+			(import "env" "memory" (memory $env.memory 2))
+			(import "env" "opa_abort" (func $opa_abort (type $t4)))
+			(import "env" "opa_builtin0" (func $opa_builtin0 (type $t1)))
+			(import "env" "opa_builtin1" (func $opa_builtin1 (type $t0)))
+			(import "env" "opa_builtin2" (func $opa_builtin2 (type $t9)))
+			(import "env" "opa_builtin3" (func $opa_builtin3 (type $t11)))
+			(import "env" "opa_builtin4" (func $opa_builtin4 (type $t10)))
+		*/
 		private void BuildHost()
 		{
-			/* https://webassembly.github.io/wabt/demo/wasm2wat/
-			  (type $t0 (func (param i32 i32) (result i32)))
-			  (type $t2 (func (param i32 i32 i32) (result i32)))
-			  (type $t3 (func (param i32)))
-			  (type $t4 (func (param i32 i32 i32 i32) (result i32)))
-			  (type $t5 (func (param i32 i32 i32 i32 i32) (result i32)))
-			  (type $t6 (func (param i32 i32 i32 i32 i32 i32) (result i32)))
-			  (import "env" "memory" (memory $env.memory 2))
-			  (import "env" "opa_abort" (func $env.opa_abort (type $t3)))
-			  (import "env" "opa_builtin0" (func $env.opa_builtin0 (type $t0)))
-			  (import "env" "opa_builtin1" (func $env.opa_builtin1 (type $t2)))
-			  (import "env" "opa_builtin2" (func $env.opa_builtin2 (type $t4)))
-			  (import "env" "opa_builtin3" (func $env.opa_builtin3 (type $t5)))
-			  (import "env" "opa_builtin4" (func $env.opa_builtin4 (type $t6)))
-			  (import "env" "opa_println" (func $env.opa_println (type $t3)))
-			*/
 			_envMemory = _host.DefineMemory(OpaConstants.Module, OpaConstants.MemoryName, 2);
 
 			var funcAbort = _host.DefineFunction(OpaConstants.Module, OpaConstants.Abort,
@@ -129,14 +126,6 @@ namespace Opa.Wasm
 				}
 			);
 			funcBuiltin4.Dispose();
-
-			var funcPrintLn = _host.DefineFunction(OpaConstants.Module, OpaConstants.PrintLn,
-				(Caller caller, int addr) =>
-				{
-					Debugger.Break();
-				}
-			);
-			funcPrintLn.Dispose();
 		}
 
 		private void Initialize(Module module)
@@ -148,9 +137,7 @@ namespace Opa.Wasm
 
 			_dataAddr = LoadJson("{}");
 			_baseHeapPtr = _policy.opa_heap_ptr_get();
-			_baseHeapTop = _policy.opa_heap_top_get();
 			_dataHeapPtr = _baseHeapPtr;
-			_dataHeapTop = _baseHeapTop;
 
 			// endof js ctor LoadedPolicy
 		}
@@ -159,7 +146,6 @@ namespace Opa.Wasm
 		{
 			// Reset the heap pointer before each evaluation
 			_policy.opa_heap_ptr_set(_dataHeapPtr);
-			_policy.opa_heap_top_set(_dataHeapTop);
 
 			// Load the input data
 			int inputAddr = LoadJson(json);
@@ -180,10 +166,8 @@ namespace Opa.Wasm
 		public void SetData(string json)
 		{
 			_policy.opa_heap_ptr_set(_baseHeapPtr);
-			_policy.opa_heap_top_set(_baseHeapTop);
 			_dataAddr = LoadJson(json);
 			_dataHeapPtr = _policy.opa_heap_ptr_get();
-			_dataHeapTop = _policy.opa_heap_top_get();
 		}
 
 		private int LoadJson(string json)
