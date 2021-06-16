@@ -8,9 +8,10 @@
     <RepositoryUrl>https://github.com/christophwille/dotnet-opa-wasm.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Authors>Christoph Wille</Authors>
-    <Description>Call Open Policy Agent (OPA) policies in WASM (Web Assembly) from .NET Core 
+    <Description>
+      Call Open Policy Agent (OPA) policies in WASM (Web Assembly) from .NET Core
 
-Built for Open Policy Agent 0.28 and Wasmtime 0.28.0-preview1</Description>
+      Built for Open Policy Agent v0.29.4 and Wasmtime 0.28.0-preview1</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
