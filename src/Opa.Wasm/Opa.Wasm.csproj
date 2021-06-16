@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <Version>0.13.0</Version>
+    <Version>0.14.0</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/christophwille/dotnet-opa-wasm</PackageProjectUrl>
     <RepositoryUrl>https://github.com/christophwille/dotnet-opa-wasm.git</RepositoryUrl>
@@ -10,7 +10,7 @@
     <Authors>Christoph Wille</Authors>
     <Description>Call Open Policy Agent (OPA) policies in WASM (Web Assembly) from .NET Core 
 
-Built for Open Policy Agent 0.28 and Wasmtime 0.27.0-preview1</Description>
+Built for Open Policy Agent 0.28 and Wasmtime 0.28.0-preview1</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -22,7 +22,7 @@ Built for Open Policy Agent 0.28 and Wasmtime 0.27.0-preview1</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Wasmtime" Version="0.27.0-preview1" />
+    <PackageReference Include="Wasmtime" Version="0.28.0-preview1" />
   </ItemGroup>
 
 </Project>
