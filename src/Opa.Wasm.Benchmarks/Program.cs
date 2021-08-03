@@ -31,6 +31,50 @@ namespace Opa.Wasm.Benchmarks
 
 			return output;
 		}
+
+		[Benchmark]
+		public string FastEvaluatePolicy()
+		{
+			using var opaPolicy = new OpaPolicy(_opaModule, _module);
+
+			opaPolicy.SetData(@"{""world"": ""world""}");
+
+			string input = @"{""message"": ""world""}";
+			string output = opaPolicy.FastEvaluate(input);
+
+			return output;
+		}
+
+		const int runXTimes = 100;
+
+		[Benchmark]
+		public void RunPolicyX()
+		{
+			using var opaPolicy = new OpaPolicy(_opaModule, _module);
+
+			opaPolicy.SetData(@"{""world"": ""world""}");
+
+			string input = @"{""message"": ""world""}";
+			for (int i = 1; i <= runXTimes; i++)
+			{
+				string output = opaPolicy.Evaluate(input);
+			}
+		}
+
+		[Benchmark]
+		public void FastEvaluatePolicyX()
+		{
+			using var opaPolicy = new OpaPolicy(_opaModule, _module);
+
+			opaPolicy.SetData(@"{""world"": ""world""}");
+
+			string input = @"{""message"": ""world""}";
+
+			for (int i = 1; i <= runXTimes; i++)
+			{
+				string output = opaPolicy.FastEvaluate(input);
+			}
+		}
 	}
 
 	class Program

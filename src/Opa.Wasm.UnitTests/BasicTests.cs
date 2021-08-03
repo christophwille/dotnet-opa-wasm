@@ -45,5 +45,28 @@ namespace Opa.Wasm.UnitTests
 			Assert.IsTrue(output[0].result.allow);
 			Assert.IsTrue(output[0].result.user_is_admin);
 		}
+
+		[Test]
+		public void HelloWorldTest_FastEvaluate()
+		{
+			using var opaModule = new OpaModule();
+			using var module = opaModule.Load(WasmFiles.HelloWorldExample);
+			using var opaPolicy = new OpaPolicy(opaModule, module);
+
+			string data = new
+			{
+				world = "world"
+			}.ToJson();
+			opaPolicy.SetData(data);
+
+			string input = new
+			{
+				message = "world"
+			}.ToJson();
+			string outputJson = opaPolicy.FastEvaluate(input);
+
+			dynamic output = outputJson.ToDynamic();
+			Assert.IsTrue(output[0].result);
+		}
 	}
 }

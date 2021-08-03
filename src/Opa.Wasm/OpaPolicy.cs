@@ -161,6 +161,16 @@ namespace Opa.Wasm
 			return DumpJson(resultAddr);
 		}
 
+		// https://github.com/open-policy-agent/opa/issues/3696#issuecomment-891662230
+		public string FastEvaluate(string json)
+		{
+			_envMemory.WriteString(_store, _dataHeapPtr, json);
+
+			int resultaddr = Policy_opa_eval(_dataAddr, _dataHeapPtr, json.Length, _dataHeapPtr + json.Length);
+
+			return _envMemory.ReadNullTerminatedString(_store, resultaddr);
+		}
+
 		public void SetData(string json)
 		{
 			Policy_opa_heap_ptr_set(_baseHeapPtr);

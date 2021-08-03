@@ -8,10 +8,10 @@
 
   <ItemGroup>
     <None Include="..\..\sample-policies\example.wasm" Link="example.wasm">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\..\sample-policies\rbac.wasm" Link="rbac.wasm">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
