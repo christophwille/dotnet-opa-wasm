@@ -161,6 +161,17 @@ namespace Opa.Wasm
 			return DumpJson(resultAddr);
 		}
 
+		public string FastEvaluate(string inputJson)
+		{
+			// Policy_opa_heap_ptr_set(_dataHeapPtr);
+
+			int inputAddr = LoadJson(inputJson);
+
+			int resultaddr = Policy_opa_eval(_dataAddr, inputAddr, inputJson.Length, _dataHeapPtr);
+
+			return _envMemory.ReadNullTerminatedString(_store, resultaddr);
+		}
+
 		public void SetData(string json)
 		{
 			Policy_opa_heap_ptr_set(_baseHeapPtr);

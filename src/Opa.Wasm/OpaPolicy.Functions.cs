@@ -48,6 +48,14 @@ namespace Opa.Wasm
 			run?.Invoke(_store, ctxAddr);
 		}
 
+		private int Policy_opa_eval(/*int addr, int entrypoint_id, */
+			int dataaddr, int jsonaddr, int jsonlength, int heapaddr/*, int format*/)
+		{
+			var run = _instance.GetFunction(_store, "opa_eval");
+			return (int)run?.Invoke(_store, 0 /* always 0 */, 0 /* default entry point*/,
+				dataaddr, jsonaddr, jsonlength, heapaddr, 0 /* json format */);
+		}
+
 		private int Policy_opa_eval_ctx_get_result(int ctxAddr)
 		{
 			var run = _instance.GetFunction(_store, "opa_eval_ctx_get_result");
