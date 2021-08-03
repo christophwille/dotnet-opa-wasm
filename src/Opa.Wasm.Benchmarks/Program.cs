@@ -31,6 +31,19 @@ namespace Opa.Wasm.Benchmarks
 
 			return output;
 		}
+
+		[Benchmark]
+		public string FastEvaluatePolicy()
+		{
+			using var opaPolicy = new OpaPolicy(_opaModule, _module);
+
+			opaPolicy.SetData(@"{""world"": ""world""}");
+
+			string input = @"{""message"": ""world""}";
+			string output = opaPolicy.FastEvaluate(input);
+
+			return output;
+		}
 	}
 
 	class Program
