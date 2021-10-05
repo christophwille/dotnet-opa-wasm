@@ -19,6 +19,9 @@ namespace Opa.Wasm
 
 		public IReadOnlyDictionary<string, int> Entrypoints { get; private set; }
 
+		public int? AbiVersion { get; private set; }
+		public int? AbiMinorVersion { get; private set; }
+
 		/// <summary>
 		/// This ctor is intended for scenarios where you want to cache a precompiled WASM module
 		/// </summary>
@@ -143,6 +146,8 @@ namespace Opa.Wasm
 
 			string entrypoints = DumpJson(Policy_Entrypoints());
 			Entrypoints = ParseEntryPointsJson(entrypoints);
+
+			ReadAbiVersionGlobals();
 		}
 
 		/* Format of JSON
@@ -167,6 +172,34 @@ namespace Opa.Wasm
 			}
 
 			return entrypoints;
+		}
+
+		private void ReadAbiVersionGlobals()
+		{
+			var major = Policy_opa_wasm_abi_version();
+			if (major.HasValue)
+			{
+				if (major != 1)
+				{
+					throw new BadImageFormatException($"{major} ABI version is unsupported");
+				}
+
+				AbiVersion = major;
+			}
+			else
+			{
+				// opa_wasm_abi_version undefined
+			}
+
+			var minor = Policy_opa_wasm_abi_minor_version();
+			if (minor.HasValue)
+			{
+				AbiMinorVersion = minor;
+			}
+			else
+			{
+				// opa_wasm_abi_minor_version undefined
+			}
 		}
 
 		public string Evaluate(string json)

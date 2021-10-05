@@ -6,6 +6,18 @@ namespace Opa.Wasm
 {
 	public partial class OpaPolicy
 	{
+		private int? Policy_opa_wasm_abi_version()
+		{
+			var global = _instance.GetGlobal(_store, "opa_wasm_abi_version");
+			return (int?)global?.GetValue(_store);
+		}
+
+		private int? Policy_opa_wasm_abi_minor_version()
+		{
+			var global = _instance.GetGlobal(_store, "opa_wasm_abi_minor_version");
+			return (int?)global?.GetValue(_store);
+		}
+
 		private int Policy_Builtins()
 		{
 			var run = _instance.GetFunction(_store, "builtins");
