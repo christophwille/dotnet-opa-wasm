@@ -51,7 +51,7 @@ namespace Opa.Wasm.ConsoleSample
 		{
 			using var inStream = File.OpenRead("bundle-example.tar.gz"); // by default would be bundle.tar.gz
 			using var gzipStream = new GZipInputStream(inStream);
-			using var tarStream = new TarInputStream(gzipStream);
+			using var tarStream = new TarInputStream(gzipStream, null);
 
 			TarEntry current = null;
 			MemoryStream ms = null;
@@ -73,7 +73,7 @@ namespace Opa.Wasm.ConsoleSample
 			{
 				ms.Position = 0;
 				var bytes = ms.ToArray();
-				int length = bytes.Length; // 554984
+				int length = bytes.Length; // 116020
 			}
 		}
 	}
