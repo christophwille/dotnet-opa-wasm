@@ -4,5 +4,7 @@
 	{
 		public static readonly string HelloWorldExample = "example.wasm";
 		public static readonly string RbacExample = "rbac.wasm";
+
+		public static readonly string MultiEntrypointExample = "multi.wasm";
 	}
 }

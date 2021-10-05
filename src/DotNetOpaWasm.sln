@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29509.3
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31717.71
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Opa.Wasm.ConsoleSample", "Opa.Wasm.ConsoleSample\Opa.Wasm.ConsoleSample.csproj", "{279FB6BC-EAAD-40B1-AAAB-15238855D097}"
 EndProject
@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Policies", "Policies", "{E7C60A3A-950E-4DD9-9BE4-39428A3A5311}"
 	ProjectSection(SolutionItems) = preProject
 		..\sample-policies\build-on-windows.bat = ..\sample-policies\build-on-windows.bat
+		..\sample-policies\example-one.rego = ..\sample-policies\example-one.rego
 		..\sample-policies\example.rego = ..\sample-policies\example.rego
 		..\sample-policies\rbac.rego = ..\sample-policies\rbac.rego
 		..\sample-policies\README.md = ..\sample-policies\README.md
