@@ -7,11 +7,19 @@
     <PackageProjectUrl>https://github.com/christophwille/dotnet-opa-wasm</PackageProjectUrl>
     <RepositoryUrl>https://github.com/christophwille/dotnet-opa-wasm.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <DebugType>embedded</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <Authors>Christoph Wille</Authors>
     <Description>
       Call Open Policy Agent (OPA) policies in WASM (Web Assembly) from .NET Core
 
       Built for Open Policy Agent v0.33 and Wasmtime 0.30.0-preview1</Description>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -23,6 +31,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="System.Text.Json" Version="5.0.2" />
     <PackageReference Include="Wasmtime" Version="0.30.0-preview1" />
   </ItemGroup>
