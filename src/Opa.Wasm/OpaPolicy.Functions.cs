@@ -6,9 +6,27 @@ namespace Opa.Wasm
 {
 	public partial class OpaPolicy
 	{
+		private int? Policy_opa_wasm_abi_version()
+		{
+			var global = _instance.GetGlobal(_store, "opa_wasm_abi_version");
+			return (int?)global?.GetValue(_store);
+		}
+
+		private int? Policy_opa_wasm_abi_minor_version()
+		{
+			var global = _instance.GetGlobal(_store, "opa_wasm_abi_minor_version");
+			return (int?)global?.GetValue(_store);
+		}
+
 		private int Policy_Builtins()
 		{
 			var run = _instance.GetFunction(_store, "builtins");
+			return (int)run?.Invoke(_store);
+		}
+
+		private int Policy_Entrypoints()
+		{
+			var run = _instance.GetFunction(_store, "entrypoints");
 			return (int)run?.Invoke(_store);
 		}
 
@@ -40,6 +58,12 @@ namespace Opa.Wasm
 		{
 			var run = _instance.GetFunction(_store, "opa_eval_ctx_set_data");
 			run?.Invoke(_store, ctxAddr, dataAddr);
+		}
+
+		private void Policy_opa_eval_ctx_set_entrypoint(int ctxAddr, int entrypoint)
+		{
+			var run = _instance.GetFunction(_store, "opa_eval_ctx_set_entrypoint");
+			run?.Invoke(_store, ctxAddr, entrypoint);
 		}
 
 		private void Policy_eval(int ctxAddr)

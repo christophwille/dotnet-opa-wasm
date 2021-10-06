@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text.Json;
 using Wasmtime;
 
 namespace Opa.Wasm
@@ -14,6 +16,11 @@ namespace Opa.Wasm
 		private Store _store;
 		private Memory _envMemory;
 		private Instance _instance;
+
+		public IReadOnlyDictionary<string, int> Entrypoints { get; private set; }
+
+		public int? AbiVersion { get; private set; }
+		public int? AbiMinorVersion { get; private set; }
 
 		/// <summary>
 		/// This ctor is intended for scenarios where you want to cache a precompiled WASM module
@@ -137,10 +144,98 @@ namespace Opa.Wasm
 			_baseHeapPtr = Policy_opa_heap_ptr_get();
 			_dataHeapPtr = _baseHeapPtr;
 
-			// endof js ctor LoadedPolicy
+			string entrypoints = DumpJson(Policy_Entrypoints());
+			Entrypoints = ParseEntryPointsJson(entrypoints);
+
+			ReadAbiVersionGlobals();
+		}
+
+		/* Format of JSON
+		{
+		   "example/one":1,
+		   "example/one/myCompositeRule":2,
+		   "example":0
+		} */
+		private Dictionary<string, int> ParseEntryPointsJson(string json)
+		{
+			var options = new JsonDocumentOptions
+			{
+				AllowTrailingCommas = true
+			};
+
+			using JsonDocument document = JsonDocument.Parse(json, options);
+
+			var entrypoints = new Dictionary<string, int>();
+			foreach (JsonProperty prop in document.RootElement.EnumerateObject())
+			{
+				entrypoints.Add(prop.Name, prop.Value.GetInt32());
+			}
+
+			return entrypoints;
+		}
+
+		private void ReadAbiVersionGlobals()
+		{
+			var major = Policy_opa_wasm_abi_version();
+			if (major.HasValue)
+			{
+				if (major != 1)
+				{
+					throw new BadImageFormatException($"{major} ABI version is unsupported");
+				}
+
+				AbiVersion = major;
+			}
+			else
+			{
+				// opa_wasm_abi_version undefined
+			}
+
+			var minor = Policy_opa_wasm_abi_minor_version();
+			if (minor.HasValue)
+			{
+				AbiMinorVersion = minor;
+			}
+			else
+			{
+				// opa_wasm_abi_minor_version undefined
+			}
 		}
 
 		public string Evaluate(string json)
+		{
+			return ExecuteEvaluate(json, null);
+		}
+
+		public string Evaluate(string json, int entrypoint)
+		{
+			bool found = false;
+			foreach (int epId in Entrypoints.Values)
+			{
+				if (epId == entrypoint)
+				{
+					found = true;
+					break;
+				}
+			}
+			if (!found)
+			{
+				throw new ArgumentOutOfRangeException(nameof(entrypoint), $"{entrypoint} not found in Entrypoints table");
+			}
+			return ExecuteEvaluate(json, entrypoint);
+		}
+
+		public string Evaluate(string json, string entrypoint)
+		{
+			bool found = Entrypoints.TryGetValue(entrypoint, out var epId);
+			if (!found)
+			{
+				throw new ArgumentOutOfRangeException(nameof(entrypoint), $"{entrypoint} not found in Entrypoints table");
+			}
+			return ExecuteEvaluate(json, epId);
+		}
+
+		private string ExecuteEvaluate(string json, int? entrypoint)
 		{
 			// Reset the heap pointer before each evaluation
 			Policy_opa_heap_ptr_set(_dataHeapPtr);
@@ -152,6 +247,11 @@ namespace Opa.Wasm
 			int ctxAddr = Policy_opa_eval_ctx_new();
 			Policy_opa_eval_ctx_set_input(ctxAddr, inputAddr);
 			Policy_opa_eval_ctx_set_data(ctxAddr, _dataAddr);
+
+			if (entrypoint.HasValue)
+			{
+				Policy_opa_eval_ctx_set_entrypoint(ctxAddr, entrypoint.Value);
+			}
 
 			// Actually evaluate the policy
 			Policy_eval(ctxAddr);
