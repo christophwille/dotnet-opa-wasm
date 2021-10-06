@@ -28,5 +28,5 @@ jobs:
     - name: Upload NuGet package artifact
       uses: actions/upload-artifact@v2
       with:
-        name: NuGet package
-        path: src/Opa.Wasm/**/*.nupkg
+        name: Opa.Wasm NuGet package
+        path: src/Opa.Wasm/bin/Release/*.nupkg
