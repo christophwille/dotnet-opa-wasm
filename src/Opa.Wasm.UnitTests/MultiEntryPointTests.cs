@@ -99,5 +99,24 @@ namespace Opa.Wasm.UnitTests
 
 			var ex = Assert.Throws<ArgumentOutOfRangeException>(() => opaPolicy.Evaluate(input, 5));
 		}
+
+		[Test]
+		public void ExampleOneRuleEntrypointMultiTest()
+		{
+			using var opaModule = new OpaModule();
+			using var module = opaModule.Load(WasmFiles.MultiEntrypointExample);
+			using var opaPolicy = new OpaPolicy(opaModule, module);
+
+			string input = new
+			{
+				someProp = "thisValue",
+				anotherProp = "thatValue"
+			}.ToJson();
+			string outputJson = opaPolicy.Evaluate(input, "example/one/myCompositeRule");
+
+			// [{"result":true}]
+			dynamic output = outputJson.ToDynamic();
+			Assert.IsTrue(output[0].result);
+		}
 	}
 }
