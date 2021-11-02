@@ -1,10 +1,10 @@
-opa_windows_amd64 build -t wasm -e "example/hello" example.rego
+.\opa_windows_amd64 build -t wasm -e "example/hello" example.rego
 tar -xzf bundle.tar.gz /policy.wasm
 copy policy.wasm example.wasm
 del policy.wasm
 del bundle.tar.gz
 
-opa_windows_amd64 build -t wasm -e "app/rbac" rbac.rego
+.\opa_windows_amd64 build -t wasm -e "app/rbac" rbac.rego
 tar -xzf bundle.tar.gz /policy.wasm
 copy policy.wasm rbac.wasm
 del policy.wasm
@@ -16,3 +16,9 @@ del bundle.tar.gz
 tar -xzf bundle.tar.gz /policy.wasm
 copy policy.wasm multi.wasm
 del policy.wasm
+
+.\opa_windows_amd64 build -t wasm -e "builtincallpkg" --capabilities v0.34.0.json simple-custom-builtincall.rego
+tar -xzf bundle.tar.gz /policy.wasm
+copy policy.wasm simplebuiltincall.wasm
+del policy.wasm
+del bundle.tar.gz
