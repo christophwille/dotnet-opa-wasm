@@ -6,5 +6,7 @@
 		public static readonly string RbacExample = "rbac.wasm";
 
 		public static readonly string MultiEntrypointExample = "multi.wasm";
+
+		public static readonly string BuiltinExample = "simplebuiltincall.wasm";
 	}
 }

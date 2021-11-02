@@ -18,6 +18,7 @@ namespace Opa.Wasm
 		private Instance _instance;
 
 		public IReadOnlyDictionary<string, int> Entrypoints { get; private set; }
+		public IReadOnlyDictionary<string, int> Builtins { get; private set; }
 
 		public int? AbiVersion { get; private set; }
 		public int? AbiMinorVersion { get; private set; }
@@ -139,6 +140,7 @@ namespace Opa.Wasm
 			_instance = _linker.Instantiate(_store, module);
 
 			string builtins = DumpJson(Policy_Builtins());
+			Builtins = ParseBuiltinsJson(builtins);
 
 			_dataAddr = LoadJson("{}");
 			_baseHeapPtr = Policy_opa_heap_ptr_get();
@@ -158,20 +160,33 @@ namespace Opa.Wasm
 		} */
 		private Dictionary<string, int> ParseEntryPointsJson(string json)
 		{
-			var options = new JsonDocumentOptions
+			return ParseKeyValueJson(json);
+		}
+
+		private Dictionary<string, int> ParseBuiltinsJson(string json)
+		{
+			return ParseKeyValueJson(json);
+		}
+
+		private Dictionary<string, int> ParseKeyValueJson(string json)
+		{
+			using JsonDocument document = JsonDocument.Parse(json, GetSTJDefaultOptions());
+
+			var dict = new Dictionary<string, int>();
+			foreach (JsonProperty prop in document.RootElement.EnumerateObject())
+			{
+				dict.Add(prop.Name, prop.Value.GetInt32());
+			}
+
+			return dict;
+		}
+
+		private JsonDocumentOptions GetSTJDefaultOptions()
+		{
+			return new JsonDocumentOptions
 			{
 				AllowTrailingCommas = true
 			};
-
-			using JsonDocument document = JsonDocument.Parse(json, options);
-
-			var entrypoints = new Dictionary<string, int>();
-			foreach (JsonProperty prop in document.RootElement.EnumerateObject())
-			{
-				entrypoints.Add(prop.Name, prop.Value.GetInt32());
-			}
-
-			return entrypoints;
 		}
 
 		private void ReadAbiVersionGlobals()
