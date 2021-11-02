@@ -18,7 +18,7 @@ namespace Opa.Wasm
 		private Instance _instance;
 
 		public IReadOnlyDictionary<string, int> Entrypoints { get; private set; }
-		public IReadOnlyDictionary<string, int> Builtins { get; private set; }
+		public IReadOnlyDictionary<int, string> Builtins { get; private set; }
 
 		public int? AbiVersion { get; private set; }
 		public int? AbiMinorVersion { get; private set; }
@@ -105,8 +105,7 @@ namespace Opa.Wasm
 			_linker.Define(OpaConstants.Module, OpaConstants.Builtin1, Function.FromCallback(_store,
 				(Caller caller, int builtinId, int opaCtxReserved, int addr1) =>
 				{
-					Debugger.Break();
-					return 0;
+					return CallBuiltin1(builtinId, opaCtxReserved, addr1);
 				})
 			);
 
@@ -163,9 +162,17 @@ namespace Opa.Wasm
 			return ParseKeyValueJson(json);
 		}
 
-		private Dictionary<string, int> ParseBuiltinsJson(string json)
+		private Dictionary<int, string> ParseBuiltinsJson(string json)
 		{
-			return ParseKeyValueJson(json);
+			using JsonDocument document = JsonDocument.Parse(json, GetSTJDefaultOptions());
+
+			var dict = new Dictionary<int, string>();
+			foreach (JsonProperty prop in document.RootElement.EnumerateObject())
+			{
+				dict.Add(prop.Value.GetInt32(), prop.Name);
+			}
+
+			return dict;
 		}
 
 		private Dictionary<string, int> ParseKeyValueJson(string json)
@@ -330,6 +337,41 @@ namespace Opa.Wasm
 				_store = null;
 				_linker.Dispose();
 				_linker = null;
+			}
+		}
+
+		private Dictionary<string, Object> _externallyProvidedBuiltins = new Dictionary<string, object>();
+
+		public void RegisterBuiltin(string name, Func<string, string> func)
+		{
+			_externallyProvidedBuiltins.Add(name, func);
+		}
+
+		private int CallBuiltin1(int builtinId, int opaCtxReserved, int addr1)
+		{
+			var arg1Json = DumpJson(addr1);
+
+			string result = ((Func<string, string>)GetFuncForBuiltinId(builtinId))(arg1Json);
+
+			return LoadJson(JsonSerializer.Serialize(result));
+		}
+
+		private object GetFuncForBuiltinId(int builtinId)
+		{
+			if (Builtins.TryGetValue(builtinId, out string nameOfFunc))
+			{
+				if (_externallyProvidedBuiltins.TryGetValue(nameOfFunc, out var func))
+				{
+					return func;
+				}
+				else
+				{
+					throw new ArgumentOutOfRangeException(nameof(nameOfFunc), $"{nameOfFunc} not found in provided builtins. Did you register the builtin?");
+				}
+			}
+			else
+			{
+				throw new ArgumentOutOfRangeException(nameof(builtinId), $"{builtinId} not found in Builtins table");
 			}
 		}
 	}
