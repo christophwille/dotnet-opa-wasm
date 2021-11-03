@@ -21,15 +21,21 @@ namespace Opa.Wasm.UnitTests
 		[Test]
 		public void SimpleTest()
 		{
+			int callCountOfBuiltin = 0;
+
 			using var opaModule = new OpaModule();
 			using var module = opaModule.Load(WasmFiles.BuiltinExample);
 			using var opaPolicy = new OpaPolicy(opaModule, module);
 
-			opaPolicy.RegisterBuiltin("custom.func", input => "Hello world");
+			opaPolicy.RegisterBuiltin("custom.func", input => {
+				callCountOfBuiltin++;
+				return input + " Doe";
+				});
 			string outputJson = opaPolicy.Evaluate("{}");
 
 			dynamic output = outputJson.ToDynamic();
-			Assert.AreEqual("Hello world", output[0].result.result);
+			Assert.AreEqual("Jane Doe", output[0].result.result);
+			Assert.AreEqual(1, callCountOfBuiltin);
 		}
 	}
 }

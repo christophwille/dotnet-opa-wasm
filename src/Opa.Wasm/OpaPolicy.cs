@@ -17,6 +17,8 @@ namespace Opa.Wasm
 		private Memory _envMemory;
 		private Instance _instance;
 
+		private Dictionary<string, Object> _registeredBuiltins = new Dictionary<string, object>();
+
 		public IReadOnlyDictionary<string, int> Entrypoints { get; private set; }
 		public IReadOnlyDictionary<int, string> Builtins { get; private set; }
 
@@ -164,6 +166,8 @@ namespace Opa.Wasm
 
 		private Dictionary<int, string> ParseBuiltinsJson(string json)
 		{
+			if ("{}" == json) return new Dictionary<int, string>();
+
 			using JsonDocument document = JsonDocument.Parse(json, GetSTJDefaultOptions());
 
 			var dict = new Dictionary<int, string>();
@@ -337,30 +341,26 @@ namespace Opa.Wasm
 				_store = null;
 				_linker.Dispose();
 				_linker = null;
+				_registeredBuiltins.Clear();
 			}
 		}
 
-		private Dictionary<string, Object> _externallyProvidedBuiltins = new Dictionary<string, object>();
-
 		public void RegisterBuiltin(string name, Func<string, string> func)
 		{
-			_externallyProvidedBuiltins.Add(name, func);
+			_registeredBuiltins.Add(name, func);
 		}
 
 		private int CallBuiltin1(int builtinId, int opaCtxReserved, int addr1)
 		{
-			var arg1Json = DumpJson(addr1);
-
-			string result = ((Func<string, string>)GetFuncForBuiltinId(builtinId))(arg1Json);
-
-			return LoadJson(JsonSerializer.Serialize(result));
+			string result = ((Func<string, string>)GetFuncForBuiltinId(builtinId))(BuiltinArgToString(addr1));
+			return BuiltinResultToAddress(result);
 		}
 
 		private object GetFuncForBuiltinId(int builtinId)
 		{
 			if (Builtins.TryGetValue(builtinId, out string nameOfFunc))
 			{
-				if (_externallyProvidedBuiltins.TryGetValue(nameOfFunc, out var func))
+				if (_registeredBuiltins.TryGetValue(nameOfFunc, out var func))
 				{
 					return func;
 				}
@@ -373,6 +373,18 @@ namespace Opa.Wasm
 			{
 				throw new ArgumentOutOfRangeException(nameof(builtinId), $"{builtinId} not found in Builtins table");
 			}
+		}
+
+		private string BuiltinArgToString(int addr)
+		{
+			var json = DumpJson(addr);
+			return JsonSerializer.Deserialize<string>(json);
+		}
+
+		private int BuiltinResultToAddress(string result)
+		{
+			var json = JsonSerializer.Serialize(result);
+			return LoadJson(json);
 		}
 	}
 }
