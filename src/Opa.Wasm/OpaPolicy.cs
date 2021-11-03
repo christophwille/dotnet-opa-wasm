@@ -157,7 +157,15 @@ namespace Opa.Wasm
 		} */
 		private Dictionary<string, int> ParseEntryPointsJson(string json)
 		{
-			return ParseKeyValueJson(json);
+			using JsonDocument document = JsonDocument.Parse(json, GetSTJDefaultOptions());
+
+			var dict = new Dictionary<string, int>();
+			foreach (JsonProperty prop in document.RootElement.EnumerateObject())
+			{
+				dict.Add(prop.Name, prop.Value.GetInt32());
+			}
+
+			return dict;
 		}
 
 		private Dictionary<int, string> ParseBuiltinsJson(string json)
@@ -170,19 +178,6 @@ namespace Opa.Wasm
 			foreach (JsonProperty prop in document.RootElement.EnumerateObject())
 			{
 				dict.Add(prop.Value.GetInt32(), prop.Name);
-			}
-
-			return dict;
-		}
-
-		private Dictionary<string, int> ParseKeyValueJson(string json)
-		{
-			using JsonDocument document = JsonDocument.Parse(json, GetSTJDefaultOptions());
-
-			var dict = new Dictionary<string, int>();
-			foreach (JsonProperty prop in document.RootElement.EnumerateObject())
-			{
-				dict.Add(prop.Name, prop.Value.GetInt32());
 			}
 
 			return dict;
@@ -343,6 +338,8 @@ namespace Opa.Wasm
 
 		public void RegisterSdkBuiltins()
 		{
+			// See https://github.com/christophwille/dotnet-opa-wasm/issues/3#issuecomment-957579119
+			// Wire-up here, implementations to go into OpaPolicy.SdkBuiltins.cs
 			throw new NotImplementedException();
 		}
 
