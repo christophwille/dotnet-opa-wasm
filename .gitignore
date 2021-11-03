@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# OPA tooling
+opa_windows_amd64.exe
+
 # User-specific files
 *.suo
 *.user
