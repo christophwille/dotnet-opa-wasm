@@ -99,39 +99,35 @@ namespace Opa.Wasm
 			_linker.Define(OpaConstants.Module, OpaConstants.Builtin0, Function.FromCallback(_store,
 				(Caller caller, int builtinId, int opaCtxReserved) =>
 				{
-					Debugger.Break();
-					return 0;
+					return CallBuiltin(builtinId, opaCtxReserved);
 				})
 			);
 
 			_linker.Define(OpaConstants.Module, OpaConstants.Builtin1, Function.FromCallback(_store,
 				(Caller caller, int builtinId, int opaCtxReserved, int addr1) =>
 				{
-					return CallBuiltin1(builtinId, opaCtxReserved, addr1);
+					return CallBuiltin(builtinId, opaCtxReserved, addr1);
 				})
 			);
 
 			_linker.Define(OpaConstants.Module, OpaConstants.Builtin2, Function.FromCallback(_store,
 				(Caller caller, int builtinId, int opaCtxReserved, int addr1, int addr2) =>
 				{
-					Debugger.Break();
-					return 0;
+					return CallBuiltin(builtinId, opaCtxReserved, addr1, addr2);
 				})
 			);
 
 			_linker.Define(OpaConstants.Module, OpaConstants.Builtin3, Function.FromCallback(_store,
 				(Caller caller, int builtinId, int opaCtxReserved, int addr1, int addr2, int addr3) =>
 				{
-					Debugger.Break();
-					return 0;
+					return CallBuiltin(builtinId, opaCtxReserved, addr1, addr2, addr3);
 				})
 			);
 
 			_linker.Define(OpaConstants.Module, OpaConstants.Builtin4, Function.FromCallback(_store,
 				(Caller caller, int builtinId, int opaCtxReserved, int addr1, int addr2, int addr3, int addr4) =>
 				{
-					Debugger.Break();
-					return 0;
+					return CallBuiltin(builtinId, opaCtxReserved, addr1, addr2, addr3, addr4);
 				})
 			);
 		}
@@ -345,14 +341,66 @@ namespace Opa.Wasm
 			}
 		}
 
+		public void RegisterSdkBuiltins()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void RegisterBuiltin(string name, Func<string> func)
+		{
+			_registeredBuiltins.Add(name, func);
+		}
+
 		public void RegisterBuiltin(string name, Func<string, string> func)
 		{
 			_registeredBuiltins.Add(name, func);
 		}
 
-		private int CallBuiltin1(int builtinId, int opaCtxReserved, int addr1)
+		public void RegisterBuiltin(string name, Func<string, string, string> func)
+		{
+			_registeredBuiltins.Add(name, func);
+		}
+
+		public void RegisterBuiltin(string name, Func<string, string, string, string> func)
+		{
+			_registeredBuiltins.Add(name, func);
+		}
+
+		public void RegisterBuiltin(string name, Func<string, string, string, string, string> func)
+		{
+			_registeredBuiltins.Add(name, func);
+		}
+
+		private int CallBuiltin(int builtinId, int opaCtxReserved)
+		{
+			string result = ((Func<string>)GetFuncForBuiltinId(builtinId))();
+			return BuiltinResultToAddress(result);
+		}
+
+		private int CallBuiltin(int builtinId, int opaCtxReserved, int addr1)
 		{
 			string result = ((Func<string, string>)GetFuncForBuiltinId(builtinId))(BuiltinArgToString(addr1));
+			return BuiltinResultToAddress(result);
+		}
+
+		private int CallBuiltin(int builtinId, int opaCtxReserved, int addr1, int addr2)
+		{
+			string result = ((Func<string, string, string>)GetFuncForBuiltinId(builtinId))(
+				BuiltinArgToString(addr1), BuiltinArgToString(addr2));
+			return BuiltinResultToAddress(result);
+		}
+
+		private int CallBuiltin(int builtinId, int opaCtxReserved, int addr1, int addr2, int addr3)
+		{
+			string result = ((Func<string, string, string, string>)GetFuncForBuiltinId(builtinId))(
+				BuiltinArgToString(addr1), BuiltinArgToString(addr2), BuiltinArgToString(addr3));
+			return BuiltinResultToAddress(result);
+		}
+
+		private int CallBuiltin(int builtinId, int opaCtxReserved, int addr1, int addr2, int addr3, int addr4)
+		{
+			string result = ((Func<string, string, string, string, string>)GetFuncForBuiltinId(builtinId))(
+				BuiltinArgToString(addr1), BuiltinArgToString(addr2), BuiltinArgToString(addr3), BuiltinArgToString(addr4));
 			return BuiltinResultToAddress(result);
 		}
 
