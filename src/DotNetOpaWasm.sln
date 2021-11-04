@@ -9,11 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Opa.Wasm", "Opa.Wasm\Opa.Wa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Policies", "Policies", "{E7C60A3A-950E-4DD9-9BE4-39428A3A5311}"
 	ProjectSection(SolutionItems) = preProject
-		..\sample-policies\build-on-windows.bat = ..\sample-policies\build-on-windows.bat
+		..\sample-policies\build.ps1 = ..\sample-policies\build.ps1
+		..\sample-policies\custom-builtincall.rego = ..\sample-policies\custom-builtincall.rego
 		..\sample-policies\example-one.rego = ..\sample-policies\example-one.rego
 		..\sample-policies\example.rego = ..\sample-policies\example.rego
 		..\sample-policies\rbac.rego = ..\sample-policies\rbac.rego
 		..\sample-policies\README.md = ..\sample-policies\README.md
+		..\sample-policies\simple-custom-builtincall.rego = ..\sample-policies\simple-custom-builtincall.rego
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Opa.Wasm.Benchmarks", "Opa.Wasm.Benchmarks\Opa.Wasm.Benchmarks.csproj", "{885FB6A8-BBD4-42B4-845A-FC077087B11A}"

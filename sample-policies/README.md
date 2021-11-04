@@ -5,6 +5,6 @@
 
 ## Building WASMs
 
-Binaries: https://github.com/open-policy-agent/opa/releases
+Binaries: https://github.com/open-policy-agent/opa/releases (Windows: rename to opa.exe, place in folder)
 
-The WASM files in this folder were built on Windows using build-on-windows.bat (in PowerShell)
+The WASM files in this folder were built on Windows using build.ps1
