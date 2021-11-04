@@ -17,7 +17,10 @@ namespace Opa.Wasm
 		private Memory _envMemory;
 		private Instance _instance;
 
+		private Dictionary<string, Object> _registeredBuiltins = new Dictionary<string, object>();
+
 		public IReadOnlyDictionary<string, int> Entrypoints { get; private set; }
+		public IReadOnlyDictionary<int, string> Builtins { get; private set; }
 
 		public int? AbiVersion { get; private set; }
 		public int? AbiMinorVersion { get; private set; }
@@ -96,40 +99,35 @@ namespace Opa.Wasm
 			_linker.Define(OpaConstants.Module, OpaConstants.Builtin0, Function.FromCallback(_store,
 				(Caller caller, int builtinId, int opaCtxReserved) =>
 				{
-					Debugger.Break();
-					return 0;
+					return CallBuiltin(builtinId, opaCtxReserved);
 				})
 			);
 
 			_linker.Define(OpaConstants.Module, OpaConstants.Builtin1, Function.FromCallback(_store,
 				(Caller caller, int builtinId, int opaCtxReserved, int addr1) =>
 				{
-					Debugger.Break();
-					return 0;
+					return CallBuiltin(builtinId, opaCtxReserved, addr1);
 				})
 			);
 
 			_linker.Define(OpaConstants.Module, OpaConstants.Builtin2, Function.FromCallback(_store,
 				(Caller caller, int builtinId, int opaCtxReserved, int addr1, int addr2) =>
 				{
-					Debugger.Break();
-					return 0;
+					return CallBuiltin(builtinId, opaCtxReserved, addr1, addr2);
 				})
 			);
 
 			_linker.Define(OpaConstants.Module, OpaConstants.Builtin3, Function.FromCallback(_store,
 				(Caller caller, int builtinId, int opaCtxReserved, int addr1, int addr2, int addr3) =>
 				{
-					Debugger.Break();
-					return 0;
+					return CallBuiltin(builtinId, opaCtxReserved, addr1, addr2, addr3);
 				})
 			);
 
 			_linker.Define(OpaConstants.Module, OpaConstants.Builtin4, Function.FromCallback(_store,
 				(Caller caller, int builtinId, int opaCtxReserved, int addr1, int addr2, int addr3, int addr4) =>
 				{
-					Debugger.Break();
-					return 0;
+					return CallBuiltin(builtinId, opaCtxReserved, addr1, addr2, addr3, addr4);
 				})
 			);
 		}
@@ -139,6 +137,7 @@ namespace Opa.Wasm
 			_instance = _linker.Instantiate(_store, module);
 
 			string builtins = DumpJson(Policy_Builtins());
+			Builtins = ParseBuiltinsJson(builtins);
 
 			_dataAddr = LoadJson("{}");
 			_baseHeapPtr = Policy_opa_heap_ptr_get();
@@ -158,20 +157,38 @@ namespace Opa.Wasm
 		} */
 		private Dictionary<string, int> ParseEntryPointsJson(string json)
 		{
-			var options = new JsonDocumentOptions
+			using JsonDocument document = JsonDocument.Parse(json, GetSTJDefaultOptions());
+
+			var dict = new Dictionary<string, int>();
+			foreach (JsonProperty prop in document.RootElement.EnumerateObject())
+			{
+				dict.Add(prop.Name, prop.Value.GetInt32());
+			}
+
+			return dict;
+		}
+
+		private Dictionary<int, string> ParseBuiltinsJson(string json)
+		{
+			if ("{}" == json) return new Dictionary<int, string>();
+
+			using JsonDocument document = JsonDocument.Parse(json, GetSTJDefaultOptions());
+
+			var dict = new Dictionary<int, string>();
+			foreach (JsonProperty prop in document.RootElement.EnumerateObject())
+			{
+				dict.Add(prop.Value.GetInt32(), prop.Name);
+			}
+
+			return dict;
+		}
+
+		private JsonDocumentOptions GetSTJDefaultOptions()
+		{
+			return new JsonDocumentOptions
 			{
 				AllowTrailingCommas = true
 			};
-
-			using JsonDocument document = JsonDocument.Parse(json, options);
-
-			var entrypoints = new Dictionary<string, int>();
-			foreach (JsonProperty prop in document.RootElement.EnumerateObject())
-			{
-				entrypoints.Add(prop.Name, prop.Value.GetInt32());
-			}
-
-			return entrypoints;
 		}
 
 		private void ReadAbiVersionGlobals()
@@ -315,7 +332,104 @@ namespace Opa.Wasm
 				_store = null;
 				_linker.Dispose();
 				_linker = null;
+				_registeredBuiltins.Clear();
 			}
+		}
+
+		public void RegisterSdkBuiltins()
+		{
+			// See https://github.com/christophwille/dotnet-opa-wasm/issues/3#issuecomment-957579119
+			// Wire-up here, implementations to go into OpaPolicy.SdkBuiltins.cs
+			throw new NotImplementedException();
+		}
+
+		public void RegisterBuiltin(string name, Func<string> func)
+		{
+			_registeredBuiltins.Add(name, func);
+		}
+
+		public void RegisterBuiltin(string name, Func<string, string> func)
+		{
+			_registeredBuiltins.Add(name, func);
+		}
+
+		public void RegisterBuiltin(string name, Func<string, string, string> func)
+		{
+			_registeredBuiltins.Add(name, func);
+		}
+
+		public void RegisterBuiltin(string name, Func<string, string, string, string> func)
+		{
+			_registeredBuiltins.Add(name, func);
+		}
+
+		public void RegisterBuiltin(string name, Func<string, string, string, string, string> func)
+		{
+			_registeredBuiltins.Add(name, func);
+		}
+
+		private int CallBuiltin(int builtinId, int opaCtxReserved)
+		{
+			string result = ((Func<string>)GetFuncForBuiltinId(builtinId))();
+			return BuiltinResultToAddress(result);
+		}
+
+		private int CallBuiltin(int builtinId, int opaCtxReserved, int addr1)
+		{
+			string result = ((Func<string, string>)GetFuncForBuiltinId(builtinId))(BuiltinArgToString(addr1));
+			return BuiltinResultToAddress(result);
+		}
+
+		private int CallBuiltin(int builtinId, int opaCtxReserved, int addr1, int addr2)
+		{
+			string result = ((Func<string, string, string>)GetFuncForBuiltinId(builtinId))(
+				BuiltinArgToString(addr1), BuiltinArgToString(addr2));
+			return BuiltinResultToAddress(result);
+		}
+
+		private int CallBuiltin(int builtinId, int opaCtxReserved, int addr1, int addr2, int addr3)
+		{
+			string result = ((Func<string, string, string, string>)GetFuncForBuiltinId(builtinId))(
+				BuiltinArgToString(addr1), BuiltinArgToString(addr2), BuiltinArgToString(addr3));
+			return BuiltinResultToAddress(result);
+		}
+
+		private int CallBuiltin(int builtinId, int opaCtxReserved, int addr1, int addr2, int addr3, int addr4)
+		{
+			string result = ((Func<string, string, string, string, string>)GetFuncForBuiltinId(builtinId))(
+				BuiltinArgToString(addr1), BuiltinArgToString(addr2), BuiltinArgToString(addr3), BuiltinArgToString(addr4));
+			return BuiltinResultToAddress(result);
+		}
+
+		private object GetFuncForBuiltinId(int builtinId)
+		{
+			if (Builtins.TryGetValue(builtinId, out string nameOfFunc))
+			{
+				if (_registeredBuiltins.TryGetValue(nameOfFunc, out var func))
+				{
+					return func;
+				}
+				else
+				{
+					throw new ArgumentOutOfRangeException(nameof(nameOfFunc), $"{nameOfFunc} not found in provided builtins. Did you register the builtin?");
+				}
+			}
+			else
+			{
+				throw new ArgumentOutOfRangeException(nameof(builtinId), $"{builtinId} not found in Builtins table");
+			}
+		}
+
+		private string BuiltinArgToString(int addr)
+		{
+			var json = DumpJson(addr);
+			return JsonSerializer.Deserialize<string>(json);
+		}
+
+		private int BuiltinResultToAddress(string result)
+		{
+			var json = JsonSerializer.Serialize(result);
+			return LoadJson(json);
 		}
 	}
 }
