@@ -1,42 +1,43 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<Version>0.19.0</Version>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/christophwille/dotnet-opa-wasm</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/christophwille/dotnet-opa-wasm.git</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<DebugType>embedded</DebugType>
+		<DebugSymbols>true</DebugSymbols>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<Authors>Christoph Wille</Authors>
+		<Description>Call Open Policy Agent (OPA) policies in WASM (Web Assembly) from .NET Core</Description>
+		<PackageReadmeFile>PackageReadme.md</PackageReadmeFile>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <Version>0.18.0</Version>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/christophwille/dotnet-opa-wasm</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/christophwille/dotnet-opa-wasm.git</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <DebugType>embedded</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <Authors>Christoph Wille</Authors>
-    <Description>
-      Call Open Policy Agent (OPA) policies in WASM (Web Assembly) from .NET Core
+	<ItemGroup>
+		<None Include="docs\PackageReadme.md" Pack="true" PackagePath="\"/>
+	</ItemGroup>
 
-      Built for Open Policy Agent v0.34 and Wasmtime 0.31.0-preview1</Description>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
-    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="System.Text.Json" Version="5.0.2" />
-    <PackageReference Include="Wasmtime" Version="0.31.0-preview1" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="System.Text.Json" Version="5.0.2" />
+		<PackageReference Include="Wasmtime" Version="0.31.0-preview1" />
+	</ItemGroup>
 
 </Project>
