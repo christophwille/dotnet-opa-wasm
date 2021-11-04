@@ -9,5 +9,7 @@
 
 		public static readonly string BuiltinExample = "simplebuiltincall.wasm";
 		public static readonly string AllBuiltinsExample = "builtincall.wasm";
+
+		public static readonly string AbortExample = "abort.wasm";
 	}
 }

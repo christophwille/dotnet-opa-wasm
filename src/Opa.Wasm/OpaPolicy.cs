@@ -93,7 +93,9 @@ namespace Opa.Wasm
 				(Caller caller, int addr) =>
 				{
 					string info = _envMemory.ReadNullTerminatedString(_store, addr);
-					throw new PolicyEvaluationAbortedException(info);
+
+					// NOTE: the generic class will do, as it is unwrapped again by Policy_eval/run?.Invoke
+					throw new Exception(info);
 				})
 			);
 

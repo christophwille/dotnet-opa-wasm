@@ -36,3 +36,10 @@ tar -xzf bundle.tar.gz /policy.wasm
 Copy-Item policy.wasm -Destination builtincall.wasm
 Remove-Item policy.wasm
 Remove-Item bundle.tar.gz
+
+Write-Output "Generating abort"
+./opa build -t wasm -e "aborttestpkg" abort.rego
+tar -xzf bundle.tar.gz /policy.wasm
+Copy-Item policy.wasm -Destination abort.wasm
+Remove-Item policy.wasm
+Remove-Item bundle.tar.gz

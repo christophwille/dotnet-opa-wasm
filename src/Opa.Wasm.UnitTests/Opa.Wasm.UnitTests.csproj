@@ -7,6 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\..\sample-policies\abort.wasm" Link="abort.wasm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\sample-policies\builtincall.wasm" Link="builtincall.wasm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
