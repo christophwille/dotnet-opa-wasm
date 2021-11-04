@@ -11,9 +11,9 @@ Built and tested against Open Policy Agent v0.34.
 TBD
 
 ```csharp
-using var opaModule = new OpaModule();
-using var module = opaModule.Load("example.wasm");
-using var opaPolicy = new OpaPolicy(opaModule, module);
+using var runtime = new OpaRuntime();
+using var module = runtime.Load("example.wasm");
+using var opaPolicy = new OpaPolicy(runtime, module);
 
 opaPolicy.SetData(@"{""world"": ""world""}");
 

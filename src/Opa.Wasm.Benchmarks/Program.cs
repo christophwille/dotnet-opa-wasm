@@ -8,21 +8,21 @@ namespace Opa.Wasm.Benchmarks
 {
 	public class WasmPolicyExecution
 	{
-		private readonly OpaModule _opaModule;
+		private readonly OpaRuntime _opaRuntime;
 		private readonly Module _module;
 
 		public WasmPolicyExecution()
 		{
 			var policyBytes = System.IO.File.ReadAllBytes("example.wasm");
 
-			_opaModule = new OpaModule();
-			_module = _opaModule.Load("example", policyBytes);
+			_opaRuntime = new OpaRuntime();
+			_module = _opaRuntime.Load("example", policyBytes);
 		}
 
 		[Benchmark]
 		public string RunPolicy()
 		{
-			using var opaPolicy = new OpaPolicy(_opaModule, _module);
+			using var opaPolicy = new OpaPolicy(_opaRuntime, _module);
 
 			opaPolicy.SetData(@"{""world"": ""world""}");
 
@@ -35,7 +35,7 @@ namespace Opa.Wasm.Benchmarks
 		[Benchmark]
 		public string FastEvaluatePolicy()
 		{
-			using var opaPolicy = new OpaPolicy(_opaModule, _module);
+			using var opaPolicy = new OpaPolicy(_opaRuntime, _module);
 
 			opaPolicy.SetData(@"{""world"": ""world""}");
 
@@ -50,7 +50,7 @@ namespace Opa.Wasm.Benchmarks
 		[Benchmark]
 		public void RunPolicyX()
 		{
-			using var opaPolicy = new OpaPolicy(_opaModule, _module);
+			using var opaPolicy = new OpaPolicy(_opaRuntime, _module);
 
 			opaPolicy.SetData(@"{""world"": ""world""}");
 
@@ -64,7 +64,7 @@ namespace Opa.Wasm.Benchmarks
 		[Benchmark]
 		public void FastEvaluatePolicyX()
 		{
-			using var opaPolicy = new OpaPolicy(_opaModule, _module);
+			using var opaPolicy = new OpaPolicy(_opaRuntime, _module);
 
 			opaPolicy.SetData(@"{""world"": ""world""}");
 

@@ -21,9 +21,11 @@ namespace Opa.Wasm.ConsoleSample
 		// https://play.openpolicyagent.org/ "Role-based" example stripped down to minimum
 		static void EvaluateRbac()
 		{
-			using var opaModule = new OpaModule();
-			using var module = opaModule.Load("rbac.wasm");
-			using var opaPolicy = new OpaPolicy(opaModule, module);
+			using var opaRuntime = new OpaRuntime();
+			using var module = opaRuntime.Load("rbac.wasm");
+
+			// Now you can create as many instances of OpaPolicy on top of this runtime & loaded module as you want
+			using var opaPolicy = new OpaPolicy(opaRuntime, module);
 
 			opaPolicy.SetData(@"{""user_roles"": { ""alice"": [""admin""],""bob"": [""employee"",""billing""],""eve"": [""customer""]}}");
 
@@ -35,9 +37,8 @@ namespace Opa.Wasm.ConsoleSample
 
 		static void EvaluateHelloWorld()
 		{
-			using var opaModule = new OpaModule();
-			using var module = opaModule.Load("example.wasm");
-			using var opaPolicy = new OpaPolicy(opaModule, module);
+			// "One-off" evaluations can be done without explicitly creating & keeping around of an OpaRuntime
+			using var opaPolicy = new OpaPolicy("example.wasm");
 
 			opaPolicy.SetData(@"{""world"": ""world""}");
 

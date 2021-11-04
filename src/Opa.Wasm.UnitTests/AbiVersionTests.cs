@@ -7,9 +7,9 @@ namespace Opa.Wasm.UnitTests
 		[Test]
 		public void ReadCurrentWasmFileTest()
 		{
-			using var opaModule = new OpaModule();
-			using var module = opaModule.Load(WasmFiles.HelloWorldExample);
-			using var opaPolicy = new OpaPolicy(opaModule, module);
+			using var opaRuntime = new OpaRuntime();
+			using var module = opaRuntime.Load(WasmFiles.HelloWorldExample);
+			using var opaPolicy = new OpaPolicy(opaRuntime, module);
 
 			var abiVersion = opaPolicy.AbiVersion;
 			var abiMinorVersion = opaPolicy.AbiMinorVersion;

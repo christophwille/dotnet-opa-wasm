@@ -28,11 +28,11 @@ namespace Opa.Wasm
 		/// <summary>
 		/// This ctor is intended for scenarios where you want to cache a precompiled WASM module
 		/// </summary>
-		/// <param name="module"></param>
+		/// <param name="runtime"></param>
 		/// <param name="wasmModule"></param>
-		public OpaPolicy(OpaModule module, Module wasmModule)
+		public OpaPolicy(OpaRuntime runtime, Module wasmModule)
 		{
-			Setup(module, wasmModule);
+			Setup(runtime, wasmModule);
 		}
 
 		/// <summary>
@@ -41,10 +41,10 @@ namespace Opa.Wasm
 		/// <param name="fileName"></param>
 		public OpaPolicy(string fileName)
 		{
-			using var module = new OpaModule();
-			var wasmModule = module.Load(fileName);
+			using var runtime = new OpaRuntime();
+			var wasmModule = runtime.Load(fileName);
 
-			Setup(module, wasmModule);
+			Setup(runtime, wasmModule);
 		}
 
 		/// <summary>
@@ -54,16 +54,16 @@ namespace Opa.Wasm
 		/// <param name="content"></param>
 		public OpaPolicy(string name, byte[] content)
 		{
-			using var module = new OpaModule();
-			var wasmModule = module.Load(name, content);
+			using var runtime = new OpaRuntime();
+			var wasmModule = runtime.Load(name, content);
 
-			Setup(module, wasmModule);
+			Setup(runtime, wasmModule);
 		}
 
-		private void Setup(OpaModule module, Module wasmModule)
+		private void Setup(OpaRuntime runtime, Module wasmModule)
 		{
-			_linker = module.CreateLinker();
-			_store = module.CreateStore();
+			_linker = runtime.CreateLinker();
+			_store = runtime.CreateStore();
 			LinkImports();
 
 			Initialize(wasmModule);
@@ -245,7 +245,7 @@ namespace Opa.Wasm
 			return ExecuteEvaluate(json, entrypoint, disableFastEvaluate);
 		}
 
-		public string Evaluate(string json, string entrypoint, bool disableFastEvaluate=false)
+		public string Evaluate(string json, string entrypoint, bool disableFastEvaluate = false)
 		{
 			bool found = Entrypoints.TryGetValue(entrypoint, out var epId);
 			if (!found)

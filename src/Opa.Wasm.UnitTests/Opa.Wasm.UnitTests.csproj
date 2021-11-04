@@ -7,22 +7,22 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\sample-policies\abort.wasm" Link="abort.wasm">
+    <None Include="..\..\sample-policies\abort.wasm" Link="LinkedWasms\abort.wasm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\sample-policies\builtincall.wasm" Link="builtincall.wasm">
+    <None Include="..\..\sample-policies\builtincall.wasm" Link="LinkedWasms\builtincall.wasm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\sample-policies\example.wasm" Link="example.wasm">
+    <None Include="..\..\sample-policies\example.wasm" Link="LinkedWasms\example.wasm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\sample-policies\multi.wasm" Link="multi.wasm">
+    <None Include="..\..\sample-policies\multi.wasm" Link="LinkedWasms\multi.wasm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\sample-policies\rbac.wasm" Link="rbac.wasm">
+    <None Include="..\..\sample-policies\rbac.wasm" Link="LinkedWasms\rbac.wasm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\sample-policies\simplebuiltincall.wasm" Link="simplebuiltincall.wasm">
+    <None Include="..\..\sample-policies\simplebuiltincall.wasm" Link="LinkedWasms\simplebuiltincall.wasm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\.editorconfig" Link=".editorconfig" />
@@ -46,6 +46,10 @@
     <None Update="TestData\basic_rbac_input.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="LinkedWasms\" />
   </ItemGroup>
 
 </Project>
