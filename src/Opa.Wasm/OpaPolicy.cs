@@ -92,7 +92,8 @@ namespace Opa.Wasm
 			_linker.Define(OpaConstants.Module, OpaConstants.Abort, Function.FromCallback(_store,
 				(Caller caller, int addr) =>
 				{
-					Debugger.Break();
+					string info = _envMemory.ReadNullTerminatedString(_store, addr);
+					throw new PolicyEvaluationAbortedException(info);
 				})
 			);
 
