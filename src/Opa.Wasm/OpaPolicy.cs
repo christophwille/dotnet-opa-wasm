@@ -222,12 +222,12 @@ namespace Opa.Wasm
 			}
 		}
 
-		public string Evaluate(string json)
+		public string Evaluate(string json, bool disableFastEvaluate = false)
 		{
-			return ExecuteEvaluate(json, null);
+			return ExecuteEvaluate(json, null, disableFastEvaluate);
 		}
 
-		public string Evaluate(string json, int entrypoint)
+		public string Evaluate(string json, int entrypoint, bool disableFastEvaluate = false)
 		{
 			bool found = false;
 			foreach (int epId in Entrypoints.Values)
@@ -242,21 +242,26 @@ namespace Opa.Wasm
 			{
 				throw new ArgumentOutOfRangeException(nameof(entrypoint), $"{entrypoint} not found in Entrypoints table");
 			}
-			return ExecuteEvaluate(json, entrypoint);
+			return ExecuteEvaluate(json, entrypoint, disableFastEvaluate);
 		}
 
-		public string Evaluate(string json, string entrypoint)
+		public string Evaluate(string json, string entrypoint, bool disableFastEvaluate=false)
 		{
 			bool found = Entrypoints.TryGetValue(entrypoint, out var epId);
 			if (!found)
 			{
 				throw new ArgumentOutOfRangeException(nameof(entrypoint), $"{entrypoint} not found in Entrypoints table");
 			}
-			return ExecuteEvaluate(json, epId);
+			return ExecuteEvaluate(json, epId, disableFastEvaluate);
 		}
 
-		private string ExecuteEvaluate(string json, int? entrypoint)
+		private string ExecuteEvaluate(string json, int? entrypoint, bool disableFastEvaluate)
 		{
+			if (!disableFastEvaluate && AbiMinorVersion.Value >= 2)
+			{
+				return FastEvaluate(json, entrypoint);
+			}
+
 			// Reset the heap pointer before each evaluation
 			Policy_opa_heap_ptr_set(_dataHeapPtr);
 
@@ -282,11 +287,13 @@ namespace Opa.Wasm
 		}
 
 		// https://github.com/open-policy-agent/opa/issues/3696#issuecomment-891662230
-		public string FastEvaluate(string json)
+		private string FastEvaluate(string json, int? entrypoint)
 		{
+			if (!entrypoint.HasValue) entrypoint = 0; // use default entry point
+
 			_envMemory.WriteString(_store, _dataHeapPtr, json);
 
-			int resultaddr = Policy_opa_eval(_dataAddr, _dataHeapPtr, json.Length, _dataHeapPtr + json.Length);
+			int resultaddr = Policy_opa_eval(entrypoint.Value, _dataAddr, _dataHeapPtr, json.Length, _dataHeapPtr + json.Length);
 
 			return _envMemory.ReadNullTerminatedString(_store, resultaddr);
 		}

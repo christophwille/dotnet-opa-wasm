@@ -27,7 +27,7 @@ namespace Opa.Wasm.Benchmarks
 			opaPolicy.SetData(@"{""world"": ""world""}");
 
 			string input = @"{""message"": ""world""}";
-			string output = opaPolicy.Evaluate(input);
+			string output = opaPolicy.Evaluate(input, disableFastEvaluate: true);
 
 			return output;
 		}
@@ -40,7 +40,7 @@ namespace Opa.Wasm.Benchmarks
 			opaPolicy.SetData(@"{""world"": ""world""}");
 
 			string input = @"{""message"": ""world""}";
-			string output = opaPolicy.FastEvaluate(input);
+			string output = opaPolicy.Evaluate(input, disableFastEvaluate: false);
 
 			return output;
 		}
@@ -57,7 +57,7 @@ namespace Opa.Wasm.Benchmarks
 			string input = @"{""message"": ""world""}";
 			for (int i = 1; i <= runXTimes; i++)
 			{
-				string output = opaPolicy.Evaluate(input);
+				string output = opaPolicy.Evaluate(input, disableFastEvaluate: true);
 			}
 		}
 
@@ -72,7 +72,7 @@ namespace Opa.Wasm.Benchmarks
 
 			for (int i = 1; i <= runXTimes; i++)
 			{
-				string output = opaPolicy.FastEvaluate(input);
+				string output = opaPolicy.Evaluate(input, disableFastEvaluate: false);
 			}
 		}
 	}

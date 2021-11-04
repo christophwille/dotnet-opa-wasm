@@ -1,4 +1,4 @@
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System.IO;
 
 namespace Opa.Wasm.UnitTests
@@ -22,7 +22,7 @@ namespace Opa.Wasm.UnitTests
 			{
 				message = "world"
 			}.ToJson();
-			string outputJson = opaPolicy.Evaluate(input);
+			string outputJson = opaPolicy.Evaluate(input, disableFastEvaluate: true);
 
 			dynamic output = outputJson.ToDynamic();
 			Assert.IsTrue(output[0].result);
@@ -63,7 +63,7 @@ namespace Opa.Wasm.UnitTests
 			{
 				message = "world"
 			}.ToJson();
-			string outputJson = opaPolicy.FastEvaluate(input);
+			string outputJson = opaPolicy.Evaluate(input, disableFastEvaluate: false);
 
 			dynamic output = outputJson.ToDynamic();
 			Assert.IsTrue(output[0].result);
