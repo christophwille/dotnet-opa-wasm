@@ -1,0 +1,22 @@
+{
+    "builtins": [
+      {
+        "name": "custom.func",
+        "decl": {
+          "args": [
+            {
+              "type": "any"
+            }
+          ],
+          "result": {
+            "type": "any"
+          },
+          "type": "function"
+        }
+      }
+    ],
+    "future_keywords": [
+    ],
+    "wasm_abi_versions": [
+    ]
+}

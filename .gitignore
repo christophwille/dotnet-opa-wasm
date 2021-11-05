@@ -5,6 +5,7 @@
 
 # OPA tooling
 opa.exe
+sample-policies/v*.json
 
 # User-specific files
 *.suo

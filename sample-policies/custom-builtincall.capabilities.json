@@ -1,0 +1,93 @@
+{
+    "builtins": [
+      {
+        "name": "custom.func0",
+        "decl": {
+          "args": [
+          ],
+          "result": {
+            "type": "any"
+          },
+          "type": "function"
+        }
+      },
+      {
+        "name": "custom.func1",
+        "decl": {
+          "args": [
+            {
+              "type": "any"
+            }
+          ],
+          "result": {
+            "type": "any"
+          },
+          "type": "function"
+        }
+      },	
+      {
+        "name": "custom.func2",
+        "decl": {
+          "args": [
+            {
+              "type": "any"
+            },
+            {
+              "type": "any"
+            }
+          ],
+          "result": {
+            "type": "any"
+          },
+          "type": "function"
+        }
+      },	
+      {
+        "name": "custom.func3",
+        "decl": {
+          "args": [
+            {
+              "type": "any"
+            },
+            {
+              "type": "any"
+            },
+            {
+              "type": "any"
+            }
+          ],
+          "result": {
+            "type": "any"
+          },
+          "type": "function"
+        }
+      },	
+      {
+        "name": "custom.func4",
+        "decl": {
+          "args": [
+            {
+              "type": "any"
+            },
+            {
+              "type": "any"
+            },
+            {
+              "type": "any"
+            },
+            {
+              "type": "any"
+            }
+          ],
+          "result": {
+            "type": "any"
+          },
+          "type": "function"
+        }
+      }
+    ],
+    "future_keywords": [
+    ],
+    "wasm_abi_versions": [
+    ]
+}
