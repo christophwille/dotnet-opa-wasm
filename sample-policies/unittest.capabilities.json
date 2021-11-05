@@ -1,105 +1,6 @@
 {
   "builtins": [
     {
-      "name": "custom.func",
-      "decl": {
-        "args": [
-          {
-            "type": "any"
-          }
-        ],
-        "result": {
-          "type": "any"
-        },
-        "type": "function"
-      }
-    },
-    {
-      "name": "custom.func0",
-      "decl": {
-        "args": [
-        ],
-        "result": {
-          "type": "any"
-        },
-        "type": "function"
-      }
-    },
-    {
-      "name": "custom.func1",
-      "decl": {
-        "args": [
-          {
-            "type": "any"
-          }
-        ],
-        "result": {
-          "type": "any"
-        },
-        "type": "function"
-      }
-    },	
-    {
-      "name": "custom.func2",
-      "decl": {
-        "args": [
-          {
-            "type": "any"
-          },
-		  {
-            "type": "any"
-          }
-        ],
-        "result": {
-          "type": "any"
-        },
-        "type": "function"
-      }
-    },	
-    {
-      "name": "custom.func3",
-      "decl": {
-        "args": [
-          {
-            "type": "any"
-          },
-		  {
-            "type": "any"
-          },
-		  {
-            "type": "any"
-          }
-        ],
-        "result": {
-          "type": "any"
-        },
-        "type": "function"
-      }
-    },	
-    {
-      "name": "custom.func4",
-      "decl": {
-        "args": [
-          {
-            "type": "any"
-          },
-		  {
-            "type": "any"
-          },
-		  {
-            "type": "any"
-          },
-		  {
-            "type": "any"
-          }
-        ],
-        "result": {
-          "type": "any"
-        },
-        "type": "function"
-      }
-    },	
-    {
       "name": "abs",
       "decl": {
         "args": [
@@ -166,7 +67,7 @@
         },
         "type": "function"
       },
-      "infix": "\u0026"
+      "infix": "&"
     },
     {
       "name": "any",
@@ -796,6 +697,104 @@
       }
     },
     {
+      "name": "custom.func",
+      "decl": {
+        "args": [
+          {
+            "type": "any"
+          }
+        ],
+        "result": {
+          "type": "any"
+        },
+        "type": "function"
+      }
+    },
+    {
+      "name": "custom.func0",
+      "decl": {
+        "args": [],
+        "result": {
+          "type": "any"
+        },
+        "type": "function"
+      }
+    },
+    {
+      "name": "custom.func1",
+      "decl": {
+        "args": [
+          {
+            "type": "any"
+          }
+        ],
+        "result": {
+          "type": "any"
+        },
+        "type": "function"
+      }
+    },
+    {
+      "name": "custom.func2",
+      "decl": {
+        "args": [
+          {
+            "type": "any"
+          },
+          {
+            "type": "any"
+          }
+        ],
+        "result": {
+          "type": "any"
+        },
+        "type": "function"
+      }
+    },
+    {
+      "name": "custom.func3",
+      "decl": {
+        "args": [
+          {
+            "type": "any"
+          },
+          {
+            "type": "any"
+          },
+          {
+            "type": "any"
+          }
+        ],
+        "result": {
+          "type": "any"
+        },
+        "type": "function"
+      }
+    },
+    {
+      "name": "custom.func4",
+      "decl": {
+        "args": [
+          {
+            "type": "any"
+          },
+          {
+            "type": "any"
+          },
+          {
+            "type": "any"
+          },
+          {
+            "type": "any"
+          }
+        ],
+        "result": {
+          "type": "any"
+        },
+        "type": "function"
+      }
+    },
+    {
       "name": "div",
       "decl": {
         "args": [
@@ -1006,7 +1005,7 @@
         },
         "type": "function"
       },
-      "infix": "\u003e"
+      "infix": ">"
     },
     {
       "name": "gte",
@@ -1024,7 +1023,7 @@
         },
         "type": "function"
       },
-      "infix": "\u003e="
+      "infix": ">="
     },
     {
       "name": "hex.decode",
@@ -1875,7 +1874,7 @@
         },
         "type": "function"
       },
-      "infix": "\u003c"
+      "infix": "<"
     },
     {
       "name": "lte",
@@ -1893,7 +1892,7 @@
         },
         "type": "function"
       },
-      "infix": "\u003c="
+      "infix": "<="
     },
     {
       "name": "max",

@@ -26,11 +26,11 @@ Write-Output "Generating multi"
 Write-Wasm -WasmName "multi.wasm"
 
 Write-Output "Generating simplebuiltincall"
-./opa build -t wasm -e "builtincallpkg" --capabilities v0.34.0.json simple-custom-builtincall.rego
+./opa build -t wasm -e "builtincallpkg" --capabilities unittest.capabilities.json simple-custom-builtincall.rego
 Write-Wasm -WasmName "simplebuiltincall.wasm"
 
 Write-Output "Generating builtincall"
-./opa build -t wasm -e "builtincallsallpkg" --capabilities v0.34.0.json custom-builtincall.rego
+./opa build -t wasm -e "builtincallsallpkg" --capabilities unittest.capabilities.json custom-builtincall.rego
 Write-Wasm -WasmName "builtincall.wasm"
 
 Write-Output "Generating abort"
