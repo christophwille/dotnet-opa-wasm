@@ -1,4 +1,4 @@
-Run `\bin\release\netcoreapp3.1> .\Opa.Wasm.Benchmarks.exe`
+Run `\bin\release\net6.0> .\Opa.Wasm.Benchmarks.exe`
 
 ``` ini
 
