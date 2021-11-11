@@ -257,7 +257,7 @@ namespace Opa.Wasm
 
 		private string ExecuteEvaluate(string json, int? entrypoint, bool disableFastEvaluate)
 		{
-			if (!disableFastEvaluate && AbiMinorVersion.Value >= 2)
+			if (!disableFastEvaluate && (AbiMinorVersion.HasValue && AbiMinorVersion.Value >= 2))
 			{
 				return FastEvaluate(json, entrypoint);
 			}
