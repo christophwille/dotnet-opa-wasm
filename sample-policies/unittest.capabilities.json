@@ -2292,6 +2292,23 @@
       }
     },
     {
+      "name": "net.lookup_ip_addr",
+      "decl": {
+        "args": [
+          {
+            "type": "string"
+          }
+        ],
+        "result": {
+          "of": {
+            "type": "string"
+          },
+          "type": "set"
+        },
+        "type": "function"
+      }
+    },
+    {
       "name": "numbers.range",
       "decl": {
         "args": [

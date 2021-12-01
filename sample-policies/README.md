@@ -14,5 +14,5 @@ The WASM files in this folder were built on Windows using `build.ps1`
 Main file from https://github.com/open-policy-agent/opa/tree/main/capabilities
 
 `
-.\concat-capabilities.ps1 -Files v0.34.0.json, simple-custom-builtincall.capabilities.json, custom-builtincall.capabilities.json -Destination unittest.capabilities.json
+.\concat-capabilities.ps1 -Files v0.35.0.json, simple-custom-builtincall.capabilities.json, custom-builtincall.capabilities.json -Destination unittest.capabilities.json
 `
