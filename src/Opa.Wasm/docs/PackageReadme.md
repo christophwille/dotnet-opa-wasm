@@ -1,6 +1,6 @@
 ﻿## About
 
-Built and tested against Open Policy Agent v0.34.
+Built and tested against Open Policy Agent v0.36.
 
 ## Features
 
