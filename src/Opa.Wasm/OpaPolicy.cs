@@ -353,62 +353,98 @@ namespace Opa.Wasm
 			throw new NotImplementedException();
 		}
 
-		public void RegisterBuiltin(string name, Func<string> func)
+		public void RegisterBuiltin<TResult>(string name, Func<TResult> callback)
 		{
-			_registeredBuiltins.Add(name, func);
+			Func<int> builtinCallback = () =>
+			{
+				var result = callback();
+				return BuiltinResultToAddress(result);
+			};
+
+			_registeredBuiltins.Add(name, builtinCallback);
 		}
 
-		public void RegisterBuiltin(string name, Func<string, string> func)
+		public void RegisterBuiltin<TArg1, TResult>(string name, Func<TArg1, TResult> callback)
 		{
-			_registeredBuiltins.Add(name, func);
+			Func<int, int> builtinCallback = (addr1) =>
+			{
+				var result = callback(
+					BuiltinArgToValue<TArg1>(addr1));
+				
+				return BuiltinResultToAddress(result);
+			};
+
+			_registeredBuiltins.Add(name, builtinCallback);
 		}
 
-		public void RegisterBuiltin(string name, Func<string, string, string> func)
+		public void RegisterBuiltin<TArg1, TArg2, TResult>(string name, Func<TArg1, TArg2, TResult> callback)
 		{
-			_registeredBuiltins.Add(name, func);
+			Func<int, int, int> builtinCallback = (addr1, addr2) =>
+			{
+				var result = callback(
+					BuiltinArgToValue<TArg1>(addr1),
+					BuiltinArgToValue<TArg2>(addr2));
+				
+				return BuiltinResultToAddress(result);
+			};
+
+			_registeredBuiltins.Add(name, builtinCallback);
 		}
 
-		public void RegisterBuiltin(string name, Func<string, string, string, string> func)
+		public void RegisterBuiltin<TArg1, TArg2, TArg3, TResult>(string name, Func<TArg1, TArg2, TArg3, TResult> callback)
 		{
-			_registeredBuiltins.Add(name, func);
+			Func<int, int, int, int> builtinCallback = (addr1, addr2, addr3) =>
+			{
+				var result = callback(
+					BuiltinArgToValue<TArg1>(addr1),
+					BuiltinArgToValue<TArg2>(addr2),
+					BuiltinArgToValue<TArg3>(addr3));
+				
+				return BuiltinResultToAddress(result);
+			};
+
+			_registeredBuiltins.Add(name, builtinCallback);
 		}
 
-		public void RegisterBuiltin(string name, Func<string, string, string, string, string> func)
+		public void RegisterBuiltin<TArg1, TArg2, TArg3, TArg4, TResult>(string name, Func<TArg1, TArg2, TArg3, TArg4, TResult> callback)
 		{
-			_registeredBuiltins.Add(name, func);
+			Func<int, int, int, int, int> builtinCallback = (addr1, addr2, addr3, addr4) =>
+			{
+				var result = callback(
+					BuiltinArgToValue<TArg1>(addr1),
+					BuiltinArgToValue<TArg2>(addr2),
+					BuiltinArgToValue<TArg3>(addr3),
+					BuiltinArgToValue<TArg4>(addr4));
+				
+				return BuiltinResultToAddress(result);
+			};
+
+			_registeredBuiltins.Add(name, builtinCallback);
 		}
 
 		private int CallBuiltin(int builtinId, int opaCtxReserved)
 		{
-			string result = ((Func<string>)GetFuncForBuiltinId(builtinId))();
-			return BuiltinResultToAddress(result);
+			return ((Func<int>)GetFuncForBuiltinId(builtinId))();
 		}
 
 		private int CallBuiltin(int builtinId, int opaCtxReserved, int addr1)
 		{
-			string result = ((Func<string, string>)GetFuncForBuiltinId(builtinId))(BuiltinArgToString(addr1));
-			return BuiltinResultToAddress(result);
+			return ((Func<int, int>)GetFuncForBuiltinId(builtinId))(addr1);
 		}
 
 		private int CallBuiltin(int builtinId, int opaCtxReserved, int addr1, int addr2)
 		{
-			string result = ((Func<string, string, string>)GetFuncForBuiltinId(builtinId))(
-				BuiltinArgToString(addr1), BuiltinArgToString(addr2));
-			return BuiltinResultToAddress(result);
+			return ((Func<int, int, int>)GetFuncForBuiltinId(builtinId))(addr1, addr2);
 		}
 
 		private int CallBuiltin(int builtinId, int opaCtxReserved, int addr1, int addr2, int addr3)
 		{
-			string result = ((Func<string, string, string, string>)GetFuncForBuiltinId(builtinId))(
-				BuiltinArgToString(addr1), BuiltinArgToString(addr2), BuiltinArgToString(addr3));
-			return BuiltinResultToAddress(result);
+			return ((Func<int, int, int, int>)GetFuncForBuiltinId(builtinId))(addr1, addr2, addr3);
 		}
 
 		private int CallBuiltin(int builtinId, int opaCtxReserved, int addr1, int addr2, int addr3, int addr4)
 		{
-			string result = ((Func<string, string, string, string, string>)GetFuncForBuiltinId(builtinId))(
-				BuiltinArgToString(addr1), BuiltinArgToString(addr2), BuiltinArgToString(addr3), BuiltinArgToString(addr4));
-			return BuiltinResultToAddress(result);
+			return ((Func<int, int, int, int, int>)GetFuncForBuiltinId(builtinId))(addr1, addr2, addr3, addr4);
 		}
 
 		private object GetFuncForBuiltinId(int builtinId)
@@ -430,13 +466,13 @@ namespace Opa.Wasm
 			}
 		}
 
-		private string BuiltinArgToString(int addr)
+		private T BuiltinArgToValue<T>(int addr)
 		{
 			var json = DumpJson(addr);
-			return JsonSerializer.Deserialize<string>(json);
+			return JsonSerializer.Deserialize<T>(json);
 		}
 
-		private int BuiltinResultToAddress(string result)
+		private int BuiltinResultToAddress(object result)
 		{
 			var json = JsonSerializer.Serialize(result);
 			return LoadJson(json);
