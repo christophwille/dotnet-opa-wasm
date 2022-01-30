@@ -25,6 +25,9 @@
     <None Include="..\..\sample-policies\simplebuiltincall.wasm" Link="LinkedWasms\simplebuiltincall.wasm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+		<None Include="..\..\sample-policies\math-builtin.wasm" Link="LinkedWasms\math-builtin.wasm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 

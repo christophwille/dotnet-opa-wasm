@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading;
 using NUnit.Framework;
 
 namespace Opa.Wasm.UnitTests
@@ -37,6 +40,31 @@ namespace Opa.Wasm.UnitTests
 
 			dynamic output = outputJson.ToDynamic();
 			Assert.AreEqual("Jane Doe", output[0].result.result);
+			Assert.AreEqual(1, callCountOfBuiltin);
+		}
+
+		[Test]
+		[SetCulture("de-DE")]
+		public void NumberSerializationTest()
+		{
+			int callCountOfBuiltin = 0;
+
+			using var opaRuntime = new OpaRuntime();
+			using var module = opaRuntime.Load(WasmFiles.MathBuiltinExample);
+			using var opaPolicy = new OpaPolicy(opaRuntime, module);
+
+			opaPolicy.RegisterBuiltin("custom.func2", (float firstNumber, float secondNumber) =>
+			{
+				callCountOfBuiltin++;
+				return firstNumber + secondNumber;
+			});
+
+			var firstNumber = decimal.Parse("3,1"); // proving this test is running in german culture.
+			var input = new { firstNumber, secondNumber = 2.2 };
+			string outputJson = opaPolicy.Evaluate(input.ToJson());
+
+			dynamic output = outputJson.ToDynamic();
+			Assert.AreEqual(5.3, output[0].result);
 			Assert.AreEqual(1, callCountOfBuiltin);
 		}
 
