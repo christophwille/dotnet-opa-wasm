@@ -1,6 +1,9 @@
 ﻿using HigherLevelApisSpike;
 
-var factory = new PolicyFactory(new DummyPolicyStore());
+var factory = new PolicyFactory(
+                    new DummyPolicyStore(),
+                    new NoOpModuleCache(),
+                    new DefaultOpaSerializer());
 
 var policy = await factory.RentAsync("mysamplepolicy");
 
