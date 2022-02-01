@@ -9,6 +9,7 @@
 
 		public static readonly string BuiltinExample = "LinkedWasms/simplebuiltincall.wasm";
 		public static readonly string AllBuiltinsExample = "LinkedWasms/builtincall.wasm";
+		public static readonly string MathBuiltinExample = "LinkedWasms/math-builtin.wasm";
 
 		public static readonly string AbortExample = "LinkedWasms/abort.wasm";
 	}

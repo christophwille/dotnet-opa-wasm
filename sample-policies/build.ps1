@@ -36,3 +36,7 @@ Write-Wasm -WasmName "builtincall.wasm"
 Write-Output "Generating abort"
 ./opa build -t wasm -e "aborttestpkg" abort.rego
 Write-Wasm -WasmName "abort.wasm"
+
+Write-Output "Generating math-builtin"
+./opa build -t wasm -e "math/builtins/result" --capabilities unittest.capabilities.json math-builtin.rego
+Write-Wasm -WasmName "math-builtin.wasm"
