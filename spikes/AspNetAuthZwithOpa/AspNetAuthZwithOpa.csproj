@@ -1,18 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Include="..\..\sample-policies\example.wasm" Link="example.wasm">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\sample-policies\example.wasm" Link="example.wasm">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Opa.Wasm" Version="0.6.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Opa.Wasm" Version="0.22.0" />
+	</ItemGroup>
 
 
 
