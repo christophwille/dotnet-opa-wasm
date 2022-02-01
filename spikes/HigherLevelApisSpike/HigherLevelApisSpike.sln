@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32120.378
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HigherLevelApisSpike", "HigherLevelApisSpike.csproj", "{AB39D88C-62BC-45C7-9EBD-71F46C70F7DB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AB39D88C-62BC-45C7-9EBD-71F46C70F7DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB39D88C-62BC-45C7-9EBD-71F46C70F7DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB39D88C-62BC-45C7-9EBD-71F46C70F7DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB39D88C-62BC-45C7-9EBD-71F46C70F7DB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9ABAC998-267F-46EE-9030-380911207D3E}
+	EndGlobalSection
+EndGlobal
