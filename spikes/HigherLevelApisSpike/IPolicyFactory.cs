@@ -109,7 +109,7 @@ public class PolicyFactory
         _moduleCache = moduleCache;
     }
 
-    public async Task<Policy> GetAsync(string policyName)
+    public async ValueTask<Policy> GetAsync(string policyName)
     {
         using var opaRuntime = new OpaRuntime();
 
