@@ -10,7 +10,7 @@ namespace Opa.Wasm
 		private Engine _engine;
 		private bool _ownsEngine;
 
-		internal Module _module;
+		private Module _module;
 
 		private OpaPolicyModule()
 		{
@@ -21,6 +21,10 @@ namespace Opa.Wasm
 			return new OpaPolicy(_engine, _module);
 		}
 
+		/// <summary>
+		/// Use when you want one Engine to load/manage multiple Modules
+		/// </summary>
+		/// <returns></returns>
 		public static Engine CreateEngine()
 		{
 			return new Engine();
