@@ -8,9 +8,8 @@ namespace Opa.Wasm.UnitTests
 		[Test]
 		public void HelloWorldTest()
 		{
-			using var opaRuntime = new OpaRuntime();
-			using var module = opaRuntime.Load(WasmFiles.HelloWorldExample);
-			using var opaPolicy = new OpaPolicy(opaRuntime, module);
+			using var module = OpaPolicyModule.Load(WasmFiles.HelloWorldExample);
+			using var opaPolicy = module.CreatePolicyInstance();
 
 			string data = new
 			{
@@ -31,9 +30,8 @@ namespace Opa.Wasm.UnitTests
 		[Test]
 		public void RbacTest()
 		{
-			using var opaRuntime = new OpaRuntime();
-			using var module = opaRuntime.Load(WasmFiles.RbacExample);
-			using var opaPolicy = new OpaPolicy(opaRuntime, module);
+			using var module = OpaPolicyModule.Load(WasmFiles.RbacExample);
+			using var opaPolicy = module.CreatePolicyInstance();
 
 			string data = File.ReadAllText(Path.Combine("TestData", "basic_rbac_data.json"));
 			opaPolicy.SetData(data);
@@ -49,9 +47,8 @@ namespace Opa.Wasm.UnitTests
 		[Test]
 		public void HelloWorldTest_FastEvaluate()
 		{
-			using var opaRuntime = new OpaRuntime();
-			using var module = opaRuntime.Load(WasmFiles.HelloWorldExample);
-			using var opaPolicy = new OpaPolicy(opaRuntime, module);
+			using var module = OpaPolicyModule.Load(WasmFiles.HelloWorldExample);
+			using var opaPolicy = module.CreatePolicyInstance();
 
 			string data = new
 			{
@@ -74,9 +71,8 @@ namespace Opa.Wasm.UnitTests
 		{
 			var policyBytes = System.IO.File.ReadAllBytes(WasmFiles.HelloWorldExample);
 
-			using var opaRuntime = new OpaRuntime();
-			using var module = opaRuntime.Load("example", policyBytes);
-			using var opaPolicy = new OpaPolicy(opaRuntime, module);
+			using var module = OpaPolicyModule.Load("example", policyBytes);
+			using var opaPolicy = module.CreatePolicyInstance();
 
 			string data = new
 			{
@@ -95,9 +91,11 @@ namespace Opa.Wasm.UnitTests
 		}
 
 		[Test]
-		public void HelloWorldTest_FromFile_NoEngine()
+		public void HelloWorldTest_FromFile_ExplicitEngine()
 		{
-			using var opaPolicy = new OpaPolicy(WasmFiles.HelloWorldExample);
+			using var engine = OpaPolicyModule.CreateEngine();
+			using var opaPolicyModule = OpaPolicyModule.Load(WasmFiles.HelloWorldExample, engine);
+			using var opaPolicy = opaPolicyModule.CreatePolicyInstance();
 
 			string data = new
 			{
@@ -116,10 +114,13 @@ namespace Opa.Wasm.UnitTests
 		}
 
 		[Test]
-		public void HelloWorldTest_FromBytes_NoEngine()
+		public void HelloWorldTest_FromBytes_ExplicitEngine()
 		{
 			var policyBytes = System.IO.File.ReadAllBytes(WasmFiles.HelloWorldExample);
-			using var opaPolicy = new OpaPolicy("example", policyBytes);
+
+			using var engine = OpaPolicyModule.CreateEngine();
+			using var opaPolicyModule = OpaPolicyModule.Load("example", policyBytes, engine);
+			using var opaPolicy = opaPolicyModule.CreatePolicyInstance();
 
 			string data = new
 			{

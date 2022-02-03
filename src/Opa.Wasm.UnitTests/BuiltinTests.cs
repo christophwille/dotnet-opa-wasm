@@ -12,9 +12,8 @@ namespace Opa.Wasm.UnitTests
 		[Test]
 		public void DumpBuiltinsTest()
 		{
-			using var opaRuntime = new OpaRuntime();
-			using var module = opaRuntime.Load(WasmFiles.BuiltinExample);
-			using var opaPolicy = new OpaPolicy(opaRuntime, module);
+			using var module = OpaPolicyModule.Load(WasmFiles.BuiltinExample);
+			using var opaPolicy = module.CreatePolicyInstance();
 
 			var builtins = opaPolicy.Builtins;
 
@@ -27,9 +26,8 @@ namespace Opa.Wasm.UnitTests
 		{
 			int callCountOfBuiltin = 0;
 
-			using var opaRuntime = new OpaRuntime();
-			using var module = opaRuntime.Load(WasmFiles.BuiltinExample);
-			using var opaPolicy = new OpaPolicy(opaRuntime, module);
+			using var module = OpaPolicyModule.Load(WasmFiles.BuiltinExample);
+			using var opaPolicy = module.CreatePolicyInstance();
 
 			opaPolicy.RegisterBuiltin("custom.func", (string input) =>
 			{
@@ -49,9 +47,8 @@ namespace Opa.Wasm.UnitTests
 		{
 			int callCountOfBuiltin = 0;
 
-			using var opaRuntime = new OpaRuntime();
-			using var module = opaRuntime.Load(WasmFiles.MathBuiltinExample);
-			using var opaPolicy = new OpaPolicy(opaRuntime, module);
+			using var module = OpaPolicyModule.Load(WasmFiles.MathBuiltinExample);
+			using var opaPolicy = module.CreatePolicyInstance();
 
 			opaPolicy.RegisterBuiltin("custom.func2", (float firstNumber, float secondNumber) =>
 			{
@@ -73,9 +70,8 @@ namespace Opa.Wasm.UnitTests
 		{
 			int[] callCountOfBuiltin = new int[5];
 
-			using var opaRuntime = new OpaRuntime();
-			using var module = opaRuntime.Load(WasmFiles.AllBuiltinsExample);
-			using var opaPolicy = new OpaPolicy(opaRuntime, module);
+			using var module = OpaPolicyModule.Load(WasmFiles.AllBuiltinsExample);
+			using var opaPolicy = module.CreatePolicyInstance();
 
 			opaPolicy.RegisterBuiltin("custom.func0", () =>
 			{

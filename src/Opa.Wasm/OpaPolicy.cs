@@ -25,48 +25,13 @@ namespace Opa.Wasm
 		public int? AbiVersion { get; private set; }
 		public int? AbiMinorVersion { get; private set; }
 
-		/// <summary>
-		/// This ctor is intended for scenarios where you want to cache a precompiled WASM module
-		/// </summary>
-		/// <param name="runtime"></param>
-		/// <param name="wasmModule"></param>
-		public OpaPolicy(OpaRuntime runtime, Module wasmModule)
+		internal OpaPolicy(Engine engine, Module module)
 		{
-			Setup(runtime, wasmModule);
-		}
-
-		/// <summary>
-		/// Load OPA policy from a .wasm file on disk. Incurs compilation penalty.
-		/// </summary>
-		/// <param name="fileName"></param>
-		public OpaPolicy(string fileName)
-		{
-			using var runtime = new OpaRuntime();
-			var wasmModule = runtime.Load(fileName);
-
-			Setup(runtime, wasmModule);
-		}
-
-		/// <summary>
-		/// Load OPA policy from an in-memory byte[] (eg Cache or other non-disk location). Incurs compilation penalty.
-		/// </summary>
-		/// <param name="name"></param>
-		/// <param name="content"></param>
-		public OpaPolicy(string name, byte[] content)
-		{
-			using var runtime = new OpaRuntime();
-			var wasmModule = runtime.Load(name, content);
-
-			Setup(runtime, wasmModule);
-		}
-
-		private void Setup(OpaRuntime runtime, Module wasmModule)
-		{
-			_linker = runtime.CreateLinker();
-			_store = runtime.CreateStore();
+			_linker = new Linker(engine);
+			_store = new Store(engine);
 			LinkImports();
 
-			Initialize(wasmModule);
+			Initialize(module);
 		}
 
 		/*  https://webassembly.github.io/wabt/demo/wasm2wat/
@@ -370,7 +335,7 @@ namespace Opa.Wasm
 			{
 				var result = callback(
 					BuiltinArgToValue<TArg1>(addr1));
-				
+
 				return BuiltinResultToAddress(result);
 			};
 
@@ -384,7 +349,7 @@ namespace Opa.Wasm
 				var result = callback(
 					BuiltinArgToValue<TArg1>(addr1),
 					BuiltinArgToValue<TArg2>(addr2));
-				
+
 				return BuiltinResultToAddress(result);
 			};
 
@@ -399,7 +364,7 @@ namespace Opa.Wasm
 					BuiltinArgToValue<TArg1>(addr1),
 					BuiltinArgToValue<TArg2>(addr2),
 					BuiltinArgToValue<TArg3>(addr3));
-				
+
 				return BuiltinResultToAddress(result);
 			};
 
@@ -415,7 +380,7 @@ namespace Opa.Wasm
 					BuiltinArgToValue<TArg2>(addr2),
 					BuiltinArgToValue<TArg3>(addr3),
 					BuiltinArgToValue<TArg4>(addr4));
-				
+
 				return BuiltinResultToAddress(result);
 			};
 

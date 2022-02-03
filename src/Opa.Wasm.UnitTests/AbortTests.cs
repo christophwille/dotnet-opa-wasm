@@ -8,9 +8,8 @@ namespace Opa.Wasm.UnitTests
 		[Test]
 		public void AbortTest()
 		{
-			using var opaRuntime = new OpaRuntime();
-			using var module = opaRuntime.Load(WasmFiles.AbortExample);
-			using var opaPolicy = new OpaPolicy(opaRuntime, module);
+			using var module = OpaPolicyModule.Load(WasmFiles.AbortExample);
+			using var opaPolicy = module.CreatePolicyInstance();
 
 			Wasmtime.TrapException ex = Assert.Throws<Wasmtime.TrapException>(
 				() =>
@@ -24,9 +23,8 @@ namespace Opa.Wasm.UnitTests
 		[Test]
 		public void FastEvaluateAbortTest()
 		{
-			using var opaRuntime = new OpaRuntime();
-			using var module = opaRuntime.Load(WasmFiles.AbortExample);
-			using var opaPolicy = new OpaPolicy(opaRuntime, module);
+			using var module = OpaPolicyModule.Load(WasmFiles.AbortExample);
+			using var opaPolicy = module.CreatePolicyInstance();
 
 			Wasmtime.TrapException ex = Assert.Throws<Wasmtime.TrapException>(
 				() =>

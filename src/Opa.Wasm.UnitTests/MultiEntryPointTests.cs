@@ -9,9 +9,8 @@ namespace Opa.Wasm.UnitTests
 		[Test]
 		public void DumpEntryPointsForMultiTest()
 		{
-			using var opaRuntime = new OpaRuntime();
-			using var module = opaRuntime.Load(WasmFiles.MultiEntrypointExample);
-			using var opaPolicy = new OpaPolicy(opaRuntime, module);
+			using var module = OpaPolicyModule.Load(WasmFiles.MultiEntrypointExample);
+			using var opaPolicy = module.CreatePolicyInstance();
 
 			var entrypoints = opaPolicy.Entrypoints;
 
@@ -24,9 +23,8 @@ namespace Opa.Wasm.UnitTests
 		[Test]
 		public void DefaultEntrypointMultiTest()
 		{
-			using var opaRuntime = new OpaRuntime();
-			using var module = opaRuntime.Load(WasmFiles.MultiEntrypointExample);
-			using var opaPolicy = new OpaPolicy(opaRuntime, module);
+			using var module = OpaPolicyModule.Load(WasmFiles.MultiEntrypointExample);
+			using var opaPolicy = module.CreatePolicyInstance();
 
 			string input = new
 			{
@@ -45,9 +43,8 @@ namespace Opa.Wasm.UnitTests
 		[Test]
 		public void ExampleOneEntrypointByNumberMultiTest()
 		{
-			using var opaRuntime = new OpaRuntime();
-			using var module = opaRuntime.Load(WasmFiles.MultiEntrypointExample);
-			using var opaPolicy = new OpaPolicy(opaRuntime, module);
+			using var module = OpaPolicyModule.Load(WasmFiles.MultiEntrypointExample);
+			using var opaPolicy = module.CreatePolicyInstance();
 
 			string input = new
 			{
@@ -66,9 +63,8 @@ namespace Opa.Wasm.UnitTests
 		[Test]
 		public void ExampleOneEntrypointByNameMultiTest()
 		{
-			using var opaRuntime = new OpaRuntime();
-			using var module = opaRuntime.Load(WasmFiles.MultiEntrypointExample);
-			using var opaPolicy = new OpaPolicy(opaRuntime, module);
+			using var module = OpaPolicyModule.Load(WasmFiles.MultiEntrypointExample);
+			using var opaPolicy = module.CreatePolicyInstance();
 
 			string input = new
 			{
@@ -87,9 +83,8 @@ namespace Opa.Wasm.UnitTests
 		[Test]
 		public void InvalidNumericalEntrypointMultiTest()
 		{
-			using var opaRuntime = new OpaRuntime();
-			using var module = opaRuntime.Load(WasmFiles.MultiEntrypointExample);
-			using var opaPolicy = new OpaPolicy(opaRuntime, module);
+			using var module = OpaPolicyModule.Load(WasmFiles.MultiEntrypointExample);
+			using var opaPolicy = module.CreatePolicyInstance();
 
 			string input = new
 			{
@@ -103,9 +98,8 @@ namespace Opa.Wasm.UnitTests
 		[Test]
 		public void ExampleOneRuleEntrypointMultiTest()
 		{
-			using var opaRuntime = new OpaRuntime();
-			using var module = opaRuntime.Load(WasmFiles.MultiEntrypointExample);
-			using var opaPolicy = new OpaPolicy(opaRuntime, module);
+			using var module = OpaPolicyModule.Load(WasmFiles.MultiEntrypointExample);
+			using var opaPolicy = module.CreatePolicyInstance();
 
 			string input = new
 			{
