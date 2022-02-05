@@ -16,10 +16,10 @@ static void EvaluateRbac()
 	// Now you can create as many instances of OpaPolicy on top of this runtime & loaded module as you want
 	using var opaPolicy = module.CreatePolicyInstance();
 
-	opaPolicy.SetData(@"{""user_roles"": { ""alice"": [""admin""],""bob"": [""employee"",""billing""],""eve"": [""customer""]}}");
+	opaPolicy.SetDataJson(@"{""user_roles"": { ""alice"": [""admin""],""bob"": [""employee"",""billing""],""eve"": [""customer""]}}");
 
 	string input = @"{ ""user"": ""alice"", ""action"": ""read"", ""object"": ""id123"", ""type"": ""dog"" }";
-	string output = opaPolicy.Evaluate(input);
+	string output = opaPolicy.EvaluateJson(input);
 
 	Console.WriteLine($"RBAC output: {output}");
 }
@@ -29,10 +29,10 @@ static void EvaluateHelloWorld()
 	using var module = OpaPolicyModule.Load("example.wasm");
 	using var opaPolicy = module.CreatePolicyInstance();
 
-	opaPolicy.SetData(@"{""world"": ""world""}");
+	opaPolicy.SetDataJson(@"{""world"": ""world""}");
 
 	string input = @"{""message"": ""world""}";
-	string output = opaPolicy.Evaluate(input);
+	string output = opaPolicy.EvaluateJson(input);
 
 	Console.WriteLine($"Hello world output: {output}");
 }

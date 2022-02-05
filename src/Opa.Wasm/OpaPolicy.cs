@@ -25,8 +25,12 @@ namespace Opa.Wasm
 		public int? AbiVersion { get; private set; }
 		public int? AbiMinorVersion { get; private set; }
 
-		internal OpaPolicy(Engine engine, Module module)
+		public IOpaSerializer Serializer { get; private set; }
+
+		internal OpaPolicy(Engine engine, Module module, IOpaSerializer serializer)
 		{
+			Serializer = serializer;
+
 			_linker = new Linker(engine);
 			_store = new Store(engine);
 			LinkImports();
@@ -187,12 +191,26 @@ namespace Opa.Wasm
 			}
 		}
 
-		public string Evaluate(string json, bool disableFastEvaluate = false)
+		public T Evaluate<T>(object input, bool disableFastEvaluate = false)
+		{
+			string json = Serializer.Serialize(input);
+			string retVal = ExecuteEvaluate(json, null, disableFastEvaluate);
+			return Serializer.Deserialize<T>(retVal);
+		}
+
+		public string EvaluateJson(string json, bool disableFastEvaluate = false)
 		{
 			return ExecuteEvaluate(json, null, disableFastEvaluate);
 		}
 
-		public string Evaluate(string json, int entrypoint, bool disableFastEvaluate = false)
+		public T Evaluate<T>(object input, int entrypoint, bool disableFastEvaluate = false)
+		{
+			string json = Serializer.Serialize(input);
+			string retVal = EvaluateJson(json, entrypoint, disableFastEvaluate);
+			return Serializer.Deserialize<T>(retVal);
+		}
+
+		public string EvaluateJson(string json, int entrypoint, bool disableFastEvaluate = false)
 		{
 			bool found = false;
 			foreach (int epId in Entrypoints.Values)
@@ -210,7 +228,14 @@ namespace Opa.Wasm
 			return ExecuteEvaluate(json, entrypoint, disableFastEvaluate);
 		}
 
-		public string Evaluate(string json, string entrypoint, bool disableFastEvaluate = false)
+		public T Evaluate<T>(object input, string entrypoint, bool disableFastEvaluate = false)
+		{
+			string json = Serializer.Serialize(input);
+			string retVal = EvaluateJson(json, entrypoint, disableFastEvaluate);
+			return Serializer.Deserialize<T>(retVal);
+		}
+
+		public string EvaluateJson(string json, string entrypoint, bool disableFastEvaluate = false)
 		{
 			bool found = Entrypoints.TryGetValue(entrypoint, out var epId);
 			if (!found)
@@ -263,11 +288,17 @@ namespace Opa.Wasm
 			return _envMemory.ReadNullTerminatedString(_store, resultaddr);
 		}
 
-		public void SetData(string json)
+		public void SetDataJson(string json)
 		{
 			Policy_opa_heap_ptr_set(_baseHeapPtr);
 			_dataAddr = LoadJson(json);
 			_dataHeapPtr = Policy_opa_heap_ptr_get();
+		}
+
+		public void SetData(object data)
+		{
+			string json = Serializer.Serialize(data);
+			SetDataJson(json);
 		}
 
 		private int LoadJson(string json)

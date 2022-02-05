@@ -34,7 +34,7 @@ namespace Opa.Wasm.UnitTests
 				callCountOfBuiltin++;
 				return input + " Doe";
 			});
-			string outputJson = opaPolicy.Evaluate("{}");
+			string outputJson = opaPolicy.EvaluateJson("{}");
 
 			dynamic output = outputJson.ToDynamic();
 			Assert.AreEqual("Jane Doe", output[0].result.result);
@@ -58,7 +58,7 @@ namespace Opa.Wasm.UnitTests
 
 			var firstNumber = decimal.Parse("3,1"); // proving this test is running in german culture.
 			var input = new { firstNumber, secondNumber = 2.2 };
-			string outputJson = opaPolicy.Evaluate(input.ToJson());
+			string outputJson = opaPolicy.EvaluateJson(input.ToJson());
 
 			dynamic output = outputJson.ToDynamic();
 			Assert.AreEqual(5.3, output[0].result);
@@ -103,7 +103,7 @@ namespace Opa.Wasm.UnitTests
 				return string.Join(",", arg1) + arg2 + arg3 + arg4;
 			});
 
-			string outputJson = opaPolicy.Evaluate("{}");
+			string outputJson = opaPolicy.EvaluateJson("{}");
 
 			dynamic output = outputJson.ToDynamic();
 			Assert.AreEqual(0, output[0].result.result0);
