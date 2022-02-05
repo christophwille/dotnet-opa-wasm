@@ -12,20 +12,13 @@ namespace Opa.Wasm.UnitTests
 			using var module = OpaPolicyModule.Load(WasmFiles.HelloWorldExample);
 			using var opaPolicy = module.CreatePolicyInstance();
 
-			var data = new
-			{
-				world = "world"
-			};
-			opaPolicy.SetData(data);
+			opaPolicy.SetData(new { world = "world" });
 
-			var input = new
-			{
-				message = "world"
-			};
+			var output = opaPolicy.Evaluate<HelloWorldResult>(
+				new { message = "world" },
+				disableFastEvaluate: true);
 
-			// JSON: [{"result":true}]
-			var output = opaPolicy.Evaluate<HelloWorldResult[]>(input, disableFastEvaluate: true);
-			Assert.IsTrue(output[0].Result);
+			Assert.IsTrue(output.Result);
 		}
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text.Json;
 using Wasmtime;
 
@@ -25,7 +26,17 @@ namespace Opa.Wasm
 		public int? AbiVersion { get; private set; }
 		public int? AbiMinorVersion { get; private set; }
 
-		public IOpaSerializer Serializer { get; private set; }
+		private IOpaSerializer _serializer;
+		public IOpaSerializer Serializer
+		{
+			get { return _serializer; }
+			set
+			{
+				if (null == value)
+					throw new ArgumentNullException(nameof(Serializer), "Must be supplied");
+				_serializer = value;
+			}
+		}
 
 		internal OpaPolicy(Engine engine, Module module, IOpaSerializer serializer)
 		{
@@ -191,11 +202,17 @@ namespace Opa.Wasm
 			}
 		}
 
+		private T TypedOutputDeserialize<T>(string evalOutput)
+		{
+			var fullResult = _serializer.Deserialize<IEnumerable<T>>(evalOutput);
+			return fullResult.FirstOrDefault();
+		}
+
 		public T Evaluate<T>(object input, bool disableFastEvaluate = false)
 		{
-			string json = Serializer.Serialize(input);
+			string json = _serializer.Serialize(input);
 			string retVal = ExecuteEvaluate(json, null, disableFastEvaluate);
-			return Serializer.Deserialize<T>(retVal);
+			return TypedOutputDeserialize<T>(retVal);
 		}
 
 		public string EvaluateJson(string json, bool disableFastEvaluate = false)
@@ -205,9 +222,9 @@ namespace Opa.Wasm
 
 		public T Evaluate<T>(object input, int entrypoint, bool disableFastEvaluate = false)
 		{
-			string json = Serializer.Serialize(input);
+			string json = _serializer.Serialize(input);
 			string retVal = EvaluateJson(json, entrypoint, disableFastEvaluate);
-			return Serializer.Deserialize<T>(retVal);
+			return TypedOutputDeserialize<T>(retVal);
 		}
 
 		public string EvaluateJson(string json, int entrypoint, bool disableFastEvaluate = false)
@@ -230,9 +247,9 @@ namespace Opa.Wasm
 
 		public T Evaluate<T>(object input, string entrypoint, bool disableFastEvaluate = false)
 		{
-			string json = Serializer.Serialize(input);
+			string json = _serializer.Serialize(input);
 			string retVal = EvaluateJson(json, entrypoint, disableFastEvaluate);
-			return Serializer.Deserialize<T>(retVal);
+			return TypedOutputDeserialize<T>(retVal);
 		}
 
 		public string EvaluateJson(string json, string entrypoint, bool disableFastEvaluate = false)
