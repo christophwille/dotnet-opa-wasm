@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Text.Json;
 using Wasmtime;
 
@@ -204,8 +202,8 @@ namespace Opa.Wasm
 
 		private IOpaResult<T> TypedOutputDeserialize<T>(string evalOutput) where T : notnull
 		{
-			var fullResult = _serializer.Deserialize<IEnumerable<OpaResult<T>>>(evalOutput);
-			var resultObj = fullResult.FirstOrDefault();
+			var fullResult = _serializer.Deserialize<OpaResult<T>[]>(evalOutput);
+			var resultObj = fullResult.Length > 0 ? fullResult[0] : null;
 
 			if (null != resultObj)
 			{

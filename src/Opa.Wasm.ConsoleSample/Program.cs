@@ -8,32 +8,33 @@ ReadFromBundle();
 
 Console.Read();
 
-// https://play.openpolicyagent.org/ "Role-based" example stripped down to minimum
-static void EvaluateRbac()
-{
-	using var module = OpaPolicyModule.Load("rbac.wasm");
-
-	// Now you can create as many instances of OpaPolicy on top of this runtime & loaded module as you want
-	using var opaPolicy = module.CreatePolicyInstance();
-
-	opaPolicy.SetDataJson(@"{""user_roles"": { ""alice"": [""admin""],""bob"": [""employee"",""billing""],""eve"": [""customer""]}}");
-	var input = new RbacPolicyInputModel("alice", "read", "id123", "dog");
-	var output = opaPolicy.Evaluate<RbacPolicyOutputModel>(input);
-
-	Console.WriteLine($"RBAC output - allowed: {output.Value.Allow} is admin: {output.Value.user_is_admin}");
-}
-
 static void EvaluateHelloWorld()
 {
 	using var module = OpaPolicyModule.Load("example.wasm");
 	using var opaPolicy = module.CreatePolicyInstance();
 
-	opaPolicy.SetDataJson(@"{""world"": ""world""}");
+	opaPolicy.SetDataJson(@"{""world"": ""world""}"); // use SetData(object) for a higher-level API
 
 	string input = @"{""message"": ""world""}";
-	string output = opaPolicy.EvaluateJson(input);
+	string output = opaPolicy.EvaluateJson(input); // use Evaluate<T>(...) for a higher-level API
 
 	Console.WriteLine($"Hello world output: {output}");
+}
+
+// https://play.openpolicyagent.org/ "Role-based" example stripped down to minimum
+static void EvaluateRbac()
+{
+	using var module = OpaPolicyModule.Load("rbac.wasm");
+	using var opaPolicy = module.CreatePolicyInstance();
+
+	// You can use SetDataJson or SetData and mix with EvaluateJson or Evaluate<T> to your liking
+	const string data = @"{""user_roles"": { ""alice"": [""admin""],""bob"": [""employee"",""billing""],""eve"": [""customer""]}}";
+	opaPolicy.SetDataJson(data);
+
+	var input = new RbacPolicyInputModel(User: "alice", Action: "read", Object: "id123", Type: "dog");
+	var result = opaPolicy.Evaluate<RbacPolicyResultModel>(input);
+
+	Console.WriteLine($"RBAC output - allowed: {result.Value.Allow} is admin: {result.Value.user_is_admin}");
 }
 
 static void ReadFromBundle()
@@ -66,7 +67,5 @@ static void ReadFromBundle()
 	}
 }
 
-// { ""user"": ""alice"", ""action"": ""read"", ""object"": ""id123"", ""type"": ""dog"" }
 record RbacPolicyInputModel(string User, string Action, string Object, string Type);
-// [{"result":{"allow":true,"user_is_admin":true}}]
-record RbacPolicyOutputModel(bool Allow, bool user_is_admin);
+record RbacPolicyResultModel(bool Allow, bool user_is_admin);

@@ -9,25 +9,25 @@ namespace Opa.Wasm.UnitTests
 		public void HelloWorldTest()
 		{
 			using var module = OpaPolicyModule.Load(WasmFiles.HelloWorldExample);
-			using var opaPolicy = module.CreatePolicyInstance(new NewtonsoftSerde());
+			using var opaPolicy = module.CreatePolicyInstance(new CustomSerdeTestsNewtonsoft());
 
 			opaPolicy.SetData(new { world = "world" });
 
 			var output = opaPolicy.Evaluate<bool>(
-				new HelloWorldPolicyInput { Message = "world" },
+				new CustomSerdeTestsHelloWorldPolicyInput { Message = "world" },
 				disableFastEvaluate: true);
 
 			Assert.IsTrue(output.Value);
 		}
 	}
 
-	internal class HelloWorldPolicyInput
+	internal class CustomSerdeTestsHelloWorldPolicyInput
 	{
 		[JsonProperty("message")]
 		public string Message { get; set; }
 	}
 
-	internal class NewtonsoftSerde : IOpaSerializer
+	internal class CustomSerdeTestsNewtonsoft : IOpaSerializer
 	{
 		public T Deserialize<T>(string json)
 		{
