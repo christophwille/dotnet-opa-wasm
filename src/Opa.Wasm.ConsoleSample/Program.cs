@@ -17,11 +17,10 @@ static void EvaluateRbac()
 	using var opaPolicy = module.CreatePolicyInstance();
 
 	opaPolicy.SetDataJson(@"{""user_roles"": { ""alice"": [""admin""],""bob"": [""employee"",""billing""],""eve"": [""customer""]}}");
+	var input = new RbacPolicyInputModel("alice", "read", "id123", "dog");
+	var output = opaPolicy.Evaluate<RbacPolicyOutputModel>(input);
 
-	string input = @"{ ""user"": ""alice"", ""action"": ""read"", ""object"": ""id123"", ""type"": ""dog"" }";
-	string output = opaPolicy.EvaluateJson(input);
-
-	Console.WriteLine($"RBAC output: {output}");
+	Console.WriteLine($"RBAC output - allowed: {output.Value.Allow} is admin: {output.Value.user_is_admin}");
 }
 
 static void EvaluateHelloWorld()
@@ -66,3 +65,8 @@ static void ReadFromBundle()
 		int length = bytes.Length; // 116020
 	}
 }
+
+// { ""user"": ""alice"", ""action"": ""read"", ""object"": ""id123"", ""type"": ""dog"" }
+record RbacPolicyInputModel(string User, string Action, string Object, string Type);
+// [{"result":{"allow":true,"user_is_admin":true}}]
+record RbacPolicyOutputModel(bool Allow, bool user_is_admin);

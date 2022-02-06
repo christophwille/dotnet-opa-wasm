@@ -202,14 +202,27 @@ namespace Opa.Wasm
 			}
 		}
 
-		private T TypedOutputDeserialize<T>(string evalOutput)
+		private IOpaResult<T> TypedOutputDeserialize<T>(string evalOutput) where T : notnull
 		{
-			var fullResult = _serializer.Deserialize<IEnumerable<T>>(evalOutput);
-			return fullResult.FirstOrDefault();
+			var fullResult = _serializer.Deserialize<IEnumerable<OpaResult<T>>>(evalOutput);
+			var resultObj = fullResult.FirstOrDefault();
+
+			if (null != resultObj)
+			{
+				resultObj.JsonOutput = evalOutput;
+			}
+
+			return resultObj;
 		}
 
-		public T Evaluate<T>(object input, bool disableFastEvaluate = false)
+		public IOpaResult<T> Evaluate<T>(object input, bool disableFastEvaluate = false)
 		{
+			// TBD: Passing a string or value type could be unintentional here, should we stop the user from hurting themselves?
+			//if (input.GetType() == typeof(string))
+			//{
+			//	throw new NotSupportedException("The 'string' type argument is not supported.");
+			//}
+
 			string json = _serializer.Serialize(input);
 			string retVal = ExecuteEvaluate(json, null, disableFastEvaluate);
 			return TypedOutputDeserialize<T>(retVal);
@@ -220,7 +233,7 @@ namespace Opa.Wasm
 			return ExecuteEvaluate(json, null, disableFastEvaluate);
 		}
 
-		public T Evaluate<T>(object input, int entrypoint, bool disableFastEvaluate = false)
+		public IOpaResult<T> Evaluate<T>(object input, int entrypoint, bool disableFastEvaluate = false)
 		{
 			string json = _serializer.Serialize(input);
 			string retVal = EvaluateJson(json, entrypoint, disableFastEvaluate);
@@ -245,7 +258,7 @@ namespace Opa.Wasm
 			return ExecuteEvaluate(json, entrypoint, disableFastEvaluate);
 		}
 
-		public T Evaluate<T>(object input, string entrypoint, bool disableFastEvaluate = false)
+		public IOpaResult<T> Evaluate<T>(object input, string entrypoint, bool disableFastEvaluate = false)
 		{
 			string json = _serializer.Serialize(input);
 			string retVal = EvaluateJson(json, entrypoint, disableFastEvaluate);

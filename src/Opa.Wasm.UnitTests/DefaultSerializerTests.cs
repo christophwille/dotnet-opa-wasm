@@ -2,8 +2,6 @@
 
 namespace Opa.Wasm.UnitTests
 {
-	record HelloWorldResult(bool Result);
-
 	public class DefaultSerializerTests
 	{
 		[Test]
@@ -14,11 +12,11 @@ namespace Opa.Wasm.UnitTests
 
 			opaPolicy.SetData(new { world = "world" });
 
-			var output = opaPolicy.Evaluate<HelloWorldResult>(
+			var output = opaPolicy.Evaluate<bool>(
 				new { message = "world" },
 				disableFastEvaluate: true);
 
-			Assert.IsTrue(output.Result);
+			Assert.IsTrue(output.Value);
 		}
 	}
 }
