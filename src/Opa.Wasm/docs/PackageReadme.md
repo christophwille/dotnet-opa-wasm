@@ -1,6 +1,6 @@
 ﻿## About
 
-Built and tested against Open Policy Agent v0.36.
+Built and tested against Open Policy Agent v0.37.
 
 ## Features
 
@@ -28,7 +28,7 @@ string output = opaPolicy.EvaluateJson(@"{""message"": ""world""}");
 ```
 
 For higher-performance scenarios, you can keep the engine as well as the loaded WASM module around.
-Note that one engine can handle multiple modules, and the module keeps the correct reference to 
+Note that one engine can handle multiple modules, and the OpaPolicyModule keeps the correct reference to 
 the engine to guarantee thread safety:
 
 ```csharp
