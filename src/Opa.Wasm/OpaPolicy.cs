@@ -215,12 +215,6 @@ namespace Opa.Wasm
 
 		public IOpaResult<T> Evaluate<T>(object input, bool disableFastEvaluate = false)
 		{
-			// TBD: Passing a string or value type could be unintentional here, should we stop the user from hurting themselves?
-			//if (input.GetType() == typeof(string))
-			//{
-			//	throw new NotSupportedException("The 'string' type argument is not supported.");
-			//}
-
 			string json = _serializer.Serialize(input);
 			string retVal = ExecuteEvaluate(json, null, disableFastEvaluate);
 			return TypedOutputDeserialize<T>(retVal);
