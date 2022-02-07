@@ -15,13 +15,13 @@ namespace Opa.Wasm.UnitTests
 			{
 				world = "world"
 			}.ToJson();
-			opaPolicy.SetData(data);
+			opaPolicy.SetDataJson(data);
 
 			string input = new
 			{
 				message = "world"
 			}.ToJson();
-			string outputJson = opaPolicy.Evaluate(input, disableFastEvaluate: true);
+			string outputJson = opaPolicy.EvaluateJson(input, disableFastEvaluate: true);
 
 			dynamic output = outputJson.ToDynamic();
 			Assert.IsTrue(output[0].result);
@@ -34,10 +34,10 @@ namespace Opa.Wasm.UnitTests
 			using var opaPolicy = module.CreatePolicyInstance();
 
 			string data = File.ReadAllText(Path.Combine("TestData", "basic_rbac_data.json"));
-			opaPolicy.SetData(data);
+			opaPolicy.SetDataJson(data);
 
 			string input = File.ReadAllText(Path.Combine("TestData", "basic_rbac_input.json"));
-			string outputJson = opaPolicy.Evaluate(input);
+			string outputJson = opaPolicy.EvaluateJson(input);
 
 			dynamic output = outputJson.ToDynamic();
 			Assert.IsTrue(output[0].result.allow);
@@ -54,13 +54,13 @@ namespace Opa.Wasm.UnitTests
 			{
 				world = "world"
 			}.ToJson();
-			opaPolicy.SetData(data);
+			opaPolicy.SetDataJson(data);
 
 			string input = new
 			{
 				message = "world"
 			}.ToJson();
-			string outputJson = opaPolicy.Evaluate(input, disableFastEvaluate: false);
+			string outputJson = opaPolicy.EvaluateJson(input, disableFastEvaluate: false);
 
 			dynamic output = outputJson.ToDynamic();
 			Assert.IsTrue(output[0].result);
@@ -78,13 +78,13 @@ namespace Opa.Wasm.UnitTests
 			{
 				world = "world"
 			}.ToJson();
-			opaPolicy.SetData(data);
+			opaPolicy.SetDataJson(data);
 
 			string input = new
 			{
 				message = "world"
 			}.ToJson();
-			string outputJson = opaPolicy.Evaluate(input, disableFastEvaluate: true);
+			string outputJson = opaPolicy.EvaluateJson(input, disableFastEvaluate: true);
 
 			dynamic output = outputJson.ToDynamic();
 			Assert.IsTrue(output[0].result);
@@ -101,13 +101,13 @@ namespace Opa.Wasm.UnitTests
 			{
 				world = "world"
 			}.ToJson();
-			opaPolicy.SetData(data);
+			opaPolicy.SetDataJson(data);
 
 			string input = new
 			{
 				message = "world"
 			}.ToJson();
-			string outputJson = opaPolicy.Evaluate(input, disableFastEvaluate: true);
+			string outputJson = opaPolicy.EvaluateJson(input, disableFastEvaluate: true);
 
 			dynamic output = outputJson.ToDynamic();
 			Assert.IsTrue(output[0].result);
@@ -126,13 +126,13 @@ namespace Opa.Wasm.UnitTests
 			{
 				world = "world"
 			}.ToJson();
-			opaPolicy.SetData(data);
+			opaPolicy.SetDataJson(data);
 
 			string input = new
 			{
 				message = "world"
 			}.ToJson();
-			string outputJson = opaPolicy.Evaluate(input, disableFastEvaluate: true);
+			string outputJson = opaPolicy.EvaluateJson(input, disableFastEvaluate: true);
 
 			dynamic output = outputJson.ToDynamic();
 			Assert.IsTrue(output[0].result);

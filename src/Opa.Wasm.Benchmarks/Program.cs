@@ -21,10 +21,10 @@ namespace Opa.Wasm.Benchmarks
 		{
 			using var opaPolicy = _opaModule.CreatePolicyInstance();
 
-			opaPolicy.SetData(@"{""world"": ""world""}");
+			opaPolicy.SetDataJson(@"{""world"": ""world""}");
 
 			string input = @"{""message"": ""world""}";
-			string output = opaPolicy.Evaluate(input, disableFastEvaluate: true);
+			string output = opaPolicy.EvaluateJson(input, disableFastEvaluate: true);
 
 			return output;
 		}
@@ -34,10 +34,10 @@ namespace Opa.Wasm.Benchmarks
 		{
 			using var opaPolicy = _opaModule.CreatePolicyInstance();
 
-			opaPolicy.SetData(@"{""world"": ""world""}");
+			opaPolicy.SetDataJson(@"{""world"": ""world""}");
 
 			string input = @"{""message"": ""world""}";
-			string output = opaPolicy.Evaluate(input, disableFastEvaluate: false);
+			string output = opaPolicy.EvaluateJson(input, disableFastEvaluate: false);
 
 			return output;
 		}
@@ -49,12 +49,12 @@ namespace Opa.Wasm.Benchmarks
 		{
 			using var opaPolicy = _opaModule.CreatePolicyInstance();
 
-			opaPolicy.SetData(@"{""world"": ""world""}");
+			opaPolicy.SetDataJson(@"{""world"": ""world""}");
 
 			string input = @"{""message"": ""world""}";
 			for (int i = 1; i <= runXTimes; i++)
 			{
-				string output = opaPolicy.Evaluate(input, disableFastEvaluate: true);
+				string output = opaPolicy.EvaluateJson(input, disableFastEvaluate: true);
 			}
 		}
 
@@ -63,13 +63,13 @@ namespace Opa.Wasm.Benchmarks
 		{
 			using var opaPolicy = _opaModule.CreatePolicyInstance();
 
-			opaPolicy.SetData(@"{""world"": ""world""}");
+			opaPolicy.SetDataJson(@"{""world"": ""world""}");
 
 			string input = @"{""message"": ""world""}";
 
 			for (int i = 1; i <= runXTimes; i++)
 			{
-				string output = opaPolicy.Evaluate(input, disableFastEvaluate: false);
+				string output = opaPolicy.EvaluateJson(input, disableFastEvaluate: false);
 			}
 		}
 	}

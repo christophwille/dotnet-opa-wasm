@@ -14,7 +14,7 @@ namespace Opa.Wasm.UnitTests
 			Wasmtime.TrapException ex = Assert.Throws<Wasmtime.TrapException>(
 				() =>
 				{
-					string outputJson = opaPolicy.Evaluate("{}", disableFastEvaluate: true);
+					string outputJson = opaPolicy.EvaluateJson("{}", disableFastEvaluate: true);
 				});
 
 			StringAssert.StartsWith("abort.rego:4:1: var assignment conflict", ex.Message);
@@ -29,7 +29,7 @@ namespace Opa.Wasm.UnitTests
 			Wasmtime.TrapException ex = Assert.Throws<Wasmtime.TrapException>(
 				() =>
 				{
-					string outputJson = opaPolicy.Evaluate("{}", disableFastEvaluate: false);
+					string outputJson = opaPolicy.EvaluateJson("{}", disableFastEvaluate: false);
 				});
 
 			StringAssert.StartsWith("abort.rego:4:1: var assignment conflict", ex.Message);

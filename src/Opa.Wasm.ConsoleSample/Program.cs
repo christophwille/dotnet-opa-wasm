@@ -8,33 +8,33 @@ ReadFromBundle();
 
 Console.Read();
 
-// https://play.openpolicyagent.org/ "Role-based" example stripped down to minimum
-static void EvaluateRbac()
-{
-	using var module = OpaPolicyModule.Load("rbac.wasm");
-
-	// Now you can create as many instances of OpaPolicy on top of this runtime & loaded module as you want
-	using var opaPolicy = module.CreatePolicyInstance();
-
-	opaPolicy.SetData(@"{""user_roles"": { ""alice"": [""admin""],""bob"": [""employee"",""billing""],""eve"": [""customer""]}}");
-
-	string input = @"{ ""user"": ""alice"", ""action"": ""read"", ""object"": ""id123"", ""type"": ""dog"" }";
-	string output = opaPolicy.Evaluate(input);
-
-	Console.WriteLine($"RBAC output: {output}");
-}
-
 static void EvaluateHelloWorld()
 {
 	using var module = OpaPolicyModule.Load("example.wasm");
 	using var opaPolicy = module.CreatePolicyInstance();
 
-	opaPolicy.SetData(@"{""world"": ""world""}");
+	opaPolicy.SetDataJson(@"{""world"": ""world""}"); // use SetData(object) for a higher-level API
 
 	string input = @"{""message"": ""world""}";
-	string output = opaPolicy.Evaluate(input);
+	string output = opaPolicy.EvaluateJson(input); // use Evaluate<T>(...) for a higher-level API
 
 	Console.WriteLine($"Hello world output: {output}");
+}
+
+// https://play.openpolicyagent.org/ "Role-based" example stripped down to minimum
+static void EvaluateRbac()
+{
+	using var module = OpaPolicyModule.Load("rbac.wasm");
+	using var opaPolicy = module.CreatePolicyInstance();
+
+	// You can use SetDataJson or SetData and mix with EvaluateJson or Evaluate<T> to your liking
+	const string data = @"{""user_roles"": { ""alice"": [""admin""],""bob"": [""employee"",""billing""],""eve"": [""customer""]}}";
+	opaPolicy.SetDataJson(data);
+
+	var input = new RbacPolicyInputModel(User: "alice", Action: "read", Object: "id123", Type: "dog");
+	var result = opaPolicy.Evaluate<RbacPolicyResultModel>(input);
+
+	Console.WriteLine($"RBAC output - allowed: {result.Value.Allow} is admin: {result.Value.user_is_admin}");
 }
 
 static void ReadFromBundle()
@@ -66,3 +66,6 @@ static void ReadFromBundle()
 		int length = bytes.Length; // 116020
 	}
 }
+
+record RbacPolicyInputModel(string User, string Action, string Object, string Type);
+record RbacPolicyResultModel(bool Allow, bool user_is_admin);

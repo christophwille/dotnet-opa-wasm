@@ -15,17 +15,26 @@ Built and tested against Open Policy Agent v0.36.
 The simplest use case - load a WASM module into a policy object, pass data and evaluate based on input:
 
 ```csharp
-using var opaPolicy = new OpaPolicy("example.wasm");
-opaPolicy.SetData(@"{""world"": ""world""}");
-string output = opaPolicy.Evaluate(@"{""message"": ""world""}");
+using var module = OpaPolicyModule.Load("example.wasm");
+using var opaPolicy = module.CreatePolicyInstance();
+
+// Use the typed methods to interact with the policy instance
+opaPolicy.SetData(new { world = "world" });
+var output = opaPolicy.Evaluate<bool>(new { message = "world" });
+
+// Alternatively, send raw Json for the utmost control (advanced scenario)
+opaPolicy.SetDataJson(@"{""world"": ""world""}");
+string output = opaPolicy.EvaluateJson(@"{""message"": ""world""}");
 ```
 
-For higher-performance scenarios, you can keep the runtime as well as the loaded WASM module around:
+For higher-performance scenarios, you can keep the engine as well as the loaded WASM module around.
+Note that one engine can handle multiple modules, and the module keeps the correct reference to 
+the engine to guarantee thread safety:
 
 ```csharp
-using var opaRuntime = new OpaRuntime();
-using var module = opaRuntime.Load("example.wasm");
+using var engine = OpaPolicyModule.CreateEngine();
+using var opaPolicyModule = OpaPolicyModule.Load("example.wasm", engine);
 
-// Now instantiate as many policy objects you want on top of the runtime & module
-using var opaPolicy = new OpaPolicy(opaRuntime, module);
+// Now instantiate as many policy objects you want on top of the engine & module
+using var opaPolicy = opaPolicyModule.CreatePolicyInstance();
 ```

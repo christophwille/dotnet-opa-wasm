@@ -31,7 +31,7 @@ namespace Opa.Wasm.UnitTests
 				someProp = "thisValue",
 				anotherProp = "thatValue"
 			}.ToJson();
-			string outputJson = opaPolicy.Evaluate(input);
+			string outputJson = opaPolicy.EvaluateJson(input);
 
 			// [{"result":{"one":{"myOtherRule":true,"myRule":true,"myCompositeRule":true}}}]
 			dynamic output = outputJson.ToDynamic();
@@ -51,7 +51,7 @@ namespace Opa.Wasm.UnitTests
 				someProp = "thisValue",
 				anotherProp = "thatValue"
 			}.ToJson();
-			string outputJson = opaPolicy.Evaluate(input, 1);
+			string outputJson = opaPolicy.EvaluateJson(input, 1);
 
 			// [{"result":{"myOtherRule":true,"myRule":true,"myCompositeRule":true}}]
 			dynamic output = outputJson.ToDynamic();
@@ -71,7 +71,7 @@ namespace Opa.Wasm.UnitTests
 				someProp = "thisValue",
 				anotherProp = "thatValue"
 			}.ToJson();
-			string outputJson = opaPolicy.Evaluate(input, "example/one");
+			string outputJson = opaPolicy.EvaluateJson(input, "example/one");
 
 			// [{"result":{"myOtherRule":true,"myRule":true,"myCompositeRule":true}}]
 			dynamic output = outputJson.ToDynamic();
@@ -92,7 +92,7 @@ namespace Opa.Wasm.UnitTests
 				anotherProp = "thatValue"
 			}.ToJson();
 
-			var ex = Assert.Throws<ArgumentOutOfRangeException>(() => opaPolicy.Evaluate(input, 5));
+			var ex = Assert.Throws<ArgumentOutOfRangeException>(() => opaPolicy.EvaluateJson(input, 5));
 		}
 
 		[Test]
@@ -106,7 +106,7 @@ namespace Opa.Wasm.UnitTests
 				someProp = "thisValue",
 				anotherProp = "thatValue"
 			}.ToJson();
-			string outputJson = opaPolicy.Evaluate(input, "example/one/myCompositeRule");
+			string outputJson = opaPolicy.EvaluateJson(input, "example/one/myCompositeRule");
 
 			// [{"result":true}]
 			dynamic output = outputJson.ToDynamic();
