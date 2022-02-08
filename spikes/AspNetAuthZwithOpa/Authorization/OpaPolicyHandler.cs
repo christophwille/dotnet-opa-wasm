@@ -29,17 +29,15 @@ namespace AspNetAuthZwithOpa.Authorization
 
             if (succeeded)
             {
-                using var opaRuntime = new OpaRuntime();
-
                 // TODO: This incurs the compilation penalty for wasm - use an object pool (single-threaded use only)
-                using var module = opaRuntime.Load(policyName, wasmBytes);
+                using var module = OpaPolicyModule.Load(policyName, wasmBytes);
 
-                using var opaPolicy = new OpaPolicy(opaRuntime, module);
+                using var opaPolicy = module.CreatePolicyInstance();
 
-                opaPolicy.SetData(@"{""world"": ""world""}");
+                opaPolicy.SetDataJson(@"{""world"": ""world""}");
 
                 string input = @"{""message"": ""world""}";
-                string output = opaPolicy.Evaluate(input);
+                string output = opaPolicy.EvaluateJson(input);
 
                 context.Succeed(requirement);
             }
