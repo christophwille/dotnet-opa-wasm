@@ -1,4 +1,6 @@
-﻿namespace AspNetAuthZwithOpa.Authorization
+﻿using System.Threading.Tasks;
+
+namespace AspNetAuthZwithOpa.Authorization
 {
     public class SamplePolicy
     {
@@ -9,12 +11,11 @@
             _factory = factory;
         }
 
-        public bool Evaluate(/* provide whatever input you want here */)
+        public async Task<bool> EvaluateAsync(/* provide whatever input you want here */)
         {
-            // Module is owned by Factory
-            var module = _factory.Get("example");
+            bool isPolicyAvailable = await _factory.EnsurePolicyWasmLoadedAsync("example");
+            using var policy = _factory.CreatePolicyInstance("example");
 
-            using var policy = module.CreatePolicyInstance();
             policy.SetData(new SamplePolicyData("world"));
             var result = policy.Evaluate<bool>(new SamplePolicyInput("world"));
 

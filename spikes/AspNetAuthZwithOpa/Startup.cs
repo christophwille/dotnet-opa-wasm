@@ -28,7 +28,7 @@ namespace AspNetAuthZwithOpa
             services.AddRazorPages();
 
             services.AddMemoryCache();
-            services.AddSingleton<IPoliciesStore, ImmutablePoliciesFileStore>();
+            services.AddSingleton<IOpaWasmStore, SampleFileWasmStore>();
 
             services.AddAuthorization(options =>
             {
@@ -38,7 +38,7 @@ namespace AspNetAuthZwithOpa
 
             services.AddSingleton<IAuthorizationHandler, OpaPolicyHandler>();
 
-            services.AddSingleton<SampleFactory, SampleFactory>(); // AddSingleton useful when it does cache stuff
+            services.AddSingleton<SampleFactory, SampleFactory>();
             services.AddTransient<SamplePolicy, SamplePolicy>();
         }
 

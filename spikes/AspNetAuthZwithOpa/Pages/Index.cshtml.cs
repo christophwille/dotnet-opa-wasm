@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace AspNetAuthZwithOpa.Pages
 {
@@ -16,9 +17,9 @@ namespace AspNetAuthZwithOpa.Pages
             _logger = logger;
         }
 
-        public void OnGet([FromServices] SamplePolicy samplePolicy)
+        public async Task OnGetAsync([FromServices] SamplePolicy samplePolicy)
         {
-            bool output = samplePolicy.Evaluate();
+            bool output = await samplePolicy.EvaluateAsync();
         }
     }
 }
