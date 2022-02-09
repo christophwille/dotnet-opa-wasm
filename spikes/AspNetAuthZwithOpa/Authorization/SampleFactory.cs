@@ -17,49 +17,43 @@ namespace AspNetAuthZwithOpa.Authorization
             _store = store;
         }
 
-        public virtual string GenerateCacheKeyForModuleBytes(string name)
-        {
-            return "OPA_AuthZ_Policies_CachedBytes_" + name;
-        }
-
-        public virtual string GenerateCacheKeyForPolicyModule(string name)
-        {
-            return "OPA_AuthZ_Policies_CachedModule_" + name;
-        }
-
         public async Task<bool> EnsurePolicyWasmLoadedAsync(string name)
         {
-            string cacheKey = GenerateCacheKeyForModuleBytes(name);
-            if (_wasmCache.ContainsKey(cacheKey))
+            if (_wasmCache.ContainsKey(name))
             {
                 return true;
             }
 
+            // Needs: exception handling
             var bytes = await _store.LoadPolicyModuleAsync(name);
-            _wasmCache.TryAdd(cacheKey, bytes);
+            _wasmCache.TryAdd(name, bytes);
 
             return true;
         }
 
+        // Should that be public at all?
         public OpaPolicyModule GetModuleRef(string name)
         {
-            string modcacheKey = GenerateCacheKeyForPolicyModule(name);
-            if (_opaModules.TryGetValue(modcacheKey, out var module))
+            if (_opaModules.TryGetValue(name, out var module))
             {
                 return module;
             }
 
-            string cacheKey = GenerateCacheKeyForModuleBytes(name);
-            if (_wasmCache.TryGetValue(cacheKey, out var bytes))
+            if (_wasmCache.TryGetValue(name, out var bytes))
             {
                 var newModule = OpaPolicyModule.Load(name, bytes);
-                _opaModules.TryAdd(modcacheKey, newModule);
+                _opaModules.TryAdd(name, newModule);
                 return newModule;
             }
 
             throw new ArgumentException(nameof(name), "Policy bytes not cached, did you call EnsurePolicyWasmBytesLoadedAsync?");
         }
 
+        // Could be async to avoid calling EnsurePolicyWasmLoadedAsync separately
+        // Intention of EnsurePolicyWasmLoadedAsync
+        //     - a global preload could also be done and calling this method would be unnecessary
+        //     - have an entirely sync code path for policy evaluation starting with CreatePolicyInstance
+        // Non-async might be pointless anyways if SetData/input requires db data access or the like
         public OpaPolicy CreatePolicyInstance(string name)
         {
             var module = GetModuleRef(name);
