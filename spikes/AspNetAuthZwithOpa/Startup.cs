@@ -27,17 +27,14 @@ namespace AspNetAuthZwithOpa
         {
             services.AddRazorPages();
 
-            services.AddMemoryCache();
-            services.AddSingleton<IOpaWasmStore, SampleFileWasmStore>();
-
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("GuardedByOpa", policy =>
                     policy.Requirements.Add(new OpaPolicyRequirement("example")));
             });
-
             services.AddSingleton<IAuthorizationHandler, OpaPolicyHandler>();
 
+            services.AddSingleton<IOpaWasmStore, SampleFileWasmStore>();
             services.AddSingleton<SampleFactory, SampleFactory>();
             services.AddTransient<SamplePolicy, SamplePolicy>();
         }
