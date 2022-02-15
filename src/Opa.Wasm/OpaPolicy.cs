@@ -119,9 +119,9 @@ namespace Opa.Wasm
 
 			string builtins = DumpJson(Policy_Builtins());
 			Builtins = ParseBuiltinsJson(builtins);
-
-			_dataAddr = LoadJson("{}");
+			
 			_baseHeapPtr = Policy_opa_heap_ptr_get();
+			_dataAddr = LoadJson("{}");
 			_dataHeapPtr = _baseHeapPtr;
 
 			string entrypoints = DumpJson(Policy_Entrypoints());
