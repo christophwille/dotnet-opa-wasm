@@ -330,6 +330,8 @@ namespace Opa.Wasm
 
 			int parseAddr = Policy_opa_json_parse(addr, json.Length);
 
+			Policy_opa_free(addr);
+
 			if (0 == parseAddr)
 			{
 				throw new ArgumentNullException("Parsing failed");

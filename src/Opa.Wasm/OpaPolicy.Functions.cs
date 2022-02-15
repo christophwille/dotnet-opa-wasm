@@ -92,6 +92,12 @@ namespace Opa.Wasm
 			return (int)run?.Invoke(_store, length);
 		}
 
+		private void Policy_opa_free(int addr)
+		{
+			var run = _instance.GetFunction(_store, "opa_free");
+			run?.Invoke(_store, addr);
+		}
+
 		private int Policy_opa_json_parse(int addr, int length)
 		{
 			var run = _instance.GetFunction(_store, "opa_json_parse");
