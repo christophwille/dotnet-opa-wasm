@@ -303,6 +303,8 @@ namespace Opa.Wasm
 		{
 			if (!entrypoint.HasValue) entrypoint = 0; // use default entry point
 
+			EnsureMemoryCapacity(json);
+
 			_envMemory.WriteString(_store, _dataHeapPtr, json);
 
 			int resultaddr = Policy_opa_eval(entrypoint.Value, _dataAddr, _dataHeapPtr, json.Length, _dataHeapPtr + json.Length);
@@ -495,5 +497,16 @@ namespace Opa.Wasm
 			var json = JsonSerializer.Serialize(result);
 			return LoadJson(json);
 		}
-	}
+
+		private void EnsureMemoryCapacity(string value)
+		{
+			var requiredPages = (uint)Math.Ceiling((_dataHeapPtr + value.Length) / (double)Memory.PageSize);
+			var pagesToAdd = requiredPages - _envMemory.GetSize(_store);
+
+			if (pagesToAdd > 0)
+			{
+				_envMemory.Grow(_store, pagesToAdd);
+			}
+		}
+}
 }
