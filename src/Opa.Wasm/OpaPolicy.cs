@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using Wasmtime;
 
@@ -136,7 +137,7 @@ namespace Opa.Wasm
 		   "example/one/myCompositeRule":2,
 		   "example":0
 		} */
-		private Dictionary<string, int> ParseEntryPointsJson(string json)
+		private Dictionary<string, int> ParseEntryPointsJson([StringSyntax("Json")] string json)
 		{
 			using JsonDocument document = JsonDocument.Parse(json, GetSTJDefaultOptions());
 
@@ -149,7 +150,7 @@ namespace Opa.Wasm
 			return dict;
 		}
 
-		private Dictionary<int, string> ParseBuiltinsJson(string json)
+		private Dictionary<int, string> ParseBuiltinsJson([StringSyntax("Json")] string json)
 		{
 			if ("{}" == json) return new Dictionary<int, string>();
 
@@ -220,7 +221,7 @@ namespace Opa.Wasm
 			return TypedOutputDeserialize<T>(retVal);
 		}
 
-		public string EvaluateJson(string json, bool disableFastEvaluate = false)
+		public string EvaluateJson([StringSyntax("Json")] string json, bool disableFastEvaluate = false)
 		{
 			return ExecuteEvaluate(json, null, disableFastEvaluate);
 		}
@@ -232,7 +233,7 @@ namespace Opa.Wasm
 			return TypedOutputDeserialize<T>(retVal);
 		}
 
-		public string EvaluateJson(string json, int entrypoint, bool disableFastEvaluate = false)
+		public string EvaluateJson([StringSyntax("Json")] string json, int entrypoint, bool disableFastEvaluate = false)
 		{
 			bool found = false;
 			foreach (int epId in Entrypoints.Values)
@@ -257,7 +258,7 @@ namespace Opa.Wasm
 			return TypedOutputDeserialize<T>(retVal);
 		}
 
-		public string EvaluateJson(string json, string entrypoint, bool disableFastEvaluate = false)
+		public string EvaluateJson([StringSyntax("Json")] string json, string entrypoint, bool disableFastEvaluate = false)
 		{
 			bool found = Entrypoints.TryGetValue(entrypoint, out var epId);
 			if (!found)
@@ -267,7 +268,7 @@ namespace Opa.Wasm
 			return ExecuteEvaluate(json, epId, disableFastEvaluate);
 		}
 
-		private string ExecuteEvaluate(string json, int? entrypoint, bool disableFastEvaluate)
+		private string ExecuteEvaluate([StringSyntax("Json")] string json, int? entrypoint, bool disableFastEvaluate)
 		{
 			if (!disableFastEvaluate && (AbiMinorVersion.HasValue && AbiMinorVersion.Value >= 2))
 			{
@@ -299,7 +300,7 @@ namespace Opa.Wasm
 		}
 
 		// https://github.com/open-policy-agent/opa/issues/3696#issuecomment-891662230
-		private string FastEvaluate(string json, int? entrypoint)
+		private string FastEvaluate([StringSyntax("Json")] string json, int? entrypoint)
 		{
 			if (!entrypoint.HasValue) entrypoint = 0; // use default entry point
 
@@ -310,7 +311,7 @@ namespace Opa.Wasm
 			return _envMemory.ReadNullTerminatedString(_store, resultaddr);
 		}
 
-		public void SetDataJson(string json)
+		public void SetDataJson([StringSyntax("Json")] string json)
 		{
 			Policy_opa_heap_ptr_set(_baseHeapPtr);
 			_dataAddr = LoadJson(json);
@@ -323,7 +324,7 @@ namespace Opa.Wasm
 			SetDataJson(json);
 		}
 
-		private int LoadJson(string json)
+		private int LoadJson([StringSyntax("Json")] string json)
 		{
 			int addr = Policy_opa_malloc(json.Length);
 			_envMemory.WriteString(_store, addr, json);
