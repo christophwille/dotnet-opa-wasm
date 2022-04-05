@@ -11,7 +11,7 @@
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<Authors>Christoph Wille</Authors>
-		<Description>Call Open Policy Agent (OPA) policies in WASM (Web Assembly) from .NET Core</Description>
+		<Description>Call Open Policy Agent (OPA) policies in WASM (Web Assembly) from .NET</Description>
 		<PackageReadmeFile>PackageReadme.md</PackageReadmeFile>
 	</PropertyGroup>
 
@@ -37,7 +37,7 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="System.Text.Json" Version="6.0.2" />
-		<PackageReference Include="Wasmtime" Version="0.35.0-preview1" />
+		<PackageReference Include="Wasmtime" Version="0.35.2-preview1" />
 	</ItemGroup>
 
 </Project>
