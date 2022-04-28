@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<Version>0.31.0</Version>
+		<Version>0.32.0</Version>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/christophwille/dotnet-opa-wasm</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/christophwille/dotnet-opa-wasm.git</RepositoryUrl>
