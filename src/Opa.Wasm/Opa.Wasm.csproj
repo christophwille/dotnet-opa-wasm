@@ -36,8 +36,8 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="System.Text.Json" Version="6.0.3" />
-		<PackageReference Include="Wasmtime" Version="0.36.0-preview1" />
+		<PackageReference Include="System.Text.Json" Version="6.0.5" />
+		<PackageReference Include="Wasmtime" Version="0.37.0-preview1" />
 	</ItemGroup>
 
 </Project>
