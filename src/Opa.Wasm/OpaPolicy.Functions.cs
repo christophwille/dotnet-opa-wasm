@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Opa.Wasm
 {
@@ -20,88 +18,88 @@ namespace Opa.Wasm
 
 		private int Policy_Builtins()
 		{
-			var run = _instance.GetFunction(_store, "builtins");
-			return (int)run?.Invoke(_store);
+			var run = _instance.GetFunction<int>(_store, "builtins");
+			return run();
 		}
 
 		private int Policy_Entrypoints()
 		{
-			var run = _instance.GetFunction(_store, "entrypoints");
-			return (int)run?.Invoke(_store);
+			var run = _instance.GetFunction<int>(_store, "entrypoints");
+			return run();
 		}
 
 		private int Policy_opa_heap_ptr_get()
 		{
-			var run = _instance.GetFunction(_store, "opa_heap_ptr_get");
-			return (int)run?.Invoke(_store);
+			var run = _instance.GetFunction<int>(_store, "opa_heap_ptr_get");
+			return run();
 		}
 
 		private void Policy_opa_heap_ptr_set(int ptr)
 		{
-			var run = _instance.GetFunction(_store, "opa_heap_ptr_set");
-			run?.Invoke(_store, ptr);
+			var run = _instance.GetAction<int>(_store, "opa_heap_ptr_set");
+			run(ptr);
 		}
 
 		private int Policy_opa_eval_ctx_new()
 		{
-			var run = _instance.GetFunction(_store, "opa_eval_ctx_new");
-			return (int)run?.Invoke(_store);
+			var run = _instance.GetFunction<int>(_store, "opa_eval_ctx_new");
+			return run();
 		}
 
 		private void Policy_opa_eval_ctx_set_input(int ctxAddr, int inputAddr)
 		{
-			var run = _instance.GetFunction(_store, "opa_eval_ctx_set_input");
-			run?.Invoke(_store, ctxAddr, inputAddr);
+			var run = _instance.GetAction<int, int>(_store, "opa_eval_ctx_set_input");
+			run(ctxAddr, inputAddr);
 		}
 
 		private void Policy_opa_eval_ctx_set_data(int ctxAddr, int dataAddr)
 		{
-			var run = _instance.GetFunction(_store, "opa_eval_ctx_set_data");
-			run?.Invoke(_store, ctxAddr, dataAddr);
+			var run = _instance.GetAction<int, int>(_store, "opa_eval_ctx_set_data");
+			run(ctxAddr, dataAddr);
 		}
 
 		private void Policy_opa_eval_ctx_set_entrypoint(int ctxAddr, int entrypoint)
 		{
-			var run = _instance.GetFunction(_store, "opa_eval_ctx_set_entrypoint");
-			run?.Invoke(_store, ctxAddr, entrypoint);
+			var run = _instance.GetAction<int, int>(_store, "opa_eval_ctx_set_entrypoint");
+			run(ctxAddr, entrypoint);
 		}
 
 		private void Policy_eval(int ctxAddr)
 		{
-			var run = _instance.GetFunction(_store, "eval");
-			run?.Invoke(_store, ctxAddr);
+			var run = _instance.GetFunction<int, int>(_store, "eval");
+			_ = run(ctxAddr);
 		}
 
 		private int Policy_opa_eval(/*int addr, */
 			int entrypoint_id, int dataaddr, int jsonaddr, int jsonlength, int heapaddr/*, int format*/)
 		{
-			var run = _instance.GetFunction(_store, "opa_eval");
-			return (int)run?.Invoke(_store, 0 /* always 0 */, entrypoint_id,
+			var run = _instance.GetFunction<int, int, int, int, int, int, int, int>(_store, "opa_eval");
+			return run(0 /* always 0 */, entrypoint_id,
 				dataaddr, jsonaddr, jsonlength, heapaddr, 0 /* json format */);
 		}
 
 		private int Policy_opa_eval_ctx_get_result(int ctxAddr)
 		{
-			var run = _instance.GetFunction(_store, "opa_eval_ctx_get_result");
-			return (int)run?.Invoke(_store, ctxAddr);
+			var run = _instance.GetFunction<int, int>(_store, "opa_eval_ctx_get_result");
+			return run(ctxAddr);
 		}
 
 		private int Policy_opa_malloc(int length)
 		{
-			var run = _instance.GetFunction(_store, "opa_malloc");
-			return (int)run?.Invoke(_store, length);
+			var run = _instance.GetFunction<int, int>(_store, "opa_malloc");
+			return run(length);
 		}
 
 		private int Policy_opa_json_parse(int addr, int length)
 		{
-			var run = _instance.GetFunction(_store, "opa_json_parse");
-			return (int)run?.Invoke(_store, addr, length);
+			var run = _instance.GetFunction<int, int, int>(_store, "opa_json_parse");
+			return run(addr, length);
 		}
 
 		private int Policy_opa_json_dump(int addrResult)
 		{
-			var run = _instance.GetFunction(_store, "opa_json_dump");
-			return (int)run?.Invoke(_store, addrResult);
+			var run = _instance.GetFunction<int, int>(_store, "opa_json_dump");
+			return run(addrResult);
 		}
 	}
 }
