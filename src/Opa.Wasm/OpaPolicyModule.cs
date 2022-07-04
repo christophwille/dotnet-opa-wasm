@@ -16,7 +16,7 @@ namespace Opa.Wasm
 		{
 		}
 
-		public OpaPolicy CreatePolicyInstance(IOpaSerializer serializer = null)
+		public IOpaPolicy CreatePolicyInstance(IOpaSerializer serializer = null)
 		{
 			if (null == serializer) serializer = DefaultOpaSerializer.Instance;
 
