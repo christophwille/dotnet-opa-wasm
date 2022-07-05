@@ -119,9 +119,9 @@ namespace Opa.Wasm
 
 			string builtins = DumpJson(Policy_Builtins());
 			Builtins = ParseBuiltinsJson(builtins);
-
-			_dataAddr = LoadJson("{}");
+			
 			_baseHeapPtr = Policy_opa_heap_ptr_get();
+			_dataAddr = LoadJson("{}");
 			_dataHeapPtr = _baseHeapPtr;
 
 			string entrypoints = DumpJson(Policy_Entrypoints());
@@ -302,6 +302,8 @@ namespace Opa.Wasm
 		private string FastEvaluate(string json, int? entrypoint)
 		{
 			if (!entrypoint.HasValue) entrypoint = 0; // use default entry point
+
+			EnsureMemoryCapacity(json);
 
 			_envMemory.WriteString(_store, _dataHeapPtr, json);
 
@@ -495,5 +497,16 @@ namespace Opa.Wasm
 			var json = JsonSerializer.Serialize(result);
 			return LoadJson(json);
 		}
-	}
+
+		private void EnsureMemoryCapacity(string value)
+		{
+			var requiredPages = (uint)Math.Ceiling((_dataHeapPtr + value.Length) / (double)Memory.PageSize);
+			var pagesToAdd = requiredPages - _envMemory.GetSize(_store);
+
+			if (pagesToAdd > 0)
+			{
+				_envMemory.Grow(_store, pagesToAdd);
+			}
+		}
+}
 }
