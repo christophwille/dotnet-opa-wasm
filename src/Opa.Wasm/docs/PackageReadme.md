@@ -1,6 +1,6 @@
 ﻿## About
 
-Built and tested against Open Policy Agent v0.40.
+Built and tested against Open Policy Agent v0.43.
 
 Note: 0.30 and higher changed the target framework to net6.0 (from netstandard2.1) because Wasmtime changed its TFM.
 
