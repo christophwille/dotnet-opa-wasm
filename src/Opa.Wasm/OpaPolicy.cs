@@ -5,7 +5,7 @@ using Wasmtime;
 
 namespace Opa.Wasm
 {
-	public partial class OpaPolicy : IDisposable
+	public partial class OpaPolicy : IOpaPolicy
 	{
 		private int _dataAddr;
 		private int _baseHeapPtr;
