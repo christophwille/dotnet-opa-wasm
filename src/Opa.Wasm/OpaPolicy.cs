@@ -70,7 +70,7 @@ namespace Opa.Wasm
 			_linker.Define(OpaConstants.Module, OpaConstants.Abort, Function.FromCallback(_store,
 				(Caller caller, int addr) =>
 				{
-					string info = _envMemory.ReadNullTerminatedString(_store, addr);
+					string info = _envMemory.ReadNullTerminatedString(addr);
 
 					// NOTE: the generic class will do, as it is unwrapped again by Policy_eval/run?.Invoke
 					throw new Exception(info);
@@ -303,11 +303,11 @@ namespace Opa.Wasm
 		{
 			if (!entrypoint.HasValue) entrypoint = 0; // use default entry point
 
-			_envMemory.WriteString(_store, _dataHeapPtr, json);
+			_envMemory.WriteString(_dataHeapPtr, json);
 
 			int resultaddr = Policy_opa_eval(entrypoint.Value, _dataAddr, _dataHeapPtr, json.Length, _dataHeapPtr + json.Length);
 
-			return _envMemory.ReadNullTerminatedString(_store, resultaddr);
+			return _envMemory.ReadNullTerminatedString(resultaddr);
 		}
 
 		public void SetDataJson(string json)
@@ -326,7 +326,7 @@ namespace Opa.Wasm
 		private int LoadJson(string json)
 		{
 			int addr = Policy_opa_malloc(json.Length);
-			_envMemory.WriteString(_store, addr, json);
+			_envMemory.WriteString(addr, json);
 
 			int parseAddr = Policy_opa_json_parse(addr, json.Length);
 
@@ -341,7 +341,7 @@ namespace Opa.Wasm
 		private string DumpJson(int addrResult)
 		{
 			int addr = Policy_opa_json_dump(addrResult);
-			return _envMemory.ReadNullTerminatedString(_store, addr);
+			return _envMemory.ReadNullTerminatedString(addr);
 		}
 
 		public void Dispose()
