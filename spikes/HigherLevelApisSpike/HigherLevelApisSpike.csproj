@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Opa.Wasm" Version="0.22.0" />
+    <PackageReference Include="Opa.Wasm" Version="0.33.0" />
   </ItemGroup>
 
 </Project>
