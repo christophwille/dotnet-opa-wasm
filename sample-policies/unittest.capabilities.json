@@ -1382,7 +1382,8 @@
           "type": "object"
         },
         "type": "function"
-      }
+      },
+      "nondeterministic": true
     },
     {
       "name": "indexof",
@@ -1591,7 +1592,8 @@
           "type": "array"
         },
         "type": "function"
-      }
+      },
+      "nondeterministic": true
     },
     {
       "name": "io.jwt.encode_sign",
@@ -1635,7 +1637,8 @@
           "type": "string"
         },
         "type": "function"
-      }
+      },
+      "nondeterministic": true
     },
     {
       "name": "io.jwt.encode_sign_raw",
@@ -1655,7 +1658,8 @@
           "type": "string"
         },
         "type": "function"
-      }
+      },
+      "nondeterministic": true
     },
     {
       "name": "io.jwt.verify_es256",
@@ -2627,7 +2631,8 @@
           "type": "set"
         },
         "type": "function"
-      }
+      },
+      "nondeterministic": true
     },
     {
       "name": "numbers.range",
@@ -2917,7 +2922,8 @@
           "type": "object"
         },
         "type": "function"
-      }
+      },
+      "nondeterministic": true
     },
     {
       "name": "or",
@@ -3016,7 +3022,8 @@
           "type": "number"
         },
         "type": "function"
-      }
+      },
+      "nondeterministic": true
     },
     {
       "name": "re_match",
@@ -3419,6 +3426,108 @@
       }
     },
     {
+      "name": "strings.any_prefix_match",
+      "decl": {
+        "args": [
+          {
+            "of": [
+              {
+                "type": "string"
+              },
+              {
+                "dynamic": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "of": {
+                  "type": "string"
+                },
+                "type": "set"
+              }
+            ],
+            "type": "any"
+          },
+          {
+            "of": [
+              {
+                "type": "string"
+              },
+              {
+                "dynamic": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "of": {
+                  "type": "string"
+                },
+                "type": "set"
+              }
+            ],
+            "type": "any"
+          }
+        ],
+        "result": {
+          "type": "boolean"
+        },
+        "type": "function"
+      }
+    },
+    {
+      "name": "strings.any_suffix_match",
+      "decl": {
+        "args": [
+          {
+            "of": [
+              {
+                "type": "string"
+              },
+              {
+                "dynamic": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "of": {
+                  "type": "string"
+                },
+                "type": "set"
+              }
+            ],
+            "type": "any"
+          },
+          {
+            "of": [
+              {
+                "type": "string"
+              },
+              {
+                "dynamic": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "of": {
+                  "type": "string"
+                },
+                "type": "set"
+              }
+            ],
+            "type": "any"
+          }
+        ],
+        "result": {
+          "type": "boolean"
+        },
+        "type": "function"
+      }
+    },
+    {
       "name": "strings.replace_n",
       "decl": {
         "args": [
@@ -3686,7 +3795,8 @@
           "type": "number"
         },
         "type": "function"
-      }
+      },
+      "nondeterministic": true
     },
     {
       "name": "time.parse_duration_ns",
@@ -4087,7 +4197,8 @@
           "type": "string"
         },
         "type": "function"
-      }
+      },
+      "nondeterministic": true
     },
     {
       "name": "walk",
