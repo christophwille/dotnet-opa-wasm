@@ -23,8 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SharpZipLib" Version="1.4.0" />
-    <PackageReference Include="Wasmtime" Version="1.0.0" />
+    <PackageReference Include="SharpZipLib" Version="1.4.1" />
+    <PackageReference Include="Wasmtime" Version="2.0.1" />
   </ItemGroup>
 
   <ItemGroup>
