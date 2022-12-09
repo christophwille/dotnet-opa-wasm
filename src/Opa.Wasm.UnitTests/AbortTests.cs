@@ -11,13 +11,13 @@ namespace Opa.Wasm.UnitTests
 			using var module = OpaPolicyModule.Load(WasmFiles.AbortExample);
 			using var opaPolicy = module.CreatePolicyInstance();
 
-			Wasmtime.TrapException ex = Assert.Throws<Wasmtime.TrapException>(
+			Wasmtime.WasmtimeException ex = Assert.Throws<Wasmtime.WasmtimeException>(
 				() =>
 				{
 					string outputJson = opaPolicy.EvaluateJson("{}", disableFastEvaluate: true);
 				});
 
-			StringAssert.StartsWith("abort.rego:4:1: var assignment conflict", ex.Message);
+			StringAssert.StartsWith("abort.rego:4:1: var assignment conflict", ex.InnerException.Message);
 		}
 
 		[Test]
@@ -26,13 +26,13 @@ namespace Opa.Wasm.UnitTests
 			using var module = OpaPolicyModule.Load(WasmFiles.AbortExample);
 			using var opaPolicy = module.CreatePolicyInstance();
 
-			Wasmtime.TrapException ex = Assert.Throws<Wasmtime.TrapException>(
+			Wasmtime.WasmtimeException ex = Assert.Throws<Wasmtime.WasmtimeException>(
 				() =>
 				{
 					string outputJson = opaPolicy.EvaluateJson("{}", disableFastEvaluate: false);
 				});
 
-			StringAssert.StartsWith("abort.rego:4:1: var assignment conflict", ex.Message);
+			StringAssert.StartsWith("abort.rego:4:1: var assignment conflict", ex.InnerException.Message);
 		}
 	}
 }
