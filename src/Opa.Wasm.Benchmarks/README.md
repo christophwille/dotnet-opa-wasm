@@ -2,18 +2,17 @@ Run `\bin\release\net6.0> .\Opa.Wasm.Benchmarks.exe`
 
 ``` ini
 
-BenchmarkDotNet=v0.13.2, OS=Windows 11 (10.0.22621.819)
+BenchmarkDotNet=v0.13.4, OS=Windows 11 (10.0.22621.1194)
 AMD Ryzen 7 PRO 6850U with Radeon Graphics, 1 CPU, 16 logical and 8 physical cores
-.NET SDK=7.0.100
-  [Host]     : .NET 6.0.11 (6.0.1122.52304), X64 RyuJIT AVX2
-  DefaultJob : .NET 6.0.11 (6.0.1122.52304), X64 RyuJIT AVX2
+.NET SDK=7.0.102
+  [Host]     : .NET 6.0.13 (6.0.1322.58009), X64 RyuJIT AVX2
+  DefaultJob : .NET 6.0.13 (6.0.1322.58009), X64 RyuJIT AVX2
 
 
 |              Method |       Mean |    Error |   StdDev |
 |-------------------- |-----------:|---------:|---------:|
-|           RunPolicy |   982.3 us |  6.93 us |  6.48 us |
-|  FastEvaluatePolicy |   961.5 us | 16.47 us | 15.40 us |
-|          RunPolicyX | 2,652.3 us | 30.96 us | 28.96 us |
-| FastEvaluatePolicyX | 1,356.3 us | 26.79 us | 49.65 us |
-
+|           RunPolicy |   964.7 us | 10.88 us |  8.49 us |
+|  FastEvaluatePolicy |   940.9 us | 11.58 us | 10.83 us |
+|          RunPolicyX | 2,351.5 us | 25.63 us | 23.98 us |
+| FastEvaluatePolicyX | 1,256.8 us | 24.43 us | 42.15 us |
 ```
