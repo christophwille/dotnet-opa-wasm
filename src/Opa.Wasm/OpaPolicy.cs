@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.Json;
 using Wasmtime;
 
@@ -7,6 +8,8 @@ namespace Opa.Wasm
 {
 	public partial class OpaPolicy : IOpaPolicy
 	{
+		private static readonly Encoding StringEncoding = Encoding.UTF8;
+
 		private int _dataAddr;
 		private int _baseHeapPtr;
 		private int _dataHeapPtr;
@@ -303,7 +306,7 @@ namespace Opa.Wasm
 		{
 			if (!entrypoint.HasValue) entrypoint = 0; // use default entry point
 
-			_envMemory.WriteString(_dataHeapPtr, json);
+			_envMemory.WriteString(_dataHeapPtr, json, StringEncoding);
 
 			int resultaddr = Policy_opa_eval(entrypoint.Value, _dataAddr, _dataHeapPtr, json.Length, _dataHeapPtr + json.Length);
 
@@ -325,10 +328,12 @@ namespace Opa.Wasm
 
 		private int LoadJson(string json)
 		{
-			int addr = Policy_opa_malloc(json.Length);
-			_envMemory.WriteString(addr, json);
+			var len = StringEncoding.GetByteCount(json);
 
-			int parseAddr = Policy_opa_json_parse(addr, json.Length);
+			int addr = Policy_opa_malloc(len);
+			_envMemory.WriteString(addr, json, StringEncoding);
+
+			int parseAddr = Policy_opa_json_parse(addr, len);
 
 			if (0 == parseAddr)
 			{

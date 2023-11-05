@@ -6,21 +6,16 @@ namespace Opa.Wasm.UnitTests
 	public class BasicTests
 	{
 		[Test]
-		public void HelloWorldTest()
+		[TestCase("{\"world\": \"world\"}", "{\"message\": \"world\"}")]
+		[TestCase("{\"world\": \"мир\"}", "{\"message\": \"мир\"}")]
+		[TestCase("{\"world\": \"🚀✨\"}", "{\"message\": \"🚀✨\"}")]
+		public void HelloWorldTest(string data, string input)
 		{
 			using var module = OpaPolicyModule.Load(WasmFiles.HelloWorldExample);
 			using var opaPolicy = module.CreatePolicyInstance();
-
-			string data = new
-			{
-				world = "world"
-			}.ToJson();
+			
 			opaPolicy.SetDataJson(data);
-
-			string input = new
-			{
-				message = "world"
-			}.ToJson();
+			
 			string outputJson = opaPolicy.EvaluateJson(input, disableFastEvaluate: true);
 
 			dynamic output = outputJson.ToDynamic();
