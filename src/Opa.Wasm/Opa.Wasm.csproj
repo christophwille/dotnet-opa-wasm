@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFrameworks>net6.0;net8.0</TargetFrameworks>
 		<Version>0.80.0</Version>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/christophwille/dotnet-opa-wasm</PackageProjectUrl>
@@ -32,12 +32,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="System.Text.Json" Version="6.0.7" />
-		<PackageReference Include="Wasmtime" Version="9.0.1" />
+		<PackageReference Include="System.Text.Json" Version="6.0.9" />
+		<PackageReference Include="Wasmtime" Version="16.0.0" />
 	</ItemGroup>
 
 </Project>
