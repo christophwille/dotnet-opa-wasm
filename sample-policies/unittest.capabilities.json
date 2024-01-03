@@ -672,6 +672,31 @@
       }
     },
     {
+      "name": "crypto.parse_private_keys",
+      "decl": {
+        "args": [
+          {
+            "type": "string"
+          }
+        ],
+        "result": {
+          "dynamic": {
+            "dynamic": {
+              "key": {
+                "type": "string"
+              },
+              "value": {
+                "type": "any"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "type": "function"
+      }
+    },
+    {
       "name": "crypto.sha1",
       "decl": {
         "args": [
@@ -2969,6 +2994,29 @@
       }
     },
     {
+      "name": "numbers.range_step",
+      "decl": {
+        "args": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "number"
+          }
+        ],
+        "result": {
+          "dynamic": {
+            "type": "number"
+          },
+          "type": "array"
+        },
+        "type": "function"
+      }
+    },
+    {
       "name": "object.filter",
       "decl": {
         "args": [
@@ -3931,6 +3979,31 @@
       }
     },
     {
+      "name": "strings.render_template",
+      "decl": {
+        "args": [
+          {
+            "type": "string"
+          },
+          {
+            "dynamic": {
+              "key": {
+                "type": "string"
+              },
+              "value": {
+                "type": "any"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "result": {
+          "type": "string"
+        },
+        "type": "function"
+      }
+    },
+    {
       "name": "strings.replace_n",
       "decl": {
         "args": [
@@ -4628,6 +4701,28 @@
         ],
         "result": {
           "type": "string"
+        },
+        "type": "function"
+      }
+    },
+    {
+      "name": "uuid.parse",
+      "decl": {
+        "args": [
+          {
+            "type": "string"
+          }
+        ],
+        "result": {
+          "dynamic": {
+            "key": {
+              "type": "string"
+            },
+            "value": {
+              "type": "any"
+            }
+          },
+          "type": "object"
         },
         "type": "function"
       }
