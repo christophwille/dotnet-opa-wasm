@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using System;
-using System.IO;
 
 namespace Opa.Wasm.UnitTests
 {
@@ -14,10 +13,10 @@ namespace Opa.Wasm.UnitTests
 
 			var entrypoints = opaPolicy.Entrypoints;
 
-			Assert.AreEqual(3, entrypoints.Count);
-			Assert.AreEqual(1, entrypoints["example/one"]);
-			Assert.AreEqual(2, entrypoints["example/one/myCompositeRule"]);
-			Assert.AreEqual(0, entrypoints["example"]);
+			Assert.That(entrypoints.Count, Is.EqualTo(3));
+			Assert.That(entrypoints["example/one"], Is.EqualTo(1));
+			Assert.That(entrypoints["example/one/myCompositeRule"], Is.EqualTo(2));
+			Assert.That(entrypoints["example"], Is.EqualTo(0));
 		}
 
 		[Test]
@@ -35,9 +34,9 @@ namespace Opa.Wasm.UnitTests
 
 			// [{"result":{"one":{"myOtherRule":true,"myRule":true,"myCompositeRule":true}}}]
 			dynamic output = outputJson.ToDynamic();
-			Assert.IsTrue(output[0].result.one.myOtherRule);
-			Assert.IsTrue(output[0].result.one.myRule);
-			Assert.IsTrue(output[0].result.one.myCompositeRule);
+			Assert.That(output[0].result.one.myOtherRule, Is.True);
+			Assert.That(output[0].result.one.myRule, Is.True);
+			Assert.That(output[0].result.one.myCompositeRule, Is.True);
 		}
 
 		[Test]
@@ -55,9 +54,9 @@ namespace Opa.Wasm.UnitTests
 
 			// [{"result":{"myOtherRule":true,"myRule":true,"myCompositeRule":true}}]
 			dynamic output = outputJson.ToDynamic();
-			Assert.IsTrue(output[0].result.myOtherRule);
-			Assert.IsTrue(output[0].result.myRule);
-			Assert.IsTrue(output[0].result.myCompositeRule);
+			Assert.That(output[0].result.myOtherRule, Is.True);
+			Assert.That(output[0].result.myRule, Is.True);
+			Assert.That(output[0].result.myCompositeRule, Is.True);
 		}
 
 		[Test]
@@ -75,9 +74,9 @@ namespace Opa.Wasm.UnitTests
 
 			// [{"result":{"myOtherRule":true,"myRule":true,"myCompositeRule":true}}]
 			dynamic output = outputJson.ToDynamic();
-			Assert.IsTrue(output[0].result.myOtherRule);
-			Assert.IsTrue(output[0].result.myRule);
-			Assert.IsTrue(output[0].result.myCompositeRule);
+			Assert.That(output[0].result.myOtherRule, Is.True);
+			Assert.That(output[0].result.myRule, Is.True);
+			Assert.That(output[0].result.myCompositeRule, Is.True);
 		}
 
 		[Test]
@@ -110,7 +109,7 @@ namespace Opa.Wasm.UnitTests
 
 			// [{"result":true}]
 			dynamic output = outputJson.ToDynamic();
-			Assert.IsTrue(output[0].result);
+			Assert.That(output[0].result, Is.True);
 		}
 	}
 }

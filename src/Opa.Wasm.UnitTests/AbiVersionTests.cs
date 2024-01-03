@@ -13,8 +13,8 @@ namespace Opa.Wasm.UnitTests
 			var abiVersion = opaPolicy.AbiVersion;
 			var abiMinorVersion = opaPolicy.AbiMinorVersion;
 
-			Assert.AreEqual(1, abiVersion);
-			Assert.IsNotNull(abiMinorVersion);
+			Assert.That(abiVersion, Is.EqualTo(1));
+			Assert.That(abiMinorVersion, Is.Not.Null);
 		}
 	}
 }

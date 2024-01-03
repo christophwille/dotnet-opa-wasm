@@ -16,7 +16,7 @@ namespace Opa.Wasm.UnitTests
 				new { message = "world" },
 				disableFastEvaluate: true);
 
-			Assert.IsTrue(output.Value);
+			Assert.That(output.Value, Is.True);
 		}
 
 		[Test]
@@ -29,9 +29,9 @@ namespace Opa.Wasm.UnitTests
 			var result = opaPolicy.Evaluate<ExampleOneResultModel>(input, 1);
 
 			// [{"result":{"myOtherRule":true,"myRule":true,"myCompositeRule":true}}]
-			Assert.IsTrue(result.Value.MyOtherRule);
-			Assert.IsTrue(result.Value.myRule);
-			Assert.IsTrue(result.Value.MyCompositeRule);
+			Assert.That(result.Value.MyOtherRule, Is.True);
+			Assert.That(result.Value.myRule, Is.True);
+			Assert.That(result.Value.MyCompositeRule, Is.True);
 		}
 
 		[Test]
@@ -44,9 +44,9 @@ namespace Opa.Wasm.UnitTests
 			var result = opaPolicy.Evaluate<ExampleOneResultModel>(input, "example/one");
 
 			// [{"result":{"myOtherRule":true,"myRule":true,"myCompositeRule":true}}]
-			Assert.IsTrue(result.Value.MyOtherRule);
-			Assert.IsTrue(result.Value.myRule);
-			Assert.IsTrue(result.Value.MyCompositeRule);
+			Assert.That(result.Value.MyOtherRule, Is.True);
+			Assert.That(result.Value.myRule, Is.True);
+			Assert.That(result.Value.MyCompositeRule, Is.True);
 		}
 	}
 

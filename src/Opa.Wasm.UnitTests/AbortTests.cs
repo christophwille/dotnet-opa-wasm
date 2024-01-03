@@ -17,7 +17,7 @@ namespace Opa.Wasm.UnitTests
 					string outputJson = opaPolicy.EvaluateJson("{}", disableFastEvaluate: true);
 				});
 
-			StringAssert.StartsWith("abort.rego:4:1: var assignment conflict", ex.InnerException.Message);
+			Assert.That(ex.InnerException.Message, Does.StartWith("abort.rego:4:1: var assignment conflict"));
 		}
 
 		[Test]
@@ -32,7 +32,7 @@ namespace Opa.Wasm.UnitTests
 					string outputJson = opaPolicy.EvaluateJson("{}", disableFastEvaluate: false);
 				});
 
-			StringAssert.StartsWith("abort.rego:4:1: var assignment conflict", ex.InnerException.Message);
+			Assert.That(ex.InnerException.Message, Does.StartWith("abort.rego:4:1: var assignment conflict"));
 		}
 	}
 }

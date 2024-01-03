@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace Opa.Wasm.UnitTests
@@ -17,8 +13,8 @@ namespace Opa.Wasm.UnitTests
 
 			var builtins = opaPolicy.Builtins;
 
-			Assert.AreEqual(1, builtins.Count);
-			Assert.AreEqual("custom.func", builtins[0]);
+			Assert.That(builtins.Count, Is.EqualTo(1));
+			Assert.That(builtins[0], Is.EqualTo("custom.func"));
 		}
 
 		[Test]
@@ -37,8 +33,8 @@ namespace Opa.Wasm.UnitTests
 			string outputJson = opaPolicy.EvaluateJson("{}");
 
 			dynamic output = outputJson.ToDynamic();
-			Assert.AreEqual("Jane Doe", output[0].result.result);
-			Assert.AreEqual(1, callCountOfBuiltin);
+			Assert.That(output[0].result.result, Is.EqualTo("Jane Doe"));
+			Assert.That(callCountOfBuiltin, Is.EqualTo(1));
 		}
 
 		[Test]
@@ -61,8 +57,8 @@ namespace Opa.Wasm.UnitTests
 			string outputJson = opaPolicy.EvaluateJson(input.ToJson());
 
 			dynamic output = outputJson.ToDynamic();
-			Assert.AreEqual(5.3, output[0].result);
-			Assert.AreEqual(1, callCountOfBuiltin);
+			Assert.That(output[0].result, Is.EqualTo(5.3));
+			Assert.That(callCountOfBuiltin, Is.EqualTo(1));
 		}
 
 		[Test]
@@ -106,16 +102,16 @@ namespace Opa.Wasm.UnitTests
 			string outputJson = opaPolicy.EvaluateJson("{}");
 
 			dynamic output = outputJson.ToDynamic();
-			Assert.AreEqual(0, output[0].result.result0);
-			Assert.AreEqual("s1", output[0].result.result1);
-			Assert.AreEqual(true, output[0].result.result2);
-			Assert.AreEqual("s1s2False", output[0].result.result3);
-			Assert.AreEqual("s1-1,s1-2s2s3s4", output[0].result.result4);
-			Assert.AreEqual(1, callCountOfBuiltin[0]);
-			Assert.AreEqual(1, callCountOfBuiltin[1]);
-			Assert.AreEqual(1, callCountOfBuiltin[2]);
-			Assert.AreEqual(1, callCountOfBuiltin[3]);
-			Assert.AreEqual(1, callCountOfBuiltin[4]);
+			Assert.That(output[0].result.result0, Is.EqualTo(0));
+			Assert.That(output[0].result.result1, Is.EqualTo("s1"));
+			Assert.That(output[0].result.result2, Is.True);
+			Assert.That(output[0].result.result3, Is.EqualTo("s1s2False"));
+			Assert.That(output[0].result.result4, Is.EqualTo("s1-1,s1-2s2s3s4"));
+			Assert.That(callCountOfBuiltin[0], Is.EqualTo(1));
+			Assert.That(callCountOfBuiltin[1], Is.EqualTo(1));
+			Assert.That(callCountOfBuiltin[2], Is.EqualTo(1));
+			Assert.That(callCountOfBuiltin[3], Is.EqualTo(1));
+			Assert.That(callCountOfBuiltin[4], Is.EqualTo(1));
 		}
 	}
 }

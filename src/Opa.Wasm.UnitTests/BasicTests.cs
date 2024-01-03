@@ -24,7 +24,7 @@ namespace Opa.Wasm.UnitTests
 			string outputJson = opaPolicy.EvaluateJson(input, disableFastEvaluate: true);
 
 			dynamic output = outputJson.ToDynamic();
-			Assert.IsTrue(output[0].result);
+			Assert.That(output[0].result, Is.True);
 		}
 
 		[Test]
@@ -40,8 +40,8 @@ namespace Opa.Wasm.UnitTests
 			string outputJson = opaPolicy.EvaluateJson(input);
 
 			dynamic output = outputJson.ToDynamic();
-			Assert.IsTrue(output[0].result.allow);
-			Assert.IsTrue(output[0].result.user_is_admin);
+			Assert.That(output[0].result.allow, Is.True);
+			Assert.That(output[0].result.user_is_admin, Is.True);
 		}
 
 		[Test]
@@ -63,7 +63,7 @@ namespace Opa.Wasm.UnitTests
 			string outputJson = opaPolicy.EvaluateJson(input, disableFastEvaluate: false);
 
 			dynamic output = outputJson.ToDynamic();
-			Assert.IsTrue(output[0].result);
+			Assert.That(output[0].result, Is.True);
 		}
 
 		[Test]
@@ -87,7 +87,7 @@ namespace Opa.Wasm.UnitTests
 			string outputJson = opaPolicy.EvaluateJson(input, disableFastEvaluate: true);
 
 			dynamic output = outputJson.ToDynamic();
-			Assert.IsTrue(output[0].result);
+			Assert.That(output[0].result, Is.True);
 		}
 
 		[Test]
@@ -110,7 +110,7 @@ namespace Opa.Wasm.UnitTests
 			string outputJson = opaPolicy.EvaluateJson(input, disableFastEvaluate: true);
 
 			dynamic output = outputJson.ToDynamic();
-			Assert.IsTrue(output[0].result);
+			Assert.That(output[0].result, Is.True);
 		}
 
 		[Test]
@@ -135,7 +135,7 @@ namespace Opa.Wasm.UnitTests
 			string outputJson = opaPolicy.EvaluateJson(input, disableFastEvaluate: true);
 
 			dynamic output = outputJson.ToDynamic();
-			Assert.IsTrue(output[0].result);
+			Assert.That(output[0].result, Is.True);
 		}
 	}
 }

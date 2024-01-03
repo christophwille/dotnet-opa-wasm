@@ -17,7 +17,7 @@ namespace Opa.Wasm.UnitTests
 				new CustomSerdeTestsHelloWorldPolicyInput { Message = "world" },
 				disableFastEvaluate: true);
 
-			Assert.IsTrue(output.Value);
+			Assert.That(output.Value, Is.True);
 		}
 	}
 
