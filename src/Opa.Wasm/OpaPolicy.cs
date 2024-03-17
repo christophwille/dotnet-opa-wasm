@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.Json;
 using Wasmtime;
+using System.Text;
 
 namespace Opa.Wasm
 {
@@ -303,9 +304,10 @@ namespace Opa.Wasm
 		{
 			if (!entrypoint.HasValue) entrypoint = 0; // use default entry point
 
-			_envMemory.WriteString(_dataHeapPtr, json);
+			int jsonLength = Encoding.UTF8.GetByteCount(json);
+			_envMemory.WriteString(_dataHeapPtr, json);  // UTF8 is the default in WriteString when no encoding is passed
 
-			int resultaddr = Policy_opa_eval(entrypoint.Value, _dataAddr, _dataHeapPtr, json.Length, _dataHeapPtr + json.Length);
+			int resultaddr = Policy_opa_eval(entrypoint.Value, _dataAddr, _dataHeapPtr, jsonLength, _dataHeapPtr + jsonLength);
 
 			return _envMemory.ReadNullTerminatedString(resultaddr);
 		}
@@ -325,10 +327,12 @@ namespace Opa.Wasm
 
 		private int LoadJson(string json)
 		{
-			int addr = Policy_opa_malloc(json.Length);
-			_envMemory.WriteString(addr, json);
+			int jsonLength = Encoding.UTF8.GetByteCount(json);
 
-			int parseAddr = Policy_opa_json_parse(addr, json.Length);
+			int addr = Policy_opa_malloc(jsonLength);
+			_envMemory.WriteString(addr, json);  // UTF8 is the default in WriteString when no encoding is passed
+
+			int parseAddr = Policy_opa_json_parse(addr, jsonLength);
 
 			if (0 == parseAddr)
 			{
@@ -341,6 +345,8 @@ namespace Opa.Wasm
 		private string DumpJson(int addrResult)
 		{
 			int addr = Policy_opa_json_dump(addrResult);
+
+			// Note: ReadNullTerminatedString internally returns Encoding.UTF8.GetString(...) - ReadString takes Encoding param
 			return _envMemory.ReadNullTerminatedString(addr);
 		}
 

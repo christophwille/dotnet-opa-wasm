@@ -67,6 +67,27 @@ namespace Opa.Wasm.UnitTests
 		}
 
 		[Test]
+		[TestCase("{\"world\": \"Anna Karenina\"}", "{\"message\": \"Anna Karenina\"}")]
+		[TestCase("{\"world\": \"Анна Каренина\"}", "{\"message\": \"Анна Каренина\"}")]
+		[TestCase("{\"world\": \"👩‍❤️‍👨🚂💔✒️\"}", "{\"message\": \"👩‍❤️‍👨🚂💔✒️\"}")]
+		public void HelloWorldTest_Encoding_Both_CodePaths(string data, string input)
+		{
+			using var module = OpaPolicyModule.Load(WasmFiles.HelloWorldExample);
+			using var opaPolicy = module.CreatePolicyInstance();
+
+			opaPolicy.SetDataJson(data);
+
+			string outputJsonFastPath = opaPolicy.EvaluateJson(input, disableFastEvaluate: false);
+			string outputJson = opaPolicy.EvaluateJson(input, disableFastEvaluate: true);
+
+			dynamic outputFastPath = outputJsonFastPath.ToDynamic();
+			dynamic output = outputJson.ToDynamic();
+
+			Assert.That(outputFastPath[0].result, Is.True);
+			Assert.That(output[0].result, Is.True);
+		}
+
+		[Test]
 		public void HelloWorldTest_FromBytes()
 		{
 			var policyBytes = System.IO.File.ReadAllBytes(WasmFiles.HelloWorldExample);
