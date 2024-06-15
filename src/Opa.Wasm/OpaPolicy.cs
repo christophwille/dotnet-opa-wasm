@@ -37,12 +37,21 @@ namespace Opa.Wasm
 			}
 		}
 
-		internal OpaPolicy(Engine engine, Module module, IOpaSerializer serializer)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="engine"></param>
+		/// <param name="module"></param>
+		/// <param name="serializer"></param>
+		/// <param name="minMemSize">The minimum memory size (in WebAssembly page units)</param>
+		internal OpaPolicy(Engine engine, Module module, IOpaSerializer serializer, long minMemSize)
 		{
 			Serializer = serializer;
 
 			_linker = new Linker(engine);
 			_store = new Store(engine);
+			_envMemory = new Memory(_store, minMemSize);
+
 			LinkImports();
 
 			Initialize(module);
@@ -65,7 +74,6 @@ namespace Opa.Wasm
 		*/
 		private void LinkImports()
 		{
-			_envMemory = new Memory(_store, 2);
 			_linker.Define(OpaConstants.Module, OpaConstants.MemoryName, _envMemory);
 
 			_linker.Define(OpaConstants.Module, OpaConstants.Abort, Function.FromCallback(_store,
