@@ -758,6 +758,50 @@
       }
     },
     {
+      "name": "crypto.x509.parse_and_verify_certificates_with_options",
+      "decl": {
+        "args": [
+          {
+            "type": "string"
+          },
+          {
+            "dynamic": {
+              "key": {
+                "type": "string"
+              },
+              "value": {
+                "type": "any"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "result": {
+          "static": [
+            {
+              "type": "boolean"
+            },
+            {
+              "dynamic": {
+                "dynamic": {
+                  "key": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "any"
+                  }
+                },
+                "type": "object"
+              },
+              "type": "array"
+            }
+          ],
+          "type": "array"
+        },
+        "type": "function"
+      }
+    },
+    {
       "name": "crypto.x509.parse_certificate_request",
       "decl": {
         "args": [
@@ -2237,6 +2281,51 @@
         "args": [
           {
             "type": "any"
+          }
+        ],
+        "result": {
+          "type": "string"
+        },
+        "type": "function"
+      }
+    },
+    {
+      "name": "json.marshal_with_options",
+      "decl": {
+        "args": [
+          {
+            "type": "any"
+          },
+          {
+            "dynamic": {
+              "key": {
+                "type": "string"
+              },
+              "value": {
+                "type": "any"
+              }
+            },
+            "static": [
+              {
+                "key": "indent",
+                "value": {
+                  "type": "string"
+                }
+              },
+              {
+                "key": "prefix",
+                "value": {
+                  "type": "string"
+                }
+              },
+              {
+                "key": "pretty",
+                "value": {
+                  "type": "boolean"
+                }
+              }
+            ],
+            "type": "object"
           }
         ],
         "result": {
@@ -3974,6 +4063,23 @@
         ],
         "result": {
           "type": "boolean"
+        },
+        "type": "function"
+      }
+    },
+    {
+      "name": "strings.count",
+      "decl": {
+        "args": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "string"
+          }
+        ],
+        "result": {
+          "type": "number"
         },
         "type": "function"
       }
