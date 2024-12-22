@@ -1,10 +1,12 @@
 package math.builtins
 
+import rego.v1
+
 firstNumber := to_number(input.firstNumber)
 secondNumber := to_number(input.secondNumber)
 
-valid {
-	is_number(firstNumber)
+valid if {
+  is_number(firstNumber)
   is_number(secondNumber)
 }
 

@@ -1,6 +1,8 @@
 package aborttestpkg
 
-r { true }
-r = false { true }
+import rego.v1
 
-q { r }
+r if { true }
+r = false if { true }
+
+q if { r }

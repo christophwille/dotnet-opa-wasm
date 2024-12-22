@@ -1,19 +1,21 @@
 package example.one
 
+import rego.v1
+
 import input
 
-default myRule = false
-default myOtherRule = false
+default myRule := false
+default myOtherRule := false
 
-myRule {
+myRule if {
     input.someProp == "thisValue"
 }
 
-myOtherRule {
+myOtherRule if {
     input.anotherProp == "thatValue"
 }
 
-myCompositeRule {
+myCompositeRule if {
     myRule
     myOtherRule
 }
