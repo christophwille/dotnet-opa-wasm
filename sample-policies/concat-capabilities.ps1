@@ -23,7 +23,7 @@ if ($duplicatedBuiltins.Count -gt 0) {
       | group_by(.name)
       | map(.[-1])
 } #>
-$output = jq -s "{ builtins: [ .[].builtins | .[]] | group_by(.name) | map(.[-1]), wasm_abi_versions: [ .[] | .wasm_abi_versions[] ] }" $Files
+$output = jq -s "{ builtins: [ .[].builtins | .[]] | group_by(.name) | map(.[-1]), wasm_abi_versions: [ .[] | .wasm_abi_versions[] ], features: [ .[] | .features[] ] }" $Files
 if ($LASTEXITCODE -ne 0) { throw }
 
 $output | Out-File -FilePath $Destination

@@ -10,7 +10,7 @@ valid if {
   is_number(secondNumber)
 }
 
-result = x {
+result = x if {
   valid
   x := custom.func2(firstNumber, secondNumber)
 }
