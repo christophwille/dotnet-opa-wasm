@@ -1,8 +1,7 @@
 package example
 
-default hello = false
+import rego.v1
 
-hello {
-    x := input.message
-    x == data.world
-}
+default hello := false
+
+hello if input.message == data.world

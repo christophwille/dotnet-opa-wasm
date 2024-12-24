@@ -86,8 +86,8 @@
         }
       }
     ],
-    "future_keywords": [
-    ],
     "wasm_abi_versions": [
+    ],
+    "features": [
     ]
 }

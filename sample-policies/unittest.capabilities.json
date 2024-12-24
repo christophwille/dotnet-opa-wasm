@@ -4917,12 +4917,6 @@
       }
     }
   ],
-  "future_keywords": [
-    "contains",
-    "every",
-    "if",
-    "in"
-  ],
   "wasm_abi_versions": [
     {
       "version": 1,
@@ -4932,5 +4926,8 @@
       "version": 1,
       "minor_version": 2
     }
+  ],
+  "features": [
+    "rego_v1"
   ]
 }
