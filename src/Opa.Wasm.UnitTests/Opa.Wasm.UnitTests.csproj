@@ -16,6 +16,9 @@
     <None Include="..\..\sample-policies\example.wasm" Link="LinkedWasms\example.wasm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+		<None Include="..\..\sample-policies\memorytest.wasm" Link="LinkedWasms\memorytest.wasm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\sample-policies\multi.wasm" Link="LinkedWasms\multi.wasm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
