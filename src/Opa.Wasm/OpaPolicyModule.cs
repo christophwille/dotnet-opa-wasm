@@ -16,11 +16,20 @@ namespace Opa.Wasm
 		{
 		}
 
-		public IOpaPolicy CreatePolicyInstance(IOpaSerializer serializer = null, long minMemSize = 2)
+		private const long MinMemSize = 2;
+
+		public IOpaPolicy CreatePolicyInstance(IOpaSerializer serializer = null)
 		{
 			if (null == serializer) serializer = DefaultOpaSerializer.Instance;
 
-			return new OpaPolicy(_engine, _module, serializer, minMemSize);
+			return new OpaPolicy(_engine, _module, serializer, MinMemSize, null);
+		}
+
+		public IOpaPolicy CreatePolicyInstance(long minMemSize, long? maxMemSize, IOpaSerializer serializer = null)
+		{
+			if (null == serializer) serializer = DefaultOpaSerializer.Instance;
+
+			return new OpaPolicy(_engine, _module, serializer, minMemSize, maxMemSize);
 		}
 
 		/// <summary>
