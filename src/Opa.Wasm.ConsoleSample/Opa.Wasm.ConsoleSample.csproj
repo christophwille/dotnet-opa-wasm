@@ -24,7 +24,7 @@
 
   <ItemGroup>
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
-    <PackageReference Include="Wasmtime" Version="22.0.0" />
+    <PackageReference Include="Wasmtime" Version="34.0.2" />
   </ItemGroup>
 
   <ItemGroup>
