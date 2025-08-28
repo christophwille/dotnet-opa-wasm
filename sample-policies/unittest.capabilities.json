@@ -1716,6 +1716,20 @@
       }
     },
     {
+      "name": "internal.test_case",
+      "decl": {
+        "args": [
+          {
+            "dynamic": {
+              "type": "any"
+            },
+            "type": "array"
+          }
+        ],
+        "type": "function"
+      }
+    },
+    {
       "name": "intersection",
       "decl": {
         "args": [
@@ -1897,6 +1911,23 @@
         "type": "function"
       },
       "nondeterministic": true
+    },
+    {
+      "name": "io.jwt.verify_eddsa",
+      "decl": {
+        "args": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "string"
+          }
+        ],
+        "result": {
+          "type": "boolean"
+        },
+        "type": "function"
+      }
     },
     {
       "name": "io.jwt.verify_es256",
@@ -4928,6 +4959,7 @@
     }
   ],
   "features": [
+    "keywords_in_refs",
     "rego_v1"
   ]
 }
