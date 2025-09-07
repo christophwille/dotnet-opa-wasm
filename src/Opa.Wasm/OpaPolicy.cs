@@ -44,13 +44,13 @@ namespace Opa.Wasm
 		/// <param name="module"></param>
 		/// <param name="serializer"></param>
 		/// <param name="minMemSize">The minimum memory size (in WebAssembly page units)</param>
-		internal OpaPolicy(Engine engine, Module module, IOpaSerializer serializer, long minMemSize)
+		internal OpaPolicy(Engine engine, Module module, IOpaSerializer serializer, long minMemSize, long? maxMemSize)
 		{
 			Serializer = serializer;
 
 			_linker = new Linker(engine);
 			_store = new Store(engine);
-			_envMemory = new Memory(_store, minMemSize);
+			_envMemory = new Memory(_store, minMemSize, maxMemSize);
 
 			LinkImports();
 
@@ -313,11 +313,24 @@ namespace Opa.Wasm
 			if (!entrypoint.HasValue) entrypoint = 0; // use default entry point
 
 			int jsonLength = Encoding.UTF8.GetByteCount(json);
+			ValidateMemorySizeAndGrow(jsonLength);
+
 			_envMemory.WriteString(_dataHeapPtr, json);  // UTF8 is the default in WriteString when no encoding is passed
 
 			int resultaddr = Policy_opa_eval(entrypoint.Value, _dataAddr, _dataHeapPtr, jsonLength, _dataHeapPtr + jsonLength);
 
 			return _envMemory.ReadNullTerminatedString(resultaddr);
+		}
+
+		private void ValidateMemorySizeAndGrow(int inputLen)
+		{
+			var requiredPages = (uint)Math.Ceiling((_dataHeapPtr + inputLen) / (double)Memory.PageSize);
+			var pagesToAdd = requiredPages - _envMemory.GetSize();
+
+			if (pagesToAdd > 0)
+			{
+				_envMemory.Grow(pagesToAdd);
+			}
 		}
 
 		public void SetDataJson(string json)

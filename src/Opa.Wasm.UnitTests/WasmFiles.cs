@@ -12,5 +12,7 @@
 		public static readonly string MathBuiltinExample = "LinkedWasms/math-builtin.wasm";
 
 		public static readonly string AbortExample = "LinkedWasms/abort.wasm";
+
+		public static readonly string MemoryTestExample = "LinkedWasms/memorytest.wasm";
 	}
 }
