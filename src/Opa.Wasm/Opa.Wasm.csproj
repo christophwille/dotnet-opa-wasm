@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>net8.0</TargetFrameworks>
-		<Version>0.91.0</Version>
+		<TargetFramework>net8.0</TargetFramework>
+		<Version>0.92.0</Version>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/christophwille/dotnet-opa-wasm</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/christophwille/dotnet-opa-wasm.git</RepositoryUrl>
@@ -36,7 +36,6 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="System.Text.Json" Version="8.0.6" />
 		<PackageReference Include="Wasmtime" Version="34.0.2" />
 	</ItemGroup>
 
