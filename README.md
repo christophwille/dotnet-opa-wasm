@@ -1,3 +1,5 @@
+
+
 # Open Policy Agent for .NET
 
 [NuGet package](https://www.nuget.org/packages/Opa.Wasm/)
@@ -16,7 +18,7 @@ Writing policies https://www.openpolicyagent.org/docs/latest/how-do-i-write-poli
 
 Example and Integrations https://github.com/open-policy-agent/contrib
 
-## Other Open Policy Agent WebAssemby SDKs
+## Other Open Policy Agent WebAssembly SDKs
 
 * https://github.com/open-policy-agent/npm-opa-wasm/
 * https://github.com/open-policy-agent/golang-opa-wasm
