@@ -32,11 +32,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.300">
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.401">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Wasmtime" Version="44.0.0" />
+		<PackageReference Include="Wasmtime" Version="48.0.2" />
 	</ItemGroup>
 
 </Project>
